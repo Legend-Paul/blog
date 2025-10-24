@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import signupRoute from "./routes/signup.js";
 dotenv.config();
 
 const app = express();
@@ -8,6 +9,8 @@ const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
     console.log("Server started", PORT);
 });
+
+app.use("/login", signupRoute);
 
 server.on("error", (err) => {
     console.error(err && err.message ? err.message : String(err));
