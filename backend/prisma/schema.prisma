@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -11,5 +8,89 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")  
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String        @id @default(uuid())
+  fullName      String
+  username      String        @unique
+  password      String
+  role          Role
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  
+  // More specific relation names
+  blogs Blog[]        @relation("AuthoredBlogs")
+  comments      Comment[]     @relation("CommentAuthor")
+  blogLikes     Like[]        @relation("BlogLikes")
+  commentLikes  CommentLike[] @relation("CommentLikes")
+}
+
+model Blog {
+  id        String      @id @default(uuid())
+  title     String 
+  content   String      @db.Text
+  slug      String      @unique
+  status    BlogStatus 
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  
+  author    User        @relation("AuthoredBlogs", fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  
+  comments  Comment[]
+  likes     Like[]
+}
+
+model Comment {
+  id        String        @id @default(uuid())
+  content   String        @db.Text
+  createdAt DateTime      @default(now())
+  
+  author    User          @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  
+  blog      Blog          @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId    String
+  
+  likes     CommentLike[]
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId    String
+  
+  user      User     @relation("BlogLikes", fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@unique([blogId, userId])
+}
+
+model CommentLike {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String
+  
+  user      User     @relation("CommentLikes", fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@unique([commentId, userId])
+}
+
+enum Role {
+  AUTHOR 
+  READER
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }
