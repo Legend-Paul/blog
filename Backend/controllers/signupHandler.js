@@ -2,7 +2,8 @@
 import prisma from "../utils/prisma.js";
 import bcryptjs from "bcryptjs";
 
-export const createUser = async (req, res) => {
+const createUser = async (req, res) => {
+    console.log(req.body);
     const { fullName, username, role, password } = req.body;
     try {
         // check if username already exists
@@ -36,3 +37,5 @@ export const createUser = async (req, res) => {
     }
 };
 // ...existing code...
+
+export { createUser };

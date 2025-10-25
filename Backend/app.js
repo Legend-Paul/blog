@@ -6,11 +6,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const server = app.listen(PORT, () => {
     console.log("Server started", PORT);
 });
 
-app.use("/login", signupRoute);
+app.use("/signup", signupRoute);
 
 server.on("error", (err) => {
     console.error(err && err.message ? err.message : String(err));
