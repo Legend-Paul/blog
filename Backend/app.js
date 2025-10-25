@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import signupRoute from "./routes/signup.js";
+import loginRoute from "./routes/login.js";
 dotenv.config();
 
 const app = express();
@@ -14,6 +15,7 @@ const server = app.listen(PORT, () => {
     console.log("Server started", PORT);
 });
 
+app.use("/login", loginRoute);
 app.use("/signup", signupRoute);
 
 server.on("error", (err) => {

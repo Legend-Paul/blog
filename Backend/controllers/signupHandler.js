@@ -28,8 +28,6 @@ const createUser = [
     async (req, res) => {
         const { fullName, username, role, password } = req.body;
 
-        console.log({ fullName, username, role, password });
-
         const errors = validationResult(req);
         if (!errors.isEmpty) {
             return res.status(400).json({ error: errors.array });
