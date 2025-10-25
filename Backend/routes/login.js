@@ -1,5 +1,5 @@
 import express from "express";
-import { validateLogin } from "../controllers/loginHandler.js";
+import validateLogin from "../controllers/loginHandler.js";
 
 const loginRoute = express.Router();
 
