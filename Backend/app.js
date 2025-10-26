@@ -4,6 +4,7 @@ import express from "express";
 import dotenv from "dotenv";
 import signupRoute from "./routes/signup.js";
 import loginRoute from "./routes/login.js";
+import forgotPasswordRoute from "./routes/forgotPassword.js";
 import passport from "passport";
 import passportConfig from "./config/passport.js";
 dotenv.config();
@@ -22,6 +23,7 @@ passportConfig(passport);
 // Routes
 app.use("/login", loginRoute);
 app.use("/signup", signupRoute);
+app.use("/forgot-password", forgotPasswordRoute);
 
 app.get("/", passport.authenticate("jwt", { session: false }), (req, res) => {
     res.json({ user: req.user });
