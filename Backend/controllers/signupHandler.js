@@ -1,5 +1,5 @@
 // ...existing code...
-import prisma from "../utils/prisma.js";
+import prisma from "../config/prisma.js";
 import bcryptjs from "bcryptjs";
 import { body, validationResult } from "express-validator";
 

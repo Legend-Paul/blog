@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import signupRoute from "./routes/signup.js";
 import loginRoute from "./routes/login.js";
+import passport from "passport";
 dotenv.config();
 
 const app = express();
@@ -10,6 +11,9 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//auth
+app.use(passport.initialize());
 
 const server = app.listen(PORT, () => {
     console.log("Server started", PORT);
