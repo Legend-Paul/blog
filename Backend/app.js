@@ -1,3 +1,5 @@
+// app.js (ADD BETTER DEBUGGING)
+
 import express from "express";
 import dotenv from "dotenv";
 import signupRoute from "./routes/signup.js";
@@ -13,24 +15,38 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//auth
+// Logging middleware
+app.use((req, res, next) => {
+    console.log("Authorization header:", req.headers.authorization);
+
+    next();
+});
+
+// Auth
 app.use(passport.initialize());
 passportConfig(passport);
 
-const server = app.listen(PORT, () => {
-    console.log("Server started", PORT);
-});
-
+// Routes
 app.use("/login", loginRoute);
 app.use("/signup", signupRoute);
+
+app.get("/", passport.authenticate("jwt", { session: false }), (req, res) => {
+    res.json({ user: req.user });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error("Error:", err);
+    res.status(err.status || 500).json({
+        message: err.message || "Internal Server Error",
+    });
+});
+
+const server = app.listen(PORT, () => {
+    console.log("Server started on port", PORT);
+});
 
 server.on("error", (err) => {
     console.error(err && err.message ? err.message : String(err));
     process.exit(1);
-});
-
-app.use((err, req, res, next) => {
-    res.status(err.status || 500).json({
-        message: err.message || "Internal Server Error",
-    });
 });

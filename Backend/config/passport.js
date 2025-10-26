@@ -8,22 +8,25 @@ const opts = {
     secretOrKey: process.env.JWT_SECRET,
 };
 
-const strategy = new JwtStrategy(opts, async (payload, done) => {
-    try {
-        const user = await prisma.user.findUnique({
-            where: {
-                id: payload.id,
-            },
-        });
-        if (!user) return done(null, false);
+const passportConfig = (passport) => {
+    passport.use(
+        new JwtStrategy(opts, async (jwt_payload, done) => {
+            try {
+                const user = await prisma.user.findUnique({
+                    where: { id: jwt_payload.id },
+                });
 
-        return done(null, user);
-    } catch (err) {
-        console.log(err);
-        done(err, false);
-    }
-});
-
-export default (passport) => {
-    passport.use(strategy);
+                if (user) {
+                    const { password, ...userWithoutPassword } = user;
+                    return done(null, userWithoutPassword);
+                }
+                return done(null, false);
+            } catch (err) {
+                console.error(err);
+                return done(err, false);
+            }
+        })
+    );
 };
+
+export default passportConfig;

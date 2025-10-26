@@ -1,6 +1,36 @@
-import passport from "passport";
+import dotenv from "dotenv";
 import bcryptjs from "bcryptjs";
+import prisma from "../config/prisma.js";
+import jwt from "jsonwebtoken";
+dotenv.config();
 
-const validateLogin = (req, res) => {};
+const validateLogin = async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: { username },
+        });
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        const isMatch = await bcryptjs.compare(password, user.password);
+        if (!isMatch)
+            return res.status(401).json({ error: "Invalid password" });
+
+        const { password: _userPassword, ...restField } = user;
+        const payload = { ...restField };
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "30d",
+        });
+
+        return res
+            .status(200)
+            .json({ message: "Login successful", token: `Bearer ${token}` });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Server error" });
+    }
+};
 
 export default validateLogin;
