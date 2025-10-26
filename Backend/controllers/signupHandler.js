@@ -27,12 +27,9 @@ const createUser = [
     ...validate,
     async (req, res) => {
         const { fullName, username, role, password } = req.body;
-        console.log({ fullName, username, role, password });
 
         const errors = validationResult(req);
-        console.log(!errors.isEmpty());
         if (!errors.isEmpty()) {
-            console.log("inputs error");
             return res.status(400).json({ error: errors.array() });
         }
 
@@ -41,14 +38,12 @@ const createUser = [
             const existing = await prisma.user.findUnique({
                 where: { username },
             });
-            console.log(existing);
             if (existing)
                 return res
                     .status(400)
                     .json({ message: "Username already taken" });
 
             const hashedPassword = await bcryptjs.hash(password, 10);
-            console.log(hashedPassword);
             const user = await prisma.user.create({
                 data: {
                     fullName,
@@ -66,7 +61,6 @@ const createUser = [
             });
             return res.status(201).json({ message: "User created", user });
         } catch (error) {
-            console.error(error);
             return res.status(500).json({ message: "Server error" });
         }
     },

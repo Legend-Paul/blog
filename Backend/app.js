@@ -15,13 +15,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Logging middleware
-app.use((req, res, next) => {
-    console.log("Authorization header:", req.headers.authorization);
-
-    next();
-});
-
 // Auth
 app.use(passport.initialize());
 passportConfig(passport);
