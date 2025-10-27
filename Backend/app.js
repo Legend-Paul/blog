@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import signupRoute from "./routes/signup.js";
 import adminBlogRoute from "./routes/adminBlog.js";
+import adminDashboardRoute from "./routes/adminDashboard.js";
 import loginRoute from "./routes/login.js";
 import forgotPasswordRoute from "./routes/forgotPassword.js";
 import passport from "passport";
@@ -25,6 +26,7 @@ app.use("/api/login", loginRoute);
 app.use("/api/signup", signupRoute);
 app.use("/api/forgot-password", forgotPasswordRoute);
 app.use("/api", requireAuth, adminBlogRoute);
+app.use("/dashboard", requireAuth, adminDashboardRoute);
 
 app.get("/", requireAuth, (req, res) => {
     res.json({ user: req.user });
