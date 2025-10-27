@@ -8,6 +8,7 @@ import loginRoute from "./routes/login.js";
 import forgotPasswordRoute from "./routes/forgotPassword.js";
 import passport from "passport";
 import passportConfig from "./config/passport.js";
+import requireAuth from "./config/auth.js";
 dotenv.config();
 
 const app = express();
@@ -27,7 +28,7 @@ app.use("/login", loginRoute);
 app.use("/signup", signupRoute);
 app.use("/forgot-password", forgotPasswordRoute);
 
-app.get("/", passport.authenticate("jwt", { session: false }), (req, res) => {
+app.get("/", requireAuth, (req, res) => {
     res.json({ user: req.user });
 });
 
