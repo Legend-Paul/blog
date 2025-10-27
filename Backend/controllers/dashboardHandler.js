@@ -37,3 +37,16 @@ export const getBlogs = async (req, res) => {
         return res.status(500).json({ message: "Server error" });
     }
 };
+
+export const getBlog = async (req, res) => {
+    try {
+        const { slug } = req.params;
+        const blog = await prisma.blog.findMany({
+            where: { slug, authorId: req.user.id },
+        });
+
+        return res.status(200).json({ message: "All blogs", blog });
+    } catch (err) {
+        return res.status(500).json({ message: "Server error" });
+    }
+};
