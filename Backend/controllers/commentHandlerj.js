@@ -7,7 +7,6 @@ export const createComment = async (req, res) => {
     const blog = await prisma.blog.findUnique({
         where: { slug },
     });
-    console.log(blog);
 
     if (!blog) return res.status(400).json({ message: "Blog not found!" });
 
