@@ -6,12 +6,16 @@ import {
     deleteBlog,
     updateBlog,
 } from "../controllers/adminBlogHandler.js";
-import { createComment } from "../controllers/commentHandlerj.js";
+import {
+    createComment,
+    getBlogComments,
+} from "../controllers/commentHandlerj.js";
 
 const adminBlogRoute = express.Router();
 
 // messages
 adminBlogRoute.post("/blogs/:slug/messages/new", createComment);
+adminBlogRoute.get("/blogs/:slug/messages", getBlogComments);
 
 adminBlogRoute.get("/blogs", getBlogs);
 adminBlogRoute.get("/blogs/:slug", getBlog);
