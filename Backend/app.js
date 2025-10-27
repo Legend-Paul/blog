@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import signupRoute from "./routes/signup.js";
-import dashboardRoute from "./routes/dashboard.js";
+import adminBlogRoute from "./routes/adminBlog.js";
 import loginRoute from "./routes/login.js";
 import forgotPasswordRoute from "./routes/forgotPassword.js";
 import passport from "passport";
@@ -21,10 +21,10 @@ app.use(passport.initialize());
 passportConfig(passport);
 
 // Routes
-app.use("/dashboard", requireAuth, dashboardRoute);
-app.use("/login", loginRoute);
-app.use("/signup", signupRoute);
-app.use("/forgot-password", forgotPasswordRoute);
+app.use("/api/login", loginRoute);
+app.use("/api/signup", signupRoute);
+app.use("/api/forgot-password", forgotPasswordRoute);
+app.use("/api", requireAuth, adminBlogRoute);
 
 app.get("/", requireAuth, (req, res) => {
     res.json({ user: req.user });
