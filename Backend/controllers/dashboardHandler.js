@@ -45,7 +45,23 @@ export const getBlog = async (req, res) => {
             where: { slug, authorId: req.user.id },
         });
 
-        return res.status(200).json({ message: "All blogs", blog });
+        return res
+            .status(200)
+            .json({ message: "Blog accessed successifully", blog });
+    } catch (err) {
+        return res.status(500).json({ message: "Server error" });
+    }
+};
+export const deleteBlog = async (req, res) => {
+    try {
+        const { slug } = req.params;
+        const blog = await prisma.blog.delete({
+            where: { slug, authorId: req.user.id },
+        });
+
+        return res
+            .status(200)
+            .json({ message: "Deleted  successifully", blog });
     } catch (err) {
         return res.status(500).json({ message: "Server error" });
     }
