@@ -1,9 +1,7 @@
-// app.js (ADD BETTER DEBUGGING)
-
 import express from "express";
 import dotenv from "dotenv";
 import signupRoute from "./routes/signup.js";
-import blogRoute from "./routes/blog.js";
+import dashboardRoute from "./routes/dashboard.js";
 import loginRoute from "./routes/login.js";
 import forgotPasswordRoute from "./routes/forgotPassword.js";
 import passport from "passport";
@@ -23,7 +21,7 @@ app.use(passport.initialize());
 passportConfig(passport);
 
 // Routes
-app.use("/blog", blogRoute);
+app.use("/dashboard", requireAuth, dashboardRoute);
 app.use("/login", loginRoute);
 app.use("/signup", signupRoute);
 app.use("/forgot-password", forgotPasswordRoute);
