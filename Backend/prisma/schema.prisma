@@ -45,17 +45,25 @@ model Blog {
 }
 
 model Comment {
-  id        String        @id @default(uuid())
-  content   String        @db.Text
-  createdAt DateTime      @default(now())
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  createdAt DateTime @default(now())
   
-  author    User          @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  author    User     @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
   
-  blog      Blog          @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId    String
+
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  parentId  String?
+  replies   Comment[] @relation("CommentReplies")
   
   likes     CommentLike[]
+  
+  @@index([blogId])
+  @@index([parentId])
+  @@index([authorId])
 }
 
 model Like {
@@ -93,4 +101,5 @@ enum BlogStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+  PENDING
 }

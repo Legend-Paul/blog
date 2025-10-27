@@ -13,7 +13,7 @@ const getSummary = async (req, res) => {
         const { password, ...restUser } = user;
         return res
             .status(200)
-            .json({ meassage: "User detailed", user: restUser });
+            .json({ meassage: "User detailed", data: restUser });
     } catch (error) {
         return res.status(500).json({ message: "Server error" });
     }

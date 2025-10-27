@@ -22,7 +22,7 @@ export const createBlog = async (req, res) => {
                 authorId: req.user.id,
             },
         });
-        return res.status(201).json({ message: "Blog created", blog });
+        return res.status(201).json({ message: "Blog created", data: blog });
     } catch (err) {
         return res.status(500).json({ message: "Server error" });
     }
@@ -35,7 +35,7 @@ export const getBlogs = async (req, res) => {
             where: { authorId: req.user.id },
         });
 
-        return res.status(200).json({ message: "All blogs", blogs });
+        return res.status(200).json({ message: "All blogs", data: blogs });
     } catch (err) {
         return res.status(500).json({ message: "Server error" });
     }
@@ -51,7 +51,7 @@ export const getBlog = async (req, res) => {
 
         return res
             .status(200)
-            .json({ message: "Blog accessed successifully", blog });
+            .json({ message: "Blog accessed successifully", data: blog });
     } catch (err) {
         return res.status(500).json({ message: "Server error" });
     }
@@ -67,7 +67,7 @@ export const deleteBlog = async (req, res) => {
 
         return res
             .status(201)
-            .json({ message: "Deleted  successifully", blog });
+            .json({ message: "Deleted  successifully", data: blog });
     } catch (err) {
         return res.status(500).json({ message: "Server error" });
     }
@@ -113,7 +113,7 @@ export const updateBlog = async (req, res) => {
 
         return res
             .status(200)
-            .json({ message: "Blog updated successifully", blog });
+            .json({ message: "Blog updated successifully", data: blog });
     } catch (err) {
         return res.status(500).json({ message: "Server error" });
     }
