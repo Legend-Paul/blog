@@ -9,12 +9,14 @@ import {
 import {
     createComment,
     getBlogComments,
-} from "../controllers/commentHandlerj.js";
+    createCommentReply,
+} from "../controllers/commentHandler.js";
 
 const adminBlogRoute = express.Router();
 
 // messages
 adminBlogRoute.post("/blogs/:slug/messages/new", createComment);
+adminBlogRoute.post("/blogs/:slug/messages/:id/reply", createCommentReply);
 adminBlogRoute.get("/blogs/:slug/messages", getBlogComments);
 
 adminBlogRoute.get("/blogs", getBlogs);
