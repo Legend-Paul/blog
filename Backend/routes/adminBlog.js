@@ -10,6 +10,7 @@ import {
     createComment,
     getBlogComments,
     createCommentReply,
+    deleteComments,
 } from "../controllers/commentHandler.js";
 
 const adminBlogRoute = express.Router();
@@ -18,6 +19,7 @@ const adminBlogRoute = express.Router();
 adminBlogRoute.post("/blogs/:slug/messages/new", createComment);
 adminBlogRoute.post("/blogs/:slug/messages/:id/reply", createCommentReply);
 adminBlogRoute.get("/blogs/:slug/messages", getBlogComments);
+adminBlogRoute.delete("/blogs/:slug/messages/:id", deleteComments);
 
 adminBlogRoute.get("/blogs", getBlogs);
 adminBlogRoute.get("/blogs/:slug", getBlog);
