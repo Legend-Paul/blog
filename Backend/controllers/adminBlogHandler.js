@@ -42,7 +42,6 @@ export const getBlogs = async (req, res) => {
 };
 
 // get a blog
-// get a blog
 export const getBlog = async (req, res) => {
     try {
         const { slug } = req.params;
