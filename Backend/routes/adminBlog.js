@@ -16,6 +16,8 @@ import {
 import {
     createBlogLike,
     createCommentLike,
+    deleteBlogLike,
+    deleteCommentLike,
 } from "../controllers/likesHandler.js";
 
 const adminBlogRoute = express.Router();
@@ -29,6 +31,9 @@ adminBlogRoute.delete("/blogs/:slug/comments/:id", deleteComments);
 //likes
 adminBlogRoute.post("/blogs/:slug/likes/new", createBlogLike);
 adminBlogRoute.post("/blogs/:slug/comments/:id/likes/new", createCommentLike);
+
+adminBlogRoute.delete("/blogs/:slug/likes/:id", deleteBlogLike);
+adminBlogRoute.delete("/blogs/:slug/comments/likes/:id", deleteCommentLike);
 
 adminBlogRoute.get("/blogs", getBlogs);
 adminBlogRoute.get("/blogs/:slug", getBlog);

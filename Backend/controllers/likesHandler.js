@@ -52,3 +52,32 @@ export const createCommentLike = async (req, res) => {
         return res.status(500).json({ message: "Server error" });
     }
 };
+
+export const deleteBlogLike = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const like = await prisma.like.delete({
+            where: { id },
+        });
+        return res
+            .status(200)
+            .json({ message: "Like deleted successifully", data: like });
+    } catch (err) {
+        return res.status(500).json({ message: "Server error" });
+    }
+};
+export const deleteCommentLike = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const like = await prisma.commentLike.delete({
+            where: { id },
+        });
+
+        return res
+            .status(200)
+            .json({ message: "Like deleted successifully", data: like });
+    } catch (err) {
+        return res.status(500).json({ message: "Server error" });
+    }
+};
