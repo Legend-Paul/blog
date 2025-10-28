@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import signupRoute from "./routes/signup.js";
-import adminBlogRoute from "./routes/adminBlog.js";
+import blogRoute from "./routes/blog.js";
 import adminDashboardRoute from "./routes/adminDashboard.js";
 import loginRoute from "./routes/login.js";
 import forgotPasswordRoute from "./routes/forgotPassword.js";
@@ -21,11 +21,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 passportConfig(passport);
 
-// Routes
-app.use("/api/login", loginRoute);
-app.use("/api/signup", signupRoute);
-app.use("/api/forgot-password", forgotPasswordRoute);
-app.use("/api", requireAuth, adminBlogRoute);
+// general Routes
+app.use("/auth/login", loginRoute);
+app.use("/auth/signup", signupRoute);
+app.use("/auth/forgot-password", forgotPasswordRoute);
+
+app.use("/api", requireAuth, blogRoute);
+// admin route
 app.use("/dashboard", requireAuth, adminDashboardRoute);
 
 app.get("/", requireAuth, (req, res) => {
