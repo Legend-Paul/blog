@@ -13,13 +13,18 @@ import {
     deleteComments,
 } from "../controllers/commentHandler.js";
 
+import { createLike } from "../controllers/likesHandler.js";
+
 const adminBlogRoute = express.Router();
 
-// messages
-adminBlogRoute.post("/blogs/:slug/messages/new", createComment);
-adminBlogRoute.post("/blogs/:slug/messages/:id/reply", createCommentReply);
-adminBlogRoute.get("/blogs/:slug/messages", getBlogComments);
-adminBlogRoute.delete("/blogs/:slug/messages/:id", deleteComments);
+// comments
+adminBlogRoute.post("/blogs/:slug/comments/new", createComment);
+adminBlogRoute.post("/blogs/:slug/comments/:id/reply", createCommentReply);
+adminBlogRoute.get("/blogs/:slug/comments", getBlogComments);
+adminBlogRoute.delete("/blogs/:slug/comments/:id", deleteComments);
+
+//likes
+adminBlogRoute.post("/blogs/:slug/likes/new", createLike);
 
 adminBlogRoute.get("/blogs", getBlogs);
 adminBlogRoute.get("/blogs/:slug", getBlog);
