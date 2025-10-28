@@ -42,9 +42,15 @@ export const getBlogComments = async (req, res) => {
         const comments = await prisma.comment.findMany({
             where: {
                 blogId: blog.id,
-                parentId: null, // IMPORTANT: Only fetch top-level comments
+                parentId: null, // Only fetch top-level comments
             },
             include: {
+                _count: {
+                    select: {
+                        likes: true,
+                        replies: true,
+                    },
+                },
                 author: {
                     select: {
                         id: true,
@@ -56,6 +62,11 @@ export const getBlogComments = async (req, res) => {
                 },
                 replies: {
                     include: {
+                        _count: {
+                            select: {
+                                likes: true,
+                            },
+                        },
                         author: {
                             select: {
                                 id: true,
