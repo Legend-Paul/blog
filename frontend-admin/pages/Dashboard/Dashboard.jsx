@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 
 export default function Dashboard() {
     const [data, setData] = useState(null);
+    let published = null;
+  let draft = null;
+  let pending = null;
+  let archived = null;
 
   useEffect(() => {
     fetch('http://localhost:5000/api/blogs', {
@@ -13,8 +17,38 @@ export default function Dashboard() {
       .then(res => setData(res.data))
       .catch(error => console.error('Error fetching data:', error));
   }, []);
-  console.log(data)
+  
+  
+  if(data){
+  published = data.blogs.filter(blogs=> blogs.status === "PUBLISHED").length;
+  draft = data.blogs.filter(blogs=> blogs.status === "DRAFT").length;
+  pending = data.blogs.filter(blogs=> blogs.status === "PENDING").length;
+  archived = data.blogs.filter(blogs=> blogs.status === "ARCHIVED").length;
+}
+
+  
   return (
-    <p>{JSON.stringify(data)}</p>
+    <div className="dashboard-container">
+
+        <div className="user-table"></div>
+        <div className="blogs-summary">
+            <div className="blog-status ">
+                <h3 className="status-name">PUBLISHED</h3>
+                <p className="status">{published}</p>
+            </div>
+            <div className="blog-status">
+                <h3 className="status-name">DRAFT</h3>
+                <p className="status">{draft}</p>
+            </div>
+            <div className="blog-status">
+                <h3 className="status-name">PENDING</h3>
+                <p className="status">{pending}</p>
+            </div>
+            <div className="blog-status">
+                <h3 className="status-name">ARCHIVED</h3>
+                <p className="status">{archived}</p>
+            </div>
+        </div>
+    </div>
   )
 }
