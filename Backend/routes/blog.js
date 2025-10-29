@@ -35,6 +35,7 @@ blogRoute.post("/blogs/:slug/comments/:id/likes/new", createCommentLike);
 blogRoute.delete("/blogs/:slug/likes/:id", deleteBlogLike);
 blogRoute.delete("/blogs/:slug/comments/likes/:id", deleteCommentLike);
 
+//blogs
 blogRoute.get("/blogs", getBlogs);
 blogRoute.get("/blogs/:slug", getBlog);
 blogRoute.put("/blogs/:slug", updateBlog);

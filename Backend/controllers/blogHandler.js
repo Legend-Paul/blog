@@ -3,6 +3,7 @@ import prisma from "../config/prisma.js";
 // create blog
 export const createBlog = async (req, res) => {
     const { title, content, slug, status } = req.body;
+    console.log("called")
     try {
         const blogExist = await prisma.blog.findUnique({
             where: {
@@ -32,11 +33,16 @@ export const createBlog = async (req, res) => {
 export const getBlogs = async (req, res) => {
     try {
         const blogs = await prisma.blog.findMany({
-            where: { authorId: req.user.id },
+            where: { 
+                authorId: req.user.id 
+            },
+            
+                
         });
 
-        return res.status(200).json({ message: "All blogs", data: blogs });
+        return res.status(200).json({ message: "All blogs", data: {blogs, user: req.user} });
     } catch (err) {
+        console.error("Error fetching blogs:", err);
         return res.status(500).json({ message: "Server error" });
     }
 };

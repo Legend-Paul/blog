@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors"
 import signupRoute from "./routes/signup.js";
 import blogRoute from "./routes/blog.js";
 import adminDashboardRoute from "./routes/adminDashboard.js";
@@ -12,10 +13,17 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const corsOptions = {
+  origin: 'http://localhost:5173', 
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, 
+};
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors(corsOptions));
+
 
 // Auth
 app.use(passport.initialize());
