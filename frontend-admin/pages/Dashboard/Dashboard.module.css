@@ -1,0 +1,28 @@
+.dashboard-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-md);
+}
+
+.blogs-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xl);
+    
+}
+
+.blog-status {
+    place-content: center;
+    place-items: center;
+    background-color: var(--bg-muted);
+    border-radius: var(--radius-sm);
+    padding: var(--space-md);
+    display: grid;
+    gap: var(--space-md);
+    h3 {
+        color: var(--info-color);
+    }
+    .status {
+        font-size: var(--text-3xl);
+    }
+}

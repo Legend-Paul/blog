@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import styles from "./Dashboard.module.css"
 
 export default function Dashboard() {
     const [data, setData] = useState(null);
@@ -28,25 +29,36 @@ export default function Dashboard() {
 
   
   return (
-    <div className="dashboard-container">
-
-        <div className="user-table"></div>
-        <div className="blogs-summary">
-            <div className="blog-status ">
-                <h3 className="status-name">PUBLISHED</h3>
-                <p className="status">{published}</p>
+    <div className={styles["dashboard-container"]}>
+        <div className={styles["user-table"]}>
+            
+            
+        </div>
+        <div className={styles["blogs-summary"]}>
+            <div className={styles["blog-status"]}>
+                <h3 className={styles["status-name"]}>
+                    PUBLISHED</h3>
+                <p className={styles["status"]}>
+                    {published}</p>
             </div>
-            <div className="blog-status">
-                <h3 className="status-name">DRAFT</h3>
-                <p className="status">{draft}</p>
+            <div className={styles["blog-status"]}>
+                <h3 className={styles["status-name"]}>
+                    DRAFT</h3>
+                <p className={styles["status"]}>
+                    {
+                draft}</p>
             </div>
-            <div className="blog-status">
-                <h3 className="status-name">PENDING</h3>
-                <p className="status">{pending}</p>
+            <div className={styles["blog-status"]}>
+                <h3 className={styles["status-name"]}>
+                    PENDING</h3>
+                <p className={styles["status"]}>
+                    {pending}</p>
             </div>
-            <div className="blog-status">
-                <h3 className="status-name">ARCHIVED</h3>
-                <p className="status">{archived}</p>
+            <div className={styles["blog-status"]}>
+                <h3 className={styles["status-name"]}>
+                    ARCHIVED</h3>
+                <p className={styles["status"]}>
+                    {archived}</p>
             </div>
         </div>
     </div>
