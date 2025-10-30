@@ -1,66 +1,69 @@
 import { useEffect, useState } from "react";
-import styles from "./Dashboard.module.css"
+import styles from "./Dashboard.module.css";
 
 export default function Dashboard() {
-    const [data, setData] = useState(null);
-    let published = null;
+  const [data, setData] = useState(null);
+  let published = null;
   let draft = null;
   let pending = null;
   let archived = null;
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/blogs', {
-        headers: {
-            "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`
-        }
-    }) 
-      .then(response => response.json())
-      .then(res => setData(res.data))
-      .catch(error => console.error('Error fetching data:', error));
+    fetch("http://localhost:5000/api/blogs", {
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
+      },
+    })
+      .then((response) => response.json())
+      .then((res) => setData(res.data))
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
-  
-  
-  if(data){
-  published = data.blogs.filter(blogs=> blogs.status === "PUBLISHED").length;
-  draft = data.blogs.filter(blogs=> blogs.status === "DRAFT").length;
-  pending = data.blogs.filter(blogs=> blogs.status === "PENDING").length;
-  archived = data.blogs.filter(blogs=> blogs.status === "ARCHIVED").length;
-}
 
-  
+  if (data) {
+    published = data.blogs.filter((blogs) => blogs.status === "PUBLISHED");
+    draft = data.blogs.filter((blogs) => blogs.status === "DRAFT").length;
+    pending = data.blogs.filter((blogs) => blogs.status === "PENDING").length;
+    archived = data.blogs.filter((blogs) => blogs.status === "ARCHIVED").length;
+  }
+
   return (
     <div className={styles["dashboard-container"]}>
-        <div className={styles["user-table"]}>
-            
-            
+      <div className="dashboard">
+        <div className={styles["user-table"]}></div>
+        <div className={styles["published-blogs-container"]}>
+          <h3>Published blogs</h3>
+          <div className={styles["published-blogs"]}>
+            {published.map((blog) => {
+              return (
+                <div className={styles["blog"]}>
+                  <a href={blog.slug}>{blog.title}</a>
+                </div>
+              );
+            })}
+          </div>
         </div>
-        <div className={styles["blogs-summary"]}>
+        <div className={styles["blog-summary-container"]}>
+          <h3>Blogs Summary</h3>
+          <div className={styles["blogs-summary"]}>
             <div className={styles["blog-status"]}>
-                <h3 className={styles["status-name"]}>
-                    PUBLISHED</h3>
-                <p className={styles["status"]}>
-                    {published}</p>
+              <h4 className={styles["status-name"]}>PUBLISHED</h4>
+              <p className={styles["status"]}>{published.length}</p>
             </div>
             <div className={styles["blog-status"]}>
-                <h3 className={styles["status-name"]}>
-                    DRAFT</h3>
-                <p className={styles["status"]}>
-                    {
-                draft}</p>
+              <h4 className={styles["status-name"]}>DRAFT</h4>
+              <p className={styles["status"]}>{draft}</p>
             </div>
             <div className={styles["blog-status"]}>
-                <h3 className={styles["status-name"]}>
-                    PENDING</h3>
-                <p className={styles["status"]}>
-                    {pending}</p>
+              <h4 className={styles["status-name"]}>PENDING</h4>
+              <p className={styles["status"]}>{pending}</p>
             </div>
             <div className={styles["blog-status"]}>
-                <h3 className={styles["status-name"]}>
-                    ARCHIVED</h3>
-                <p className={styles["status"]}>
-                    {archived}</p>
+              <h4 className={styles["status-name"]}>ARCHIVED</h4>
+              <p className={styles["status"]}>{archived}</p>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-  )
+  );
 }
