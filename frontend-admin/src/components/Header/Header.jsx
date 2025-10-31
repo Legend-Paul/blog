@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./Header.module.css";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Header() {
   const [active, setActive] = useState("dashboard");
@@ -10,12 +10,12 @@ export default function Header() {
     <div className={styles["header-container"]}>
       <header>
         <div className={styles["logo"]}>
-          <a href="/">Blog</a>
+          <Link to="/">Blog</Link>
         </div>
         <nav>
           <ul>
             <li>
-              <a
+              <Link
                 className={
                   styles[
                     `${
@@ -26,34 +26,34 @@ export default function Header() {
                     }`
                   ]
                 }
-                href="/dashboard"
+                to="/dashboard"
               >
                 Dashboard
-              </a>
+              </Link>
             </li>
           </ul>
           <ul>
             <li>
-              <a
+              <Link
                 className={
                   styles[`${currentPath.includes("blogs") ? "active" : ""}`]
                 }
-                href="/blogs"
+                to="/blogs"
               >
                 Blogs
-              </a>
+              </Link>
             </li>
           </ul>
           <ul>
             <li>
-              <a
+              <Link
                 className={
                   styles[`${currentPath.includes("signout") ? "active" : ""}`]
                 }
-                href="/signout"
+                to="/signout"
               >
                 Sign Out
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>
