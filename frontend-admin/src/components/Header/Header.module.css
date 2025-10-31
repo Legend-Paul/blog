@@ -1,0 +1,61 @@
+.header-container {
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky, 1020);
+}
+
+.header-container header {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-xl);
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  background-color: var(--primary-color);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.logo:hover {
+  background-color: var(--primary-dark);
+}
+
+.header-container nav {
+  display: flex;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+.header-container nav ul {
+  list-style: none;
+}
+
+.header-container nav a {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  font-weight: 500;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.header-container nav a:hover {
+  color: var(--primary-color);
+  background-color: var(--bg-muted);
+}
+
+/* Active state for current page */
+.header-container nav a[aria-current="page"] {
+  color: var(--primary-color);
+  background-color: var(--bg-secondary);
+}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./Dashboard.module.css";
+import Header from "../../components/Header/Header";
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
@@ -16,11 +17,16 @@ export default function Dashboard() {
   }, []);
 
   // Show loading while data is not yet available
+
   if (!data) {
     return (
       <div className={styles["dashboard-container"]}>
-        <div className={styles["dashboard"]}>
-          <p>Loading...</p>
+        <Header />
+        <div className={styles["dashboard-spiner"]}>
+          <div className={styles["spinner-container"]}>
+            <div className={styles["spinner"]}></div>
+            <p className={styles["loading-text"]}>Please Wait...</p>
+          </div>
         </div>
       </div>
     );
@@ -37,6 +43,7 @@ export default function Dashboard() {
 
   return (
     <div className={styles["dashboard-container"]}>
+      <Header></Header>
       <div className={styles["dashboard"]}>
         <div className={styles["user-table"]}>
           <table>
