@@ -6,6 +6,7 @@ import styles from "./Blogs.module.css";
 export default function Blogs() {
   const [data, setData] = useState(null);
   const [loadingStates, setLoadingStates] = useState({});
+  const [activeStatus, setActiveStatus] = useState("ALL"); // Default to show all
 
   useEffect(() => {
     fetch("http://localhost:5000/api/blogs", {
@@ -25,7 +26,7 @@ export default function Blogs() {
       const response = await fetch(
         `http://localhost:5000/api/blogs/${blogId}/${action}`,
         {
-          method: action,
+          method: "PATCH",
           headers: {
             Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
             "Content-Type": "application/json",
@@ -34,7 +35,6 @@ export default function Blogs() {
       );
 
       if (response.ok) {
-        // Refresh the data
         const updatedData = await fetch("http://localhost:5000/api/blogs", {
           headers: {
             Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
@@ -101,43 +101,98 @@ export default function Blogs() {
     return acc;
   }, {});
 
+  // Calculate counts for each status
+  const statusCounts = {
+    ALL: data.blogs?.length || 0,
+    DRAFT: blogs.DRAFT?.length || 0,
+    PENDING: blogs.PENDING?.length || 0,
+    PUBLISHED: blogs.PUBLISHED?.length || 0,
+    ARCHIVED: blogs.ARCHIVED?.length || 0,
+  };
+
+  const statusOrder = ["DRAFT", "PENDING", "PUBLISHED", "ARCHIVED"];
+
   return (
     <div className={styles["blogs-container"]}>
       <Header />
-      <section className={styles["blogs-content"]}>
+      <div className={styles["blogs-content"]}>
         <div className={styles["blogs-header"]}>
           <h1>My Blogs</h1>
           <button className={styles["create-btn"]}>Create New Blog</button>
         </div>
 
-        <div className={styles["blogs-grid"]}>
-          {Object.entries(blogs).map(([status, blog]) => {
-            return (
-              <BlogSection
-                key={status}
-                status={status}
-                blogs={blogs[status]}
-                onAction={handleBlogAction}
-                onDelete={handleDelete}
-                loadingStates={loadingStates}
-              />
-            );
-          })}
+        {/* Status Filter Chips */}
+        <div className={styles["status-filters"]}>
+          {[
+            { key: "ALL", label: "All Blogs", count: statusCounts.ALL },
+            { key: "DRAFT", label: "Drafts", count: statusCounts.DRAFT },
+            { key: "PENDING", label: "Pending", count: statusCounts.PENDING },
+            {
+              key: "PUBLISHED",
+              label: "Published",
+              count: statusCounts.PUBLISHED,
+            },
+            {
+              key: "ARCHIVED",
+              label: "Archived",
+              count: statusCounts.ARCHIVED,
+            },
+          ].map(({ key, label, count }) => (
+            <button
+              key={key}
+              className={`${styles["status-chip"]} ${
+                activeStatus === key ? styles["status-chip-active"] : ""
+              }`}
+              onClick={() => setActiveStatus(key)}
+              data-status={key}
+            >
+              <span className={styles["chip-label"]}>{label}</span>
+              <span className={styles["chip-count"]}>{count}</span>
+            </button>
+          ))}
         </div>
-      </section>
+
+        <div className={styles["blogs-grid"]}>
+          {activeStatus === "ALL" ? (
+            // Show all sections when "ALL" is selected
+            statusOrder.map(
+              (status) =>
+                blogs[status]?.length > 0 && (
+                  <BlogSection
+                    key={status}
+                    status={status}
+                    blogs={blogs[status]}
+                    onAction={handleBlogAction}
+                    onDelete={handleDelete}
+                    loadingStates={loadingStates}
+                  />
+                )
+            )
+          ) : // Show only the selected status section
+          blogs[activeStatus]?.length > 0 ? (
+            <BlogSection
+              status={activeStatus}
+              blogs={blogs[activeStatus]}
+              onAction={handleBlogAction}
+              onDelete={handleDelete}
+              loadingStates={loadingStates}
+            />
+          ) : (
+            <div className={styles["empty-state"]}>
+              <h3>No {activeStatus.toLowerCase()} blogs found</h3>
+              <p>
+                You don't have any blogs with {activeStatus.toLowerCase()}{" "}
+                status.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
-const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-};
-
-// Blog Section Component
+// Blog Section Component (same as before)
 function BlogSection({ status, blogs, onAction, onDelete, loadingStates }) {
   const statusConfig = {
     DRAFT: { color: "var(--warning-color)", label: "Drafts" },
@@ -174,8 +229,16 @@ function BlogSection({ status, blogs, onAction, onDelete, loadingStates }) {
   );
 }
 
-// Blog Card Component
+// Blog Card Component (same as before)
 function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   const getStatusActions = (currentStatus) => {
     const baseActions = [
       { label: "View", action: "view", variant: "secondary" },
