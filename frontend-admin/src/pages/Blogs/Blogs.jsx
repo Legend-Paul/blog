@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import CreateBlog from "../../components/CreateBlog/CreateBlog";
+import Button from "../../components/Button/Button";
 import styles from "./Blogs.module.css";
 
 export default function Blogs() {
@@ -321,18 +322,25 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
 
       <div className={styles["blog-actions"]}>
         {actions.map(({ label, action, variant }) => (
-          <button
+          <Button
             key={action}
-            className={`${styles["action-btn"]} ${styles[`action-${variant}`]}`}
-            onClick={() => handleActionClick(action)}
-            disabled={isLoading === action}
-          >
-            {isLoading === action ? (
-              <div className={styles["btn-spinner"]}></div>
-            ) : (
-              label
-            )}
-          </button>
+            handleClick={handleActionClick(action)}
+            isLoading={isLoading}
+            label={label}
+            action={action}
+          />
+          // <button
+          //   key={action}
+          //   className={`${styles["action-btn"]} ${styles[`action-${variant}`]}`}
+          //   onClick={() => handleActionClick(action)}
+          //   disabled={isLoading === action}
+          // >
+          //   {isLoading === action ? (
+          //     <div className={styles["btn-spinner"]}></div>
+          //   ) : (
+          //     label
+          //   )}
+          // </button>
         ))}
       </div>
     </div>

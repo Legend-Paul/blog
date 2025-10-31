@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import Header from "../../components/Header/Header";
+import Button from "../../components/Button/Button";
 
 export default function NewBlog() {
   const [content, setContent] = useState(null);
@@ -22,7 +23,12 @@ export default function NewBlog() {
               toolbar: "undo redo | bold italic | bullist numlist",
             }}
           />
-          <button onClick={() => console.log(content)}>Get Content</button>
+          <Button
+            onClick={() => console.log(content)}
+            label={"Create Blog"}
+            action={"create"}
+            variant={"success"}
+          />
         </div>
       </section>
     </div>
