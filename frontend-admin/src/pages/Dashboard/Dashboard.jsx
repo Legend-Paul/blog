@@ -65,6 +65,7 @@ export default function Dashboard() {
             </tbody>
           </table>
         </div>
+
         <div className={styles["published-blogs-container"]}>
           <h3>Published blogs</h3>
           <div className={styles["published-blogs"]}>
