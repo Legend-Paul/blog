@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import Blog from "./pages/Blog/Blog";
+import Blog from "./pages/Blogs/Blogs";
 import "./index.css";
 
 export default function App() {
