@@ -3,8 +3,9 @@ import Header from "../../components/Header/Header";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import styles from "./Blogs.module.css";
 
-export default function () {
+export default function Blogs() {
   const [data, setData] = useState(null);
+  const [loadingStates, setLoadingStates] = useState({});
 
   useEffect(() => {
     fetch("http://localhost:5000/api/blogs", {
@@ -17,7 +18,73 @@ export default function () {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  // Show loading while data is not yet available
+  const handleBlogAction = async (blogId, action) => {
+    setLoadingStates((prev) => ({ ...prev, [blogId]: action }));
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/blogs/${blogId}/${action}`,
+        {
+          method: action,
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        // Refresh the data
+        const updatedData = await fetch("http://localhost:5000/api/blogs", {
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
+          },
+        }).then((res) => res.json());
+
+        setData(updatedData.data);
+      } else {
+        console.error(`Failed to ${action} blog`);
+      }
+    } catch (error) {
+      console.error(`Error ${action}ing blog:`, error);
+    } finally {
+      setLoadingStates((prev) => ({ ...prev, [blogId]: null }));
+    }
+  };
+
+  const handleDelete = async (blogId) => {
+    if (!window.confirm("Are you sure you want to delete this blog?")) return;
+
+    setLoadingStates((prev) => ({ ...prev, [blogId]: "delete" }));
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/blogs/${blogId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const updatedData = await fetch("http://localhost:5000/api/blogs", {
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
+          },
+        }).then((res) => res.json());
+
+        setData(updatedData.data);
+      } else {
+        console.error("Failed to delete blog");
+      }
+    } catch (error) {
+      console.error("Error deleting blog:", error);
+    } finally {
+      setLoadingStates((prev) => ({ ...prev, [blogId]: null }));
+    }
+  };
 
   if (!data) {
     return (
@@ -27,10 +94,164 @@ export default function () {
       </div>
     );
   }
+
+  const blogs = (data.blogs || []).reduce((acc, curr) => {
+    if (!acc[curr.status]) acc[curr.status] = [];
+    acc[curr.status].push(curr);
+    return acc;
+  }, {});
+
   return (
-    <div className="blog-contaner">
+    <div className={styles["blogs-container"]}>
       <Header />
-      <section className="blog"></section>
+      <section className={styles["blogs-content"]}>
+        <div className={styles["blogs-header"]}>
+          <h1>My Blogs</h1>
+          <button className={styles["create-btn"]}>Create New Blog</button>
+        </div>
+
+        <div className={styles["blogs-grid"]}>
+          {Object.entries(blogs).map(([status, blog]) => {
+            return (
+              <BlogSection
+                key={status}
+                status={status}
+                blogs={blogs[status]}
+                onAction={handleBlogAction}
+                onDelete={handleDelete}
+                loadingStates={loadingStates}
+              />
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+const formatDate = (dateString) => {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
+
+// Blog Section Component
+function BlogSection({ status, blogs, onAction, onDelete, loadingStates }) {
+  const statusConfig = {
+    DRAFT: { color: "var(--warning-color)", label: "Drafts" },
+    PENDING: { color: "var(--info-color)", label: "Pending Review" },
+    PUBLISHED: { color: "var(--success-color)", label: "Published" },
+    ARCHIVED: { color: "var(--text-muted)", label: "Archived" },
+  };
+
+  const config = statusConfig[status] || {
+    color: "var(--text-muted)",
+    label: status,
+  };
+
+  return (
+    <div className={styles["blog-section"]}>
+      <div className={styles["section-header"]}>
+        <h2 style={{ color: config.color }}>{config.label}</h2>
+        <span className={styles["blog-count"]}>{blogs.length}</span>
+      </div>
+
+      <div className={styles["blogs-list"]}>
+        {blogs.map((blog) => (
+          <BlogCard
+            key={blog.id}
+            blog={blog}
+            status={status}
+            onAction={onAction}
+            onDelete={onDelete}
+            isLoading={loadingStates[blog.id]}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Blog Card Component
+function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
+  const getStatusActions = (currentStatus) => {
+    const baseActions = [
+      { label: "View", action: "view", variant: "secondary" },
+      { label: "Edit", action: "edit", variant: "secondary" },
+      { label: "Delete", action: "delete", variant: "danger" },
+    ];
+
+    switch (currentStatus) {
+      case "DRAFT":
+        return [
+          ...baseActions,
+          { label: "Publish", action: "publish", variant: "primary" },
+        ];
+      case "PENDING":
+        return [
+          ...baseActions,
+          { label: "Publish", action: "publish", variant: "primary" },
+        ];
+      case "PUBLISHED":
+        return [
+          ...baseActions,
+          { label: "Unpublish", action: "unpublish", variant: "warning" },
+        ];
+      case "ARCHIVED":
+        return [
+          ...baseActions,
+          { label: "Publish", action: "publish", variant: "primary" },
+        ];
+      default:
+        return baseActions;
+    }
+  };
+
+  const actions = getStatusActions(status);
+
+  const handleActionClick = (action) => {
+    if (action === "view") {
+      window.open(`/blog/${blog.slug}`, "_blank");
+    } else if (action === "edit") {
+      window.location.href = `/edit/${blog.id}`;
+    } else if (action === "delete") {
+      onDelete(blog.id);
+    } else {
+      onAction(blog.id, action);
+    }
+  };
+
+  return (
+    <div className={styles["blog-card"]}>
+      <div className={styles["blog-header"]}>
+        <h3 className={styles["blog-title"]}>{blog.title}</h3>
+        <span className={styles["blog-date"]}>
+          {formatDate(blog.createdAt)}
+        </span>
+      </div>
+
+      <p className={styles["blog-description"]}>
+        {blog.description || "No description available"}
+      </p>
+
+      <div className={styles["blog-actions"]}>
+        {actions.map(({ label, action, variant }) => (
+          <button
+            key={action}
+            className={`${styles["action-btn"]} ${styles[`action-${variant}`]}`}
+            onClick={() => handleActionClick(action)}
+            disabled={isLoading === action}
+          >
+            {isLoading === action ? (
+              <div className={styles["btn-spinner"]}></div>
+            ) : (
+              label
+            )}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

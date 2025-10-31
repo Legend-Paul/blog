@@ -171,5 +171,5 @@ body {
 section {
   padding: 0, var(--space-2xl);
   color: var(--text-primary);
-  margin-top: calc(var(--space-2xl) * 3) !important;
+  margin-top: calc(var(--space-2xl) * 2) !important;
 }
