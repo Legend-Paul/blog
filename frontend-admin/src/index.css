@@ -165,9 +165,11 @@
   padding: 0;
   margin: 0;
 }
-
 body {
   background-color: var(--bg-primary);
-  padding: var(--space-2xl);
+}
+section {
+  padding: 0, var(--space-2xl);
   color: var(--text-primary);
+  margin-top: calc(var(--space-2xl) * 3) !important;
 }

@@ -4,7 +4,9 @@ export default function Header() {
   return (
     <div className={styles["header-container"]}>
       <header>
-        <div className={styles["logo"]}></div>
+        <div className={styles["logo"]}>
+          <a href="/">Logo</a>
+        </div>
         <nav>
           <ul>
             <li>

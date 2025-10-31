@@ -44,7 +44,7 @@ export default function Dashboard() {
   return (
     <div className={styles["dashboard-container"]}>
       <Header></Header>
-      <div className={styles["dashboard"]}>
+      <section className={styles["dashboard"]}>
         <div className={styles["user-table"]}>
           <table>
             <caption>Author Information</caption>
@@ -109,7 +109,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
