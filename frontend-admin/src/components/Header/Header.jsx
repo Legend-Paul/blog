@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./Header.module.css";
-import { Link, useLocation } from "react-router-dom";
+import { NavLiNavLink, useLocation } from "react-router-dom";
 
 export default function Header({ searchParams }) {
   const location = useLocation();
@@ -12,17 +12,17 @@ export default function Header({ searchParams }) {
     <div className={styles["header-container"]}>
       <header>
         <div className={styles["logo"]}>
-          <Link
+          <NavLink
             to="/"
             state={{ searchParams: searchParams ? searchParams : "" }}
           >
             Blog
-          </Link>
+          </NavLink>
         </div>
         <nav>
           <ul>
             <li>
-              <Link
+              <NavLink
                 className={
                   styles[
                     `${
@@ -37,31 +37,31 @@ export default function Header({ searchParams }) {
                 to="/dashboard"
               >
                 Dashboard
-              </Link>
+              </NavLink>
             </li>
           </ul>
           <ul>
             <li>
-              <Link
+              <NavLink
                 className={
                   styles[`${currentPath.includes("blogs") ? "active" : ""}`]
                 }
                 to={`/blogs?${blogsSearchParams}`}
               >
                 Blogs
-              </Link>
+              </NavLink>
             </li>
           </ul>
           <ul>
             <li>
-              <Link
+              <NavLink
                 className={
                   styles[`${currentPath.includes("signout") ? "active" : ""}`]
                 }
                 to="/signout"
               >
                 Sign Out
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </nav>
