@@ -3,10 +3,6 @@ import styles from "./Dashboard.module.css";
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
-  let published = null;
-  let draft = null;
-  let pending = null;
-  let archived = null;
 
   useEffect(() => {
     fetch("http://localhost:5000/api/blogs", {
@@ -19,23 +15,65 @@ export default function Dashboard() {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  if (data) {
-    published = data.blogs.filter((blogs) => blogs.status === "PUBLISHED");
-    draft = data.blogs.filter((blogs) => blogs.status === "DRAFT").length;
-    pending = data.blogs.filter((blogs) => blogs.status === "PENDING").length;
-    archived = data.blogs.filter((blogs) => blogs.status === "ARCHIVED").length;
+  // Show loading while data is not yet available
+  if (!data) {
+    return (
+      <div className={styles["dashboard-container"]}>
+        <div className={styles["dashboard"]}>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
   }
+
+  const published = (data.blogs || []).filter((b) => b.status === "PUBLISHED");
+  const draft = (data.blogs || []).filter((b) => b.status === "DRAFT").length;
+  const pending = (data.blogs || []).filter(
+    (b) => b.status === "PENDING"
+  ).length;
+  const archived = (data.blogs || []).filter(
+    (b) => b.status === "ARCHIVED"
+  ).length;
 
   return (
     <div className={styles["dashboard-container"]}>
-      <div className="dashboard">
-        <div className={styles["user-table"]}></div>
+      <div className={styles["dashboard"]}>
+        <div className={styles["user-table"]}>
+          <table>
+            <caption>Author Information</caption>
+            <tbody>
+              <tr>
+                <td>Fullname</td>
+                <td>{data.user.fullName}</td>
+              </tr>
+              <tr>
+                <td>Username</td>
+                <td>{data.user.username}</td>
+              </tr>
+              <tr>
+                <td>Role</td>
+                <td>{data.user.role}</td>
+              </tr>
+              <tr>
+                <td>Created At</td>
+                <td>{data.user.createdAt}</td>
+              </tr>
+              <tr>
+                <td>Updated At</td>
+                <td>{data.user.updatedAt}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div className={styles["published-blogs-container"]}>
           <h3>Published blogs</h3>
           <div className={styles["published-blogs"]}>
             {published.map((blog) => {
               return (
-                <div className={styles["blog"]}>
+                <div
+                  className={styles["blog"]}
+                  key={blog.id || blog._id || blog.slug}
+                >
                   <a href={blog.slug}>{blog.title}</a>
                 </div>
               );
