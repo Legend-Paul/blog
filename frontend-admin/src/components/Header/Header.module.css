@@ -56,6 +56,16 @@
   background-color: var(--bg-muted);
 }
 
+nav .active {
+  /* color: var(--primary-color); */
+  background-color: var(--primary-color);
+}
+
+nav .active:hover {
+  color: var(--text-primary) !important;
+  background-color: var(--primary-color) !important;
+}
+
 /* Active state for current page */
 .header-container nav a[aria-current="page"] {
   color: var(--primary-color);
