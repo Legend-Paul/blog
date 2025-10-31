@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import styles from "./Blogs.module.css";
@@ -6,7 +7,8 @@ import styles from "./Blogs.module.css";
 export default function Blogs() {
   const [data, setData] = useState(null);
   const [loadingStates, setLoadingStates] = useState({});
-  const [activeStatus, setActiveStatus] = useState("ALL"); // Default to show all
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeStatus = searchParams.get("status") || "ALL";
 
   useEffect(() => {
     fetch("http://localhost:5000/api/blogs", {
@@ -18,6 +20,21 @@ export default function Blogs() {
       .then((res) => setData(res.data))
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
+
+  const handleStatusFilter = (status) => {
+    if (status === "ALL") {
+      // Remove status parameter to show all
+      // const newParams = new URLSearchParams(searchParams);
+      // newParams.delete("status");
+      setSearchParams((prevParams) => {
+        prevParams.delete("status");
+        return prevParams;
+      });
+    } else {
+      // Set the status parameter
+      setSearchParams({ status });
+    }
+  };
 
   const handleBlogAction = async (blogId, action) => {
     setLoadingStates((prev) => ({ ...prev, [blogId]: action }));
@@ -115,7 +132,7 @@ export default function Blogs() {
   return (
     <div className={styles["blogs-container"]}>
       <Header />
-      <div className={styles["blogs-content"]}>
+      <section className={styles["blogs-content"]}>
         <div className={styles["blogs-header"]}>
           <h1>My Blogs</h1>
           <button className={styles["create-btn"]}>Create New Blog</button>
@@ -143,7 +160,7 @@ export default function Blogs() {
               className={`${styles["status-chip"]} ${
                 activeStatus === key ? styles["status-chip-active"] : ""
               }`}
-              onClick={() => setActiveStatus(key)}
+              onClick={() => handleStatusFilter(key)}
               data-status={key}
             >
               <span className={styles["chip-label"]}>{label}</span>
@@ -187,7 +204,7 @@ export default function Blogs() {
             </div>
           )}
         </div>
-      </div>
+      </section>
     </div>
   );
 }
