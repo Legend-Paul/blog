@@ -132,7 +132,6 @@
   line-height: 1.5;
   margin-bottom: var(--space-lg);
   display: -webkit-box;
-
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
