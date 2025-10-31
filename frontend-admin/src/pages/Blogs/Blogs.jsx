@@ -103,10 +103,12 @@ export default function Blogs() {
     }
   };
 
+  console.log(searchParams.toString());
+
   if (!data) {
     return (
       <div className={styles["dashboard-container"]}>
-        <Header />
+        <Header searchParams={searchParams.toString()} />
         <Spinnner />
       </div>
     );
@@ -131,7 +133,7 @@ export default function Blogs() {
 
   return (
     <div className={styles["blogs-container"]}>
-      <Header />
+      <Header searchParams={searchParams.toString()} />
       <section className={styles["blogs-content"]}>
         <div className={styles["blogs-header"]}>
           <h1>My Blogs</h1>

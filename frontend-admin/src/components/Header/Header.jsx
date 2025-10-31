@@ -2,15 +2,22 @@ import { useState } from "react";
 import styles from "./Header.module.css";
 import { Link, useLocation } from "react-router-dom";
 
-export default function Header() {
-  const [active, setActive] = useState("dashboard");
+export default function Header({ searchParams }) {
   const location = useLocation();
   const currentPath = location.pathname;
+  console.log(location.state);
+  const blogsSearchParams = location.state?.searchParams || "";
+
   return (
     <div className={styles["header-container"]}>
       <header>
         <div className={styles["logo"]}>
-          <Link to="/">Blog</Link>
+          <Link
+            to="/"
+            state={{ searchParams: searchParams ? searchParams : "" }}
+          >
+            Blog
+          </Link>
         </div>
         <nav>
           <ul>
@@ -26,6 +33,7 @@ export default function Header() {
                     }`
                   ]
                 }
+                state={{ searchParams: searchParams ? searchParams : "" }}
                 to="/dashboard"
               >
                 Dashboard
@@ -38,7 +46,7 @@ export default function Header() {
                 className={
                   styles[`${currentPath.includes("blogs") ? "active" : ""}`]
                 }
-                to="/blogs"
+                to={`/blogs?${blogsSearchParams}`}
               >
                 Blogs
               </Link>

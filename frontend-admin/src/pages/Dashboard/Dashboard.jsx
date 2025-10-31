@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import styles from "./Dashboard.module.css";
 import Header from "../../components/Header/Header";
 import Spinnner from "../../components/Spinnner/Spinnner";
+import { useLocation } from "react-router-dom";
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
+  const location = useLocation();
+  const blogsSearchParams = location.state?.searchParams || "";
 
   useEffect(() => {
     fetch("http://localhost:5000/api/blogs", {
@@ -22,7 +25,7 @@ export default function Dashboard() {
   if (!data) {
     return (
       <div className={styles["dashboard-container"]}>
-        <Header />
+        <Header searchParams={blogsSearchParams} />
         <Spinnner />
       </div>
     );
@@ -39,7 +42,7 @@ export default function Dashboard() {
 
   return (
     <div className={styles["dashboard-container"]}>
-      <Header></Header>
+      <Header />
       <section className={styles["dashboard"]}>
         <div className={styles["user-table"]}>
           <table>
