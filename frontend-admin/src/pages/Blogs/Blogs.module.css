@@ -27,24 +27,6 @@
   margin: 0;
 }
 
-.create-btn {
-  background: var(--primary-color);
-  color: var(--bg-primary);
-  border: none;
-  padding: var(--space-md) var(--space-xl);
-  border-radius: var(--radius-lg);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  text-decoration: none;
-  display: inline-block;
-}
-
-.create-btn:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
-}
-
 .blogs-grid {
   display: grid;
   gap: var(--space-2xl);

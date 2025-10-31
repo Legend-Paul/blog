@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./Dashboard.module.css";
 import Header from "../../components/Header/Header";
 import Spinnner from "../../components/Spinnner/Spinnner";
+import CreateBlog from "../../components/CreateBlog/CreateBlog";
 import { useLocation } from "react-router-dom";
 
 export default function Dashboard() {
@@ -43,6 +44,7 @@ export default function Dashboard() {
   return (
     <div className={styles["dashboard-container"]}>
       <Header />
+      <CreateBlog />
       <section className={styles["dashboard"]}>
         <div className={styles["user-table"]}>
           <table>

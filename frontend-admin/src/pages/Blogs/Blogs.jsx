@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Spinnner from "../../components/Spinnner/Spinnner";
+import CreateBlog from "../../components/CreateBlog/CreateBlog";
 import styles from "./Blogs.module.css";
 
 export default function Blogs() {
@@ -134,10 +135,10 @@ export default function Blogs() {
   return (
     <div className={styles["blogs-container"]}>
       <Header searchParams={searchParams.toString()} />
+      <CreateBlog />
       <section className={styles["blogs-content"]}>
         <div className={styles["blogs-header"]}>
           <h1>My Blogs</h1>
-          <button className={styles["create-btn"]}>Create New Blog</button>
         </div>
 
         {/* Status Filter Chips */}

@@ -41,14 +41,6 @@
   }
 }
 
-/* Loading State */
-.dashboard-container p {
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: var(--text-lg);
-  padding: var(--space-4xl);
-}
-
 /* User Table */
 .user-table {
   background: var(--bg-secondary);

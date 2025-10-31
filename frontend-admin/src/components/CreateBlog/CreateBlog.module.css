@@ -1,0 +1,36 @@
+.create-btn {
+  background: var(--success-color);
+  color: var(--text-primary);
+  border: none;
+  padding: var(--space-sm);
+  border-radius: var(--radius-xl);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-slow);
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  overflow: hidden;
+  position: fixed;
+  bottom: var(--space-2xl);
+  right: var(--space-2xl);
+  z-index: 100;
+
+  p {
+    font-size: var(--text-md);
+    opacity: 0;
+    width: 0;
+    transition: all var(--transition-slow);
+    white-space: nowrap;
+  }
+
+  &:hover {
+    p {
+      opacity: 1;
+      width: auto;
+      margin-left: var(--space-sm);
+    }
+  }
+}

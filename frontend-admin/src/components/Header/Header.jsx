@@ -46,7 +46,7 @@ export default function Header({ searchParams }) {
                 className={
                   styles[`${currentPath.includes("blogs") ? "active" : ""}`]
                 }
-                to={`/blogs?${blogsSearchParams}`}
+                to={`/api/blogs?${blogsSearchParams}`}
               >
                 Blogs
               </NavLink>

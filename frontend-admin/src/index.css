@@ -173,3 +173,7 @@ section {
   color: var(--text-primary);
   margin-top: calc(var(--space-2xl) * 2) !important;
 }
+
+svg {
+  width: var(--space-2xl);
+}
