@@ -36,9 +36,9 @@ export default function Header() {
             <li>
               <a
                 className={
-                  styles[`${currentPath.includes("blog") ? "active" : ""}`]
+                  styles[`${currentPath.includes("blogs") ? "active" : ""}`]
                 }
-                href="/"
+                href="/blogs"
               >
                 Blogs
               </a>
