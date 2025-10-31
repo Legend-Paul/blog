@@ -1,8 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import styles from "./CreateBlog.module.css";
 
 export default function () {
+  const navigate = useNavigate();
   return (
-    <button className={styles["create-btn"]}>
+    <button
+      className={styles["create-btn"]}
+      onClick={() => navigate("/api/blogs/new")}
+    >
       <svg
         class="nav-icon"
         fill="none"
