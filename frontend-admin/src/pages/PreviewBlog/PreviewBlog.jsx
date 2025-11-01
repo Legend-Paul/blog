@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import Header from "../../components/Header/Header";
+import styles from "./PreviewBlog.module.css";
 
 export default function PreviewBlog() {
   const [data, setData] = useState();
@@ -20,16 +21,13 @@ export default function PreviewBlog() {
   if (!data) {
     return (
       <div>
-        <Header />
         <Spinnner />
       </div>
     );
   }
-  console.log(data);
 
   return (
-    <div className="preview-blog-con">
-      {/* <Header /> */}
+    <div className={styles["preview-blog-container"]}>
       <section>
         <div dangerouslySetInnerHTML={{ __html: data.content }} />
       </section>
