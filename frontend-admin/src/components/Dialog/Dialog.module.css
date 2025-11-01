@@ -10,6 +10,7 @@
   justify-content: center;
   z-index: 1000;
   padding: var(--space-xl);
+  color: var(--text-primary);
 }
 
 .dialog {
@@ -23,8 +24,20 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
 }
 
+.form-instruction {
+  padding: var(--space-xl);
+  span {
+    color: var(--error-color);
+  }
+}
 .header {
   display: flex;
   justify-content: space-between;
@@ -55,13 +68,6 @@
 .close-button:hover {
   background: var(--bg-muted);
   color: var(--text-primary);
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  overflow: hidden;
 }
 
 .form-content {

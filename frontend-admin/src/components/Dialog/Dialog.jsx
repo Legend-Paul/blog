@@ -17,7 +17,9 @@ export default function Dialog({ isOpen, onClose }) {
             ×
           </button>
         </div>
-
+        <p className={styles["form-instruction"]}>
+          Fill all the fields with <span>*</span>
+        </p>
         <Form>
           <div className={styles["form-content"]}>
             <Input
