@@ -2,7 +2,7 @@ import styles from "./NewBlog.module.css";
 import { useState, useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { EditorHeader } from "../../components/Header/Header";
-import Button from "../../components/Button/Button";
+import Input from "../../components/Input/Input";
 
 export default function NewBlog() {
   const [content, setContent] = useState("Welcome to TinyMCE!");
@@ -85,13 +85,8 @@ export default function NewBlog() {
               uploadcare_public_key: "367367409ba1cc5dfc7b",
             }}
           />
-          {/* <Button
-            handleClick={handleCreateBlog}
-            label={"Create Blog"}
-            action={"create"}
-            variant={"success"}
-          /> */}
         </div>
+        <Input></Input>
       </section>
     </div>
   );
