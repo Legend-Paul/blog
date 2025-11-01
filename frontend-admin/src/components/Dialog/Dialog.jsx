@@ -53,6 +53,7 @@ export default function Dialog({ isOpen, onClose, onSubmit }) {
             <Input
               label="Slug"
               name={"slug"}
+              max={"40"}
               id={"slug"}
               placeholder="Enter blog slug"
               value={formData.slug}
@@ -64,6 +65,7 @@ export default function Dialog({ isOpen, onClose, onSubmit }) {
               label={"Title"}
               name={"title"}
               id={"title"}
+              max={"6"}
               value={formData.title}
               placeholder={"Blog title"}
               onChange={(e) => handleChange("title", e.target.value)}
@@ -74,6 +76,7 @@ export default function Dialog({ isOpen, onClose, onSubmit }) {
               label={"Description"}
               name={"description"}
               id={"description"}
+              max={"255"}
               value={formData.description}
               placeholder={"Blog description"}
               onChange={(e) => handleChange("description", e.target.value)}

@@ -13,7 +13,7 @@
 }
 
 .dialog {
-  margin-top: var(--space-lg);
+  margin-top: calc(var(--space-4xl) * 1.75);
   background: var(--bg-primary);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
