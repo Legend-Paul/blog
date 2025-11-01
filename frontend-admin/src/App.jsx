@@ -22,7 +22,7 @@ const router = createBrowserRouter(
         action={newBlogAction}
       />
       <Route
-        path="/api/blogs/preview"
+        path="/api/blog/:slug"
         element={<PreviewBlog />}
         action={newBlogAction}
       />

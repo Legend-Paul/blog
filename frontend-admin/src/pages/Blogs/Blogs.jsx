@@ -297,7 +297,7 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
 
   const handleActionClick = (action) => {
     if (action === "view") {
-      window.open(`/blog/${blog.slug}`, "_blank");
+      window.open(`/api/blog/${blog.slug}`, "_blank");
     } else if (action === "edit") {
       window.location.href = `/edit/${blog.id}`;
     } else if (action === "delete") {
