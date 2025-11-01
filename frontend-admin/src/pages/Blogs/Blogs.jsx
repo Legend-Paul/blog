@@ -324,7 +324,7 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
         {actions.map(({ label, action, variant }) => (
           <Button
             key={action}
-            handleClick={handleActionClick(action)}
+            onClick={handleActionClick(action)}
             isLoading={isLoading}
             label={label}
             action={action}

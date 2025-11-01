@@ -3,23 +3,21 @@ import styles from "./Button.module.css";
 export default function Button({
   key,
   label,
-  handleClick,
+  onClick,
   variant,
-  isLoading,
-  action,
+
+  disabled = false,
+  type = "button",
 }) {
   return (
     <button
       key={key}
+      type={type}
       className={`${styles["action-btn"]} ${styles[`action-${variant}`]}`}
-      onClick={handleClick}
-      disabled={isLoading === action}
+      onClick={onClick}
+      disabled={disabled}
     >
-      {isLoading === action ? (
-        <div className={styles["btn-spinner"]}></div>
-      ) : (
-        label
-      )}
+      {disabled ? <div className={styles["btn-spinner"]}></div> : label}
     </button>
   );
 }

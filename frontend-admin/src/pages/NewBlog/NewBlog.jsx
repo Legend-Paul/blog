@@ -2,7 +2,7 @@ import styles from "./NewBlog.module.css";
 import { useState, useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { EditorHeader } from "../../components/Header/Header";
-import Input from "../../components/Input/Input";
+import Dialog from "../../components/Dialog/Dialog";
 
 export default function NewBlog() {
   const [content, setContent] = useState("Welcome to TinyMCE!");
@@ -85,8 +85,8 @@ export default function NewBlog() {
               uploadcare_public_key: "367367409ba1cc5dfc7b",
             }}
           />
+          <Dialog isOpen={true} />
         </div>
-        <Input></Input>
       </section>
     </div>
   );

@@ -8,6 +8,7 @@ export default function Input({
   value,
   onChange,
   error,
+  id,
   disabled = false,
   required = true,
   className = "",
@@ -15,7 +16,7 @@ export default function Input({
   return (
     <div className={styles["container"]}>
       {label && (
-        <label className={styles["label"]}>
+        <label className={styles["label"]} htmlFor={id}>
           {label}
           {required && <span className={styles["required"]}>*</span>}
         </label>
@@ -23,6 +24,7 @@ export default function Input({
 
       <input
         type={type}
+        id={id}
         className={`${styles["input"]} ${
           error ? styles["error"] : ""
         } ${className}`}
