@@ -6,8 +6,6 @@ export default function Input({
   type = "text",
   name,
   placeholder,
-  value,
-  onChange,
   error,
   id,
   max,
@@ -34,8 +32,6 @@ export default function Input({
           error ? styles["error"] : ""
         } ${className}`}
         placeholder={placeholder}
-        value={value}
-        onChange={onChange}
         disabled={disabled}
         required={required}
       />
@@ -77,12 +73,9 @@ export function Textarea({
           error ? styles["error"] : ""
         } ${className}`}
         placeholder={placeholder}
-        onChange={onChange}
         disabled={disabled}
         required={required}
-      >
-        {value}
-      </textarea>
+      ></textarea>
     </div>
   );
 }

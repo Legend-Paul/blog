@@ -2,7 +2,10 @@ import styles from "./NewBlog.module.css";
 import { useState, useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { EditorHeader } from "../../components/Header/Header";
+
 import Dialog from "../../components/Dialog/Dialog";
+
+export async function Action() {}
 
 export default function NewBlog() {
   const [content, setContent] = useState("Welcome to TinyMCE!");
@@ -16,6 +19,8 @@ export default function NewBlog() {
   const handleCreateBlog = () => {
     console.log("Blog content:", content);
   };
+
+  const onClose = () => {};
 
   return (
     <div className={styles["new-blog-container"]}>
@@ -85,9 +90,11 @@ export default function NewBlog() {
               uploadcare_public_key: "367367409ba1cc5dfc7b",
             }}
           />
-          <Dialog isOpen={true} />
         </div>
       </section>
+
+      {/* Dialog */}
+      <Dialog isOpen={true} />
     </div>
   );
 }
