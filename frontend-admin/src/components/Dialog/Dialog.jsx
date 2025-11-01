@@ -1,16 +1,19 @@
 // components/Dialog/Dialog.jsx
 import { useState } from "react";
-import Input from "../Input/Input";
+import Input, { Textarea } from "../Input/Input";
 import Button from "../Button/Button";
 import styles from "./Dialog.module.css";
 
 export default function Dialog({ isOpen, onClose, onSubmit }) {
   const [formData, setFormData] = useState({
     title: "",
+    slug: "",
     description: "",
     status: "PUBLISHED",
     category: "",
   });
+
+  console.log(formData);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,6 +22,7 @@ export default function Dialog({ isOpen, onClose, onSubmit }) {
     // Reset form
     setFormData({
       title: "",
+      slug: "",
       description: "",
       status: "DRAFT",
       category: "",
@@ -47,29 +51,33 @@ export default function Dialog({ isOpen, onClose, onSubmit }) {
         <form onSubmit={handleSubmit} className={styles["form"]}>
           <div className={styles["form-content"]}>
             <Input
-              label="Title"
-              id={"title"}
-              placeholder="Enter blog title"
-              value={formData.title}
-              onChange={(e) => handleChange("title", e.target.value)}
-              required
-            />
-
-            <Input
               label="Slug"
+              name={"slug"}
               id={"slug"}
               placeholder="Enter blog slug"
-              value={formData.title}
-              onChange={(e) => handleChange("title", e.target.value)}
+              value={formData.slug}
+              onChange={(e) => handleChange("slug", e.target.value)}
               required
             />
 
-            <Input
+            <Textarea
+              label={"Title"}
+              name={"title"}
+              id={"title"}
+              value={formData.title}
+              placeholder={"Blog title"}
+              onChange={(e) => handleChange("title", e.target.value)}
+              required={true}
+            />
+
+            <Textarea
+              label={"Description"}
+              name={"description"}
               id={"description"}
-              label="Description"
-              placeholder="Enter blog description"
               value={formData.description}
+              placeholder={"Blog description"}
               onChange={(e) => handleChange("description", e.target.value)}
+              required={true}
             />
 
             <div className={styles["select-group"]}>
