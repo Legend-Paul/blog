@@ -5,7 +5,7 @@ import { NavLink, useLocation } from "react-router-dom";
 export default function Header({ searchParams }) {
   const location = useLocation();
   const currentPath = location.pathname;
-  console.log(location.state);
+
   const blogsSearchParams = location.state?.searchParams || "";
 
   return (
@@ -61,6 +61,47 @@ export default function Header({ searchParams }) {
                 to="/signout"
               >
                 Sign Out
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
+      </header>
+    </div>
+  );
+}
+
+export function EditorHeader() {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  return (
+    <div className={styles["header-container"]}>
+      <header>
+        <div className={styles["logo"]}>
+          <NavLink to="/">Blog</NavLink>
+        </div>
+        <nav>
+          <ul>
+            <li>
+              <NavLink
+                className={
+                  styles[`${currentPath.endsWith("/new") ? "active" : ""}`]
+                }
+                to="."
+              >
+                Save
+              </NavLink>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <NavLink
+                className={
+                  styles[`${currentPath.includes("preview") ? "active" : ""}`]
+                }
+                to="preview"
+              >
+                Preview
               </NavLink>
             </li>
           </ul>

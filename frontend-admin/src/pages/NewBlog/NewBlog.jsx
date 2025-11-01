@@ -1,12 +1,13 @@
 import styles from "./NewBlog.module.css";
 import { useState, useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import Header from "../../components/Header/Header";
+import { EditorHeader } from "../../components/Header/Header";
 import Button from "../../components/Button/Button";
 
 export default function NewBlog() {
   const [content, setContent] = useState("Welcome to TinyMCE!");
   const editorRef = useRef(null);
+  const totalBrowserHeight = window.outerHeight - 200;
 
   const handleEditorChange = (newContent, editor) => {
     setContent(newContent);
@@ -18,7 +19,7 @@ export default function NewBlog() {
 
   return (
     <div className={styles["new-blog-container"]}>
-      <Header />
+      <EditorHeader />
       <section className={styles["new-blog"]}>
         <div className={styles["editor-container"]}>
           <Editor
@@ -27,7 +28,7 @@ export default function NewBlog() {
             value={content}
             onEditorChange={handleEditorChange}
             init={{
-              height: 500,
+              height: totalBrowserHeight,
               menubar: false,
               plugins: [
                 "anchor",
@@ -84,12 +85,12 @@ export default function NewBlog() {
               uploadcare_public_key: "367367409ba1cc5dfc7b",
             }}
           />
-          <Button
+          {/* <Button
             handleClick={handleCreateBlog}
             label={"Create Blog"}
             action={"create"}
             variant={"success"}
-          />
+          /> */}
         </div>
       </section>
     </div>
