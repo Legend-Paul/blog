@@ -31,7 +31,7 @@ export default function Dialog({ isOpen, onClose }) {
             <Input
               label="Slug"
               name={"slug"}
-              max={"40"}
+              maxLength={"40"}
               id={"slug"}
               placeholder="Enter blog slug"
               required
@@ -41,7 +41,7 @@ export default function Dialog({ isOpen, onClose }) {
               label={"Title"}
               name={"title"}
               id={"title"}
-              max={"6"}
+              maxLength={"60"}
               placeholder={"Blog title"}
               required={true}
             />
@@ -50,7 +50,7 @@ export default function Dialog({ isOpen, onClose }) {
               label={"Description"}
               name={"description"}
               id={"description"}
-              max={"255"}
+              maxLength={"255"}
               placeholder={"Blog description"}
               required={true}
             />
@@ -59,7 +59,12 @@ export default function Dialog({ isOpen, onClose }) {
               <label className={styles["label"]} htmlFor="select">
                 Status <span style={{ color: "var(--error-color)" }}>*</span>
               </label>
-              <select id="select" className={styles["select"]}>
+              <select
+                id="select"
+                className={styles["select"]}
+                defaultValue={"DRAFT"}
+                name="status"
+              >
                 <option value="PENDING">Pending</option>
                 <option value="DRAFT">Draft</option>
                 <option value="PUBLISHED">Published</option>

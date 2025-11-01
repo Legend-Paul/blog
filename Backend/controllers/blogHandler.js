@@ -3,6 +3,7 @@ import prisma from "../config/prisma.js";
 // create blog
 export const createBlog = async (req, res) => {
   const { title, content, description, slug, status } = req.body;
+  console.log({ title, content, description, slug, status });
 
   try {
     const blogExist = await prisma.blog.findUnique({

@@ -8,7 +8,7 @@ export default function Input({
   placeholder,
   error,
   id,
-  max,
+  maxLength,
   disabled = false,
   required = true,
   className = "",
@@ -24,7 +24,7 @@ export default function Input({
 
       <input
         type={type}
-        maxLength={max}
+        maxLength={maxLength}
         minLength={"2"}
         id={id}
         name={name}
@@ -45,11 +45,9 @@ export function Textarea({
   label,
   type = "text",
   placeholder,
-  value,
-  onChange,
   error,
   id,
-  max,
+  maxLength,
   disabled = false,
   required = true,
   className = "",
@@ -66,7 +64,7 @@ export function Textarea({
       <textarea
         type={type}
         id={id}
-        max={max}
+        maxLength={maxLength}
         minLength={2}
         name={name}
         className={`${styles["textarea"]} ${
