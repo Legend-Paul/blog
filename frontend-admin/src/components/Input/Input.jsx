@@ -73,7 +73,7 @@ export function Textarea({
         max={max}
         minLength={2}
         name={name}
-        className={`${styles["input"]} ${
+        className={`${styles["textarea"]} ${
           error ? styles["error"] : ""
         } ${className}`}
         placeholder={placeholder}

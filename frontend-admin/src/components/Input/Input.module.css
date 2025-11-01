@@ -18,7 +18,8 @@
   margin-left: var(--space-2xs);
 }
 
-.input {
+.input,
+.textarea {
   width: 100%;
   font-family: var(--font-primary);
   font-size: var(--text-base);
@@ -31,15 +32,18 @@
   outline: none;
 }
 
+.textarea:focus,
 .input:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+.textarea:hover:not(:disabled),
 .input:hover:not(:disabled) {
   border-color: var(--border-dark);
 }
 
+.textarea:disabled,
 .input:disabled {
   background-color: var(--bg-muted);
   color: var(--text-muted);
@@ -60,4 +64,16 @@
   font-size: var(--text-sm);
   color: var(--error-color);
   line-height: 1.4;
+}
+
+/* Not focused, has value, and valid: success color */
+input:not(:focus):not(:placeholder-shown):valid,
+textarea:not(:focus):not(:placeholder-shown):valid {
+  border-color: var(--success-color);
+}
+
+/* Not focused, has value, and invalid: error color */
+input:not(:focus):not(:placeholder-shown):invalid,
+textarea:not(:focus):not(:placeholder-shown):invalid {
+  border-color: var(--error-color);
 }
