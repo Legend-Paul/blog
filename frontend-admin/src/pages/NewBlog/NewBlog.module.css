@@ -1,0 +1,10 @@
+.editor-container {
+  padding: var(--space-lg);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  display: grid;
+  gap: var(--space-lg);
+  button {
+    max-width: 10rem;
+  }
+}

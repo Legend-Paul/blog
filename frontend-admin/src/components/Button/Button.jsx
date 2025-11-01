@@ -12,7 +12,7 @@ export default function Button({
     <button
       key={key}
       className={`${styles["action-btn"]} ${styles[`action-${variant}`]}`}
-      onClick={() => handleClick}
+      onClick={handleClick}
       disabled={isLoading === action}
     >
       {isLoading === action ? (
