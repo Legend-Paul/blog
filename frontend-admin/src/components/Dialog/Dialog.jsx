@@ -20,7 +20,7 @@ export default function Dialog({ isOpen, onClose }) {
         <p className={styles["form-instruction"]}>
           Fill all the fields with <span>*</span>
         </p>
-        <Form>
+        <Form method="post">
           <div className={styles["form-content"]}>
             <Input
               label="Slug"

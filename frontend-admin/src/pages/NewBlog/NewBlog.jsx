@@ -4,27 +4,39 @@ import { Editor } from "@tinymce/tinymce-react";
 import { EditorHeader } from "../../components/Header/Header";
 
 import Dialog from "../../components/Dialog/Dialog";
+import { useActionData } from "react-router-dom";
 
-export async function Action() {}
+export async function Action({ request }) {
+  const formData = await request.formData();
+  const slug = formData.get("slug");
+  const title = formData.get("title");
+  const description = formData.get("description");
+  const status = formData.get("status");
+  console.log("Action");
+  return { slug, title, description, status };
+}
 
 export default function NewBlog() {
   const [content, setContent] = useState("Welcome to TinyMCE!");
   const editorRef = useRef(null);
   const totalBrowserHeight = window.outerHeight - 200;
+  const data = useActionData();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  if (data) {
+    const body = { ...data, content: content };
+  }
   const handleEditorChange = (newContent, editor) => {
     setContent(newContent);
   };
 
-  const handleCreateBlog = () => {
-    console.log("Blog content:", content);
+  const onClose = () => {
+    setIsDialogOpen((isDialogOpen) => !isDialogOpen);
   };
-
-  const onClose = () => {};
 
   return (
     <div className={styles["new-blog-container"]}>
-      <EditorHeader />
+      <EditorHeader onClose={onClose} />
       <section className={styles["new-blog"]}>
         <div className={styles["editor-container"]}>
           <Editor
@@ -94,7 +106,7 @@ export default function NewBlog() {
       </section>
 
       {/* Dialog */}
-      <Dialog isOpen={true} />
+      <Dialog isOpen={isDialogOpen} onClose={onClose} />
     </div>
   );
 }
