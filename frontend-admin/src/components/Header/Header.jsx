@@ -70,7 +70,7 @@ export default function Header({ searchParams }) {
   );
 }
 
-export function EditorHeader() {
+export function EditorHeader({ onClose }) {
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -82,7 +82,7 @@ export function EditorHeader() {
         </div>
         <nav>
           <ul>
-            <li>
+            <li onClick={onClose}>
               <NavLink
                 className={
                   styles[`${currentPath.endsWith("/new") ? "active" : ""}`]

@@ -32,6 +32,16 @@
   }
 }
 
+.overlay-hidden {
+  transform: scaleX(0);
+  transition: var(--transition-slow);
+}
+
+.overlay-visible {
+  transform: scaleX(1);
+  transition: var(--transition-slow);
+}
+
 .form-instruction {
   padding: var(--space-xl);
   span {

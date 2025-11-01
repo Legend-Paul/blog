@@ -6,11 +6,17 @@ import styles from "./Dialog.module.css";
 import { Form } from "react-router-dom";
 
 export default function Dialog({ isOpen, onClose }) {
-  if (!isOpen) return null;
-
   return (
-    <div className={styles["overlay"]} onClick={onClose}>
-      <div className={styles["dialog"]} onClick={(e) => e.stopPropagation()}>
+    <div
+      className={`${styles["overlay"]} ${
+        isOpen ? styles["overlay-visible"] : styles["overlay-hidden"]
+      }`}
+      onClick={onClose}
+    >
+      <div
+        className={`${styles["dialog"]} `}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className={styles["header"]}>
           <h2 className={styles["title"]}>Create New Blog</h2>
           <button className={styles["close-button"]} onClick={onClose}>
