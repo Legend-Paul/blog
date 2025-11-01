@@ -7,6 +7,7 @@ import {
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Blog from "./pages/Blogs/Blogs";
 import NewBlog, { Action as newBlogAction } from "./pages/NewBlog/NewBlog";
+import PreviewBlog from "./pages/PreviewBlog/PreviewBlog";
 import "./index.css";
 
 const router = createBrowserRouter(
@@ -18,6 +19,11 @@ const router = createBrowserRouter(
       <Route
         path="/api/blogs/new"
         element={<NewBlog />}
+        action={newBlogAction}
+      />
+      <Route
+        path="/api/blogs/preview"
+        element={<PreviewBlog />}
         action={newBlogAction}
       />
     </>
