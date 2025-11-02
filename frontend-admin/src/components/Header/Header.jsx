@@ -90,7 +90,7 @@ export function EditorHeader({ onClose, route }) {
                 to="."
                 state={route.state}
               >
-                Save Blog
+                {route.state.dialogFieldsValue ? "Update" : "Save"} Blog
               </NavLink>
             </li>
           </ul>

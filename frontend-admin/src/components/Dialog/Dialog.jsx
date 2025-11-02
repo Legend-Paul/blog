@@ -18,14 +18,16 @@ export default function Dialog({
   const statusRef = useRef(null);
   useEffect(() => {
     if (dialogFieldsValue && slugRef.current) {
-      slugRef.current.value = dialogFieldsValue.slug;
+      slugRef.current.value = dialogFieldsValue.slug || "";
       slugRef.current.focus();
       slugRef.current.select();
 
-      if (titleRef.current) titleRef.current.value = dialogFieldsValue.title;
+      if (titleRef.current)
+        titleRef.current.value = dialogFieldsValue.title || "";
       if (descriptionRef.current)
-        descriptionRef.current.value = dialogFieldsValue.description;
-      if (statusRef.current) statusRef.current.value = dialogFieldsValue.status;
+        descriptionRef.current.value = dialogFieldsValue.description || "";
+      if (statusRef.current)
+        statusRef.current.value = dialogFieldsValue.status || "";
     }
   }, [dialogFieldsValue]);
   return (
@@ -110,7 +112,7 @@ export default function Dialog({
             />
 
             <Button
-              label={"Save Blog"}
+              label={dialogFieldsValue ? "Update" : "Save"}
               type="submit"
               variant={"primary"}
               disabled={state == "submitting"}
