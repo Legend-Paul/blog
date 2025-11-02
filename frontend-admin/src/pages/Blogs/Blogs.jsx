@@ -105,8 +105,6 @@ export default function Blogs() {
     }
   };
 
-  console.log(searchParams.toString());
-
   if (!data) {
     return (
       <div className={styles["dashboard-container"]}>

@@ -82,7 +82,7 @@ export default function Dialog({ isOpen, onClose }) {
             />
 
             <Button
-              label={"Create Blog"}
+              label={"Save Blog"}
               type="submit"
               variant={"primary"}
               className={styles["submit-button"]}

@@ -70,7 +70,7 @@ export default function Header({ searchParams }) {
   );
 }
 
-export function EditorHeader({ onClose }) {
+export function EditorHeader({ onClose, route }) {
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -89,7 +89,7 @@ export function EditorHeader({ onClose }) {
                 }
                 to="."
               >
-                Save
+                Save Blog
               </NavLink>
             </li>
           </ul>
@@ -97,11 +97,14 @@ export function EditorHeader({ onClose }) {
             <li>
               <NavLink
                 className={
-                  styles[`${currentPath.includes("preview") ? "active" : ""}`]
+                  styles[
+                    `${currentPath.includes(route.endpoint) ? "active" : ""}`
+                  ]
                 }
-                to="preview"
+                to={route.endpoint}
+                state={{ blogBontent: route.content }}
               >
-                Preview
+                {route.label}
               </NavLink>
             </li>
           </ul>

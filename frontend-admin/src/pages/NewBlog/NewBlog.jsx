@@ -26,6 +26,12 @@ export default function NewBlog() {
   const data = useActionData();
   const navigate = useNavigate();
 
+  const previewRoute = {
+    label: "Preview",
+    endpoint: "preview",
+    state: content,
+  };
+
   // Use useEffect to handle the data submission
   useEffect(() => {
     if (data) {
@@ -61,7 +67,7 @@ export default function NewBlog() {
 
   return (
     <div className={styles["new-blog-container"]}>
-      <EditorHeader onClose={onClose} />
+      <EditorHeader onClose={onClose} route={previewRoute} />
       <section className={styles["new-blog"]}>
         <div className={styles["editor-container"]}>
           <Editor
@@ -72,11 +78,6 @@ export default function NewBlog() {
             init={{
               height: totalBrowserHeight,
               menubar: false,
-
-              // Background color (optional)
-              content_style:
-                "body { background-color: #ffffff; padding: 20px; }",
-
               plugins: [
                 "anchor",
                 "autolink",
@@ -117,27 +118,8 @@ export default function NewBlog() {
                 "exportword",
                 "exportpdf",
               ],
-
-              // Add custom button to toolbar
               toolbar:
-                "undo redo | addsection | blocks fontfamily fontsize | bold italic underline strikethrough | link media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography uploadcare | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-
-              // Custom section button
-              setup: (editor) => {
-                editor.ui.registry.addButton("addsection", {
-                  text: "+ Section",
-                  tooltip: "Add new section",
-                  onAction: () => {
-                    editor.insertContent(`
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">
-            <h2>New Section</h2>
-            <p>Start writing your content here...</p>
-            <br>
-          `);
-                  },
-                });
-              },
-
+                "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography uploadcare | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
               tinycomments_mode: "embedded",
               tinycomments_author: "Author name",
               mergetags_list: [
