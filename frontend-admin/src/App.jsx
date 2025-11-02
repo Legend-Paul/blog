@@ -7,7 +7,10 @@ import {
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Blog from "./pages/Blogs/Blogs";
 import NewBlog, { Action as newBlogAction } from "./pages/NewBlog/NewBlog";
-import PreviewBlog, { EditorPreview } from "./pages/PreviewBlog/PreviewBlog";
+import PreviewBlog, {
+  EditorPreview,
+  Action as previewAction,
+} from "./pages/PreviewBlog/PreviewBlog";
 import ErrorPage from "./Error/ErrorPage";
 import "./index.css";
 
@@ -28,7 +31,11 @@ const router = createBrowserRouter(
           element={<PreviewBlog />}
           action={newBlogAction}
         />
-        <Route path="/api/blogs/new/preview" element={<EditorPreview />} />
+        <Route
+          path="/api/blogs/new/preview"
+          element={<EditorPreview />}
+          action={previewAction}
+        />
       </Route>
     </>
   )

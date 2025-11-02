@@ -3,11 +3,16 @@ import { useState, useRef, useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { EditorHeader } from "../../components/Header/Header";
 import Dialog from "../../components/Dialog/Dialog";
-import { useActionData, useLocation, useNavigate } from "react-router-dom";
+import {
+  useActionData,
+  useLocation,
+  useNavigate,
+  useNavigation,
+} from "react-router-dom";
 
 export async function Action({ request }) {
   const formData = await request.formData();
-  const slug = formData.get("slug").split(" ").join("-");
+  const slug = formData.get("slug").trim().toLowerCase().split(" ").join("-");
   const title = formData.get("title");
   const description = formData.get("description");
   const status = formData.get("status");
@@ -26,23 +31,24 @@ export default function NewBlog() {
   const totalBrowserHeight = window.outerHeight - 200;
   const data = useActionData();
   const navigate = useNavigate();
-
+  const navigation = useNavigation();
+  const navigationState = navigation.state;
   const previewRoute = {
     label: "Preview",
     endpoint: "preview",
     state: content,
   };
+  console.log(navigationState);
 
-  // Use useEffect to handle the data submission
   useEffect(() => {
     if (data) {
       const blogData = { ...data, content: content };
       console.log(blogData);
 
       fetch("http://localhost:5000/api/blogs/new", {
-        method: "POST", // Added method
+        method: "POST",
         headers: {
-          "Content-Type": "application/json", // Added Content-Type
+          "Content-Type": "application/json",
           Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
         },
         body: JSON.stringify(blogData),
@@ -56,7 +62,7 @@ export default function NewBlog() {
         .then((data) => console.log("Response:", data))
         .catch((error) => console.error("Error fetching data:", error));
     }
-  }, [data, content, navigate]); // Added dependencies
+  }, [data, content, navigate]);
 
   const handleEditorChange = (newContent, editor) => {
     setContent(newContent);
@@ -137,7 +143,7 @@ export default function NewBlog() {
         </div>
       </section>
 
-      <Dialog isOpen={isDialogOpen} onClose={onClose} />
+      <Dialog isOpen={isDialogOpen} onClose={onClose} state={navigationState} />
     </div>
   );
 }

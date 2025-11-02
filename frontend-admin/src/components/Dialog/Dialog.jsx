@@ -5,7 +5,7 @@ import Button from "../Button/Button";
 import styles from "./Dialog.module.css";
 import { Form } from "react-router-dom";
 
-export default function Dialog({ isOpen, onClose }) {
+export default function Dialog({ isOpen, onClose, state, content }) {
   return (
     <div
       className={`${styles["overlay"]} ${
@@ -28,6 +28,7 @@ export default function Dialog({ isOpen, onClose }) {
         </p>
         <Form method="post">
           <div className={styles["form-content"]}>
+            <input type="text" value={content} name="content" />
             <Input
               label="Slug"
               name={"slug"}
@@ -85,6 +86,7 @@ export default function Dialog({ isOpen, onClose }) {
               label={"Save Blog"}
               type="submit"
               variant={"primary"}
+              disabled={state === "submiting"}
               className={styles["submit-button"]}
             />
           </div>
