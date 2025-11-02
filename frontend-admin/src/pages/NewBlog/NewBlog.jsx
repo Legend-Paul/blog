@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { EditorHeader } from "../../components/Header/Header";
 import Dialog from "../../components/Dialog/Dialog";
-import { useActionData, useNavigate } from "react-router-dom";
+import { useActionData, useLocation, useNavigate } from "react-router-dom";
 
 export async function Action({ request }) {
   const formData = await request.formData();
@@ -18,8 +18,9 @@ export async function Action({ request }) {
 }
 
 export default function NewBlog() {
-  // Removed 'async' here
-  const [content, setContent] = useState("Welcome to TinyMCE!");
+  const location = useLocation();
+  const prevContent = location.state?.blogContent || "";
+  const [content, setContent] = useState(prevContent || "");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const editorRef = useRef(null);
   const totalBrowserHeight = window.outerHeight - 200;

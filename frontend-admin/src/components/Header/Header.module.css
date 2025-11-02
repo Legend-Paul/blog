@@ -100,7 +100,7 @@ nav .active {
 }
 
 /* Active state for current page */
-.header-container nav a[aria-current="page"] {
+/* .header-container nav a[aria-current="page"] {
   color: var(--primary-color);
   background-color: var(--bg-secondary);
-}
+} */

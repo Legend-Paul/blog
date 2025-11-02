@@ -73,7 +73,9 @@ export default function Header({ searchParams }) {
 export function EditorHeader({ onClose, route }) {
   const location = useLocation();
   const currentPath = location.pathname;
-  console.log(route);
+  console.log(currentPath);
+  console.log("new", currentPath.endsWith("new"));
+  console.log("preview", currentPath.endsWith("preview"));
   return (
     <div className={styles["header-container"]}>
       <header>
@@ -85,7 +87,7 @@ export function EditorHeader({ onClose, route }) {
             <li onClick={onClose}>
               <NavLink
                 className={
-                  styles[`${currentPath.endsWith("/new") ? "active" : ""}`]
+                  styles[`${currentPath.endsWith("new") ? "active" : ""}`]
                 }
                 to="."
               >
@@ -97,13 +99,7 @@ export function EditorHeader({ onClose, route }) {
             <li>
               <NavLink
                 className={
-                  styles[
-                    `${
-                      currentPath.endsWith(route.endpoint.split("/").at(-1))
-                        ? "active"
-                        : ""
-                    }`
-                  ]
+                  styles[`${currentPath.endsWith("preview") ? "active" : ""}`]
                 }
                 to={route.endpoint}
                 state={{ blogContent: route.state }}
