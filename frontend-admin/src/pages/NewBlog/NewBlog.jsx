@@ -12,10 +12,7 @@ export default function NewBlog() {
   const [content, setContent] = useState(prevContent || "");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const editorRef = useRef(null);
-  const slugRef = useRef(null);
-  const titleRef = useRef(null);
-  const descriptionRef = useRef(null);
-  const statusRef = useRef(null);
+
   const totalBrowserHeight = window.outerHeight - 200;
   const navigation = useNavigation();
   const navigationState = navigation.state;
@@ -34,18 +31,6 @@ export default function NewBlog() {
     setIsDialogOpen((prev) => !prev);
   };
 
-  useEffect(() => {
-    if (dialogFieldsValue && slugRef.current) {
-      slugRef.current.value = dialogFieldsValue.slug;
-      slugRef.current.focus();
-      slugRef.current.select();
-
-      if (titleRef.current) titleRef.current.value = dialogFieldsValue.title;
-      if (descriptionRef.current)
-        descriptionRef.current.value = dialogFieldsValue.description;
-      if (statusRef.current) statusRef.current.value = dialogFieldsValue.status;
-    }
-  }, [dialogFieldsValue]);
   return (
     <div className={styles["new-blog-container"]}>
       <EditorHeader onClose={onClose} route={previewRoute} />
@@ -122,10 +107,7 @@ export default function NewBlog() {
         onClose={onClose}
         state={navigationState}
         content={content}
-        slugRef={slugRef}
-        titleRef={titleRef}
-        descriptionRef={descriptionRef}
-        statusRef={statusRef}
+        dialogFieldsValue={dialogFieldsValue}
       />
     </div>
   );

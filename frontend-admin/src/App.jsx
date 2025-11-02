@@ -34,7 +34,6 @@ const router = createBrowserRouter(
         />
 
         {/* Prveiew Route */}
-
         <Route
           path="/api/blog/edit/:slug/preview"
           element={<EditorPreview />}

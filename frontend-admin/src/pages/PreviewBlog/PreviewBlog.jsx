@@ -46,10 +46,7 @@ export default function PreviewBlog() {
 export function EditorPreview() {
   const location = useLocation();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const slugRef = useRef(null);
-  const titleRef = useRef(null);
-  const descriptionRef = useRef(null);
-  const statusRef = useRef(null);
+
   const content = location.state?.blogContent || "";
   const dialogFieldsValue = location.state?.dialogFieldsValue || "";
   const navigation = useNavigation();
@@ -59,19 +56,6 @@ export function EditorPreview() {
     endpoint: editorPath,
     state: { blogContent: content, dialogFieldsValue },
   };
-
-  useEffect(() => {
-    if (dialogFieldsValue && slugRef.current) {
-      slugRef.current.value = dialogFieldsValue.slug;
-      slugRef.current.focus();
-      slugRef.current.select();
-
-      if (titleRef.current) titleRef.current.value = dialogFieldsValue.title;
-      if (descriptionRef.current)
-        descriptionRef.current.value = dialogFieldsValue.description;
-      if (statusRef.current) statusRef.current.value = dialogFieldsValue.status;
-    }
-  }, [dialogFieldsValue]);
 
   const navigationState = navigation.state;
   const onClose = () => {
@@ -91,10 +75,7 @@ export function EditorPreview() {
         onClose={onClose}
         state={navigationState}
         content={content}
-        slugRef={slugRef}
-        titleRef={titleRef}
-        descriptionRef={descriptionRef}
-        statusRef={statusRef}
+        dialogFieldsValue={dialogFieldsValue}
       />
       ;
     </div>

@@ -1,5 +1,5 @@
 // components/Dialog/Dialog.jsx
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Input, { Textarea } from "../Input/Input";
 import Button from "../Button/Button";
 import styles from "./Dialog.module.css";
@@ -10,11 +10,24 @@ export default function Dialog({
   onClose,
   state,
   content,
-  slugRef,
-  titleRef,
-  descriptionRef,
-  statusRef,
+  dialogFieldsValue,
 }) {
+  const slugRef = useRef(null);
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const statusRef = useRef(null);
+  useEffect(() => {
+    if (dialogFieldsValue && slugRef.current) {
+      slugRef.current.value = dialogFieldsValue.slug;
+      slugRef.current.focus();
+      slugRef.current.select();
+
+      if (titleRef.current) titleRef.current.value = dialogFieldsValue.title;
+      if (descriptionRef.current)
+        descriptionRef.current.value = dialogFieldsValue.description;
+      if (statusRef.current) statusRef.current.value = dialogFieldsValue.status;
+    }
+  }, [dialogFieldsValue]);
   return (
     <div
       className={`${styles["overlay"]} ${
