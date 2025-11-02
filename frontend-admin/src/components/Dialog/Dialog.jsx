@@ -6,6 +6,7 @@ import styles from "./Dialog.module.css";
 import { Form } from "react-router-dom";
 
 export default function Dialog({ isOpen, onClose, state, content }) {
+  console.log("content", content);
   return (
     <div
       className={`${styles["overlay"]} ${
@@ -28,7 +29,7 @@ export default function Dialog({ isOpen, onClose, state, content }) {
         </p>
         <Form method="post">
           <div className={styles["form-content"]}>
-            <input type="text" value={content} name="content" />
+            <input readOnly type="hidden" value={content} name="content" />
             <Input
               label="Slug"
               name={"slug"}
@@ -80,13 +81,14 @@ export default function Dialog({ isOpen, onClose, state, content }) {
               variant={"danger"}
               onClick={onClose}
               label={"Cancel"}
+              disabled={state == "submitting"}
             />
 
             <Button
               label={"Save Blog"}
               type="submit"
               variant={"primary"}
-              disabled={state === "submiting"}
+              disabled={state == "submitting"}
               className={styles["submit-button"]}
             />
           </div>

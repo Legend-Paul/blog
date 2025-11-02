@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  redirect,
   useActionData,
   useLocation,
   useNavigate,
@@ -46,22 +47,38 @@ export default function PreviewBlog() {
 
 export async function Action({ request }) {
   const formData = await request.formData();
-  const slug = formData.get("slug").trim().toLowerCase().split(" ").join("-");
+  const slug = formData.get("slug").trim().split(" ").join("-");
   const title = formData.get("title");
   const description = formData.get("description");
   const status = formData.get("status");
+  const content = formData.get("content");
+  const blogData = { status, slug, title, description, content };
+  console.log({ status, slug, title, description, content });
 
-  console.log("Form data received:", Object.fromEntries(formData));
+  try {
+    const response = await fetch("http://localhost:5000/api/blogs/new", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
+      },
+      body: JSON.stringify(blogData),
+    });
 
-  return { status, slug, title, description };
+    if (!response.ok) {
+      throw new Error("Failed to create blog");
+    }
+
+    const data = await response.json();
+    return redirect("/api/blogs");
+  } catch (error) {
+    return { error: error.message };
+  }
 }
-
 export function EditorPreview() {
   const location = useLocation();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const content = location.state?.blogContent || "";
-  const data = useActionData();
-  const navigate = useNavigate();
   const navigation = useNavigation();
   const editorRoute = {
     label: "Editor",
@@ -70,35 +87,11 @@ export function EditorPreview() {
   };
 
   const navigationState = navigation.state;
-
-  useEffect(() => {
-    if (data) {
-      const blogData = { ...data, content: content };
-      console.log(blogData);
-
-      fetch("http://localhost:500/api/blogs/new", {
-        method: "POST", // Added method
-        headers: {
-          "Content-Type": "application/json", // Added Content-Type
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
-        },
-        body: JSON.stringify(blogData),
-      })
-        .then((res) => {
-          if (res.ok) {
-            navigate("/api/blogs");
-          }
-          return res.json();
-        })
-        .then((data) => console.log("Response:", data))
-        .catch((error) => console.error("Error fetching data:", error));
-    }
-  }, [data, content, navigate]);
-
   const onClose = () => {
     setIsDialogOpen((prev) => !prev);
   };
   console.log(navigationState);
+  console.log("Top content", content);
 
   return (
     <div
@@ -108,7 +101,12 @@ export function EditorPreview() {
       <section>
         <div dangerouslySetInnerHTML={{ __html: content }} />
       </section>
-      <Dialog isOpen={isDialogOpen} onClose={onClose} state={navigationState} />
+      <Dialog
+        isOpen={isDialogOpen}
+        onClose={onClose}
+        state={navigationState}
+        content={content}
+      />
       ;
     </div>
   );
