@@ -27,7 +27,7 @@ export default function Dialog({ isOpen, onClose, state, content }) {
         <p className={styles["form-instruction"]}>
           Fill all the fields with <span>*</span>
         </p>
-        <Form method="post">
+        <Form method="post" replace>
           <div className={styles["form-content"]}>
             <input readOnly type="hidden" value={content} name="content" />
             <Input

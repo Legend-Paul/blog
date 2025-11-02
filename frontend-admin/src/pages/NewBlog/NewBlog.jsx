@@ -45,13 +45,12 @@ export default function NewBlog() {
   const totalBrowserHeight = window.outerHeight - 200;
   const navigation = useNavigation();
   const navigationState = navigation.state;
-
+  console.log(location);
   const previewRoute = {
     label: "Preview",
     endpoint: "preview",
     state: content,
   };
-  console.log(navigationState);
 
   const handleEditorChange = (newContent, editor) => {
     setContent(newContent);

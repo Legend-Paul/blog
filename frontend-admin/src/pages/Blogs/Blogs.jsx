@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import CreateBlog from "../../components/CreateBlog/CreateBlog";
@@ -250,6 +250,7 @@ function BlogSection({ status, blogs, onAction, onDelete, loadingStates }) {
 
 // Blog Card Component (same as before)
 function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
+  const navigate = useNavigate();
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -297,7 +298,9 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
     if (action === "view") {
       window.open(`/api/blog/${blog.slug}`, "_blank");
     } else if (action === "edit") {
-      window.location.href = `/edit/${blog.id}`;
+      navigate(`/api/blog/edit/${blog.slug}`, {
+        state: { blogContent: blog.content },
+      });
     } else if (action === "delete") {
       onDelete(blog.id);
     } else {

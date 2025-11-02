@@ -90,8 +90,6 @@ export function EditorPreview() {
   const onClose = () => {
     setIsDialogOpen((prev) => !prev);
   };
-  console.log(navigationState);
-  console.log("Top content", content);
 
   return (
     <div
