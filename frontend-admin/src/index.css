@@ -167,6 +167,7 @@
 }
 body {
   background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 section {
   max-width: var(--container-xl);
@@ -178,4 +179,8 @@ section {
 
 svg {
   width: var(--space-2xl);
+}
+
+a {
+  color: var(--primary-color);
 }

@@ -1,0 +1,8 @@
+.error-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  justify-content: center;
+  align-items: center;
+}
