@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   redirect,
-  useActionData,
   useLocation,
-  useNavigate,
   useNavigation,
   useParams,
 } from "react-router-dom";
@@ -113,14 +111,32 @@ export async function UpdateAction({ request }) {
 export function EditorPreview() {
   const location = useLocation();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const slugRef = useRef(null);
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const statusRef = useRef(null);
   const content = location.state?.blogContent || "";
+  const dialogFieldsValue = location.state?.dialogFieldsValue || "";
   const navigation = useNavigation();
   const editorPath = location.pathname.split("/").slice(0, -1).join("/");
   const editorRoute = {
     label: "Editor",
     endpoint: editorPath,
-    state: content,
+    state: { blogContent: content, dialogFieldsValue },
   };
+
+  useEffect(() => {
+    if (dialogFieldsValue && slugRef.current) {
+      slugRef.current.value = dialogFieldsValue.slug;
+      slugRef.current.focus();
+      slugRef.current.select();
+
+      if (titleRef.current) titleRef.current.value = dialogFieldsValue.title;
+      if (descriptionRef.current)
+        descriptionRef.current.value = dialogFieldsValue.description;
+      if (statusRef.current) statusRef.current.value = dialogFieldsValue.status;
+    }
+  }, [dialogFieldsValue]);
 
   const navigationState = navigation.state;
   const onClose = () => {
@@ -140,6 +156,10 @@ export function EditorPreview() {
         onClose={onClose}
         state={navigationState}
         content={content}
+        slugRef={slugRef}
+        titleRef={titleRef}
+        descriptionRef={descriptionRef}
+        statusRef={statusRef}
       />
       ;
     </div>

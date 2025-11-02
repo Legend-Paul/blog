@@ -12,6 +12,7 @@ export default function Input({
   disabled = false,
   required = true,
   className = "",
+  inputRef,
 }) {
   return (
     <div className={styles["container"]}>
@@ -34,6 +35,7 @@ export default function Input({
         placeholder={placeholder}
         disabled={disabled}
         required={required}
+        ref={inputRef}
       />
 
       {error && <div className={styles.errorText}>{error}</div>}
@@ -52,6 +54,7 @@ export function Textarea({
   required = true,
   className = "",
   name,
+  textareaRef,
 }) {
   return (
     <div className={styles["container"]}>
@@ -62,6 +65,7 @@ export function Textarea({
         </label>
       )}
       <textarea
+        ref={textareaRef}
         type={type}
         id={id}
         maxLength={maxLength}

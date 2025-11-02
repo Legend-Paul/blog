@@ -299,7 +299,15 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
       window.open(`/api/blog/${blog.slug}`, "_blank");
     } else if (action === "edit") {
       navigate(`/api/blog/edit/${blog.slug}`, {
-        state: { blogContent: blog.content },
+        state: {
+          blogContent: blog.content,
+          dialogFieldsValue: {
+            slug: blog.slug,
+            title: blog.title,
+            description: blog.description,
+            status: blog.status,
+          },
+        },
       });
     } else if (action === "delete") {
       onDelete(blog.id);

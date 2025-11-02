@@ -5,8 +5,16 @@ import Button from "../Button/Button";
 import styles from "./Dialog.module.css";
 import { Form } from "react-router-dom";
 
-export default function Dialog({ isOpen, onClose, state, content }) {
-  console.log("content", content);
+export default function Dialog({
+  isOpen,
+  onClose,
+  state,
+  content,
+  slugRef,
+  titleRef,
+  descriptionRef,
+  statusRef,
+}) {
   return (
     <div
       className={`${styles["overlay"]} ${
@@ -37,6 +45,7 @@ export default function Dialog({ isOpen, onClose, state, content }) {
               id={"slug"}
               placeholder="Enter blog slug"
               required
+              inputRef={slugRef}
             />
 
             <Textarea
@@ -46,6 +55,7 @@ export default function Dialog({ isOpen, onClose, state, content }) {
               maxLength={"60"}
               placeholder={"Blog title"}
               required={true}
+              textareaRef={titleRef}
             />
 
             <Textarea
@@ -55,6 +65,7 @@ export default function Dialog({ isOpen, onClose, state, content }) {
               maxLength={"255"}
               placeholder={"Blog description"}
               required={true}
+              textareaRef={descriptionRef}
             />
 
             <div className={styles["select-group"]}>
@@ -66,6 +77,7 @@ export default function Dialog({ isOpen, onClose, state, content }) {
                 className={styles["select"]}
                 defaultValue={"DRAFT"}
                 name="status"
+                statusRef={statusRef}
               >
                 <option value="PENDING">Pending</option>
                 <option value="DRAFT">Draft</option>

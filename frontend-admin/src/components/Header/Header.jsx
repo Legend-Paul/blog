@@ -88,7 +88,7 @@ export function EditorHeader({ onClose, route }) {
                   styles[`${!currentPath.endsWith("preview") ? "active" : ""}`]
                 }
                 to="."
-                state={{ blogContent: route.state }}
+                state={route.state}
               >
                 Save Blog
               </NavLink>
@@ -101,7 +101,7 @@ export function EditorHeader({ onClose, route }) {
                   styles[`${currentPath.endsWith("preview") ? "active" : ""}`]
                 }
                 to={route.endpoint}
-                state={{ blogContent: route.state }}
+                state={route.state}
               >
                 {route.label}
               </NavLink>
