@@ -1,8 +1,8 @@
 .preview-blog-container {
-  padding: var(--space-xl);
-  max-width: var(--container-xl);
-  margin: 0 auto;
   section {
+    padding: var(--space-xl);
+    max-width: var(--container-xl);
+    margin: 0 auto;
     margin-top: 0 !important;
   }
   p {
@@ -28,5 +28,11 @@
   ul,
   ol {
     padding: var(--space-sm);
+  }
+}
+
+.editor-blog-preview {
+  section {
+    margin-top: calc(var(--space-2xl) * 2) !important;
   }
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Spinnner from "../../components/Spinnner/Spinnner";
-import Header from "../../components/Header/Header";
+import { EditorHeader } from "../../components/Header/Header";
 import styles from "./PreviewBlog.module.css";
 
 export default function PreviewBlog() {
@@ -30,6 +30,27 @@ export default function PreviewBlog() {
     <div className={styles["preview-blog-container"]}>
       <section>
         <div dangerouslySetInnerHTML={{ __html: data.content }} />
+      </section>
+    </div>
+  );
+}
+
+export function EditorPreview() {
+  const location = useLocation();
+  const content = location.state?.blogContent || "";
+  const editorRoute = {
+    label: "Editor",
+    endpoint: "/api/blogs/new",
+    state: content,
+  };
+
+  return (
+    <div
+      className={`${styles["preview-blog-container"]} ${styles["editor-blog-preview"]}`}
+    >
+      <EditorHeader route={editorRoute} />
+      <section>
+        <div dangerouslySetInnerHTML={{ __html: content }} />
       </section>
     </div>
   );

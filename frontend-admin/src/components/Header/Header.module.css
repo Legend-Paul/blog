@@ -10,13 +10,13 @@
 }
 
 .header-container header {
-  /* max-width: var(--container-max-width); */
+  max-width: var(--container-xl);
   margin: 0 auto;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--space-md) var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
 }
 
 .logo {
@@ -38,6 +38,9 @@
   transition: all var(--transition-fast);
   position: relative;
   overflow: hidden;
+  a {
+    color: var(--text-secondary);
+  }
 }
 
 .logo::before {
@@ -92,8 +95,8 @@
 }
 
 nav .active {
-  /* color: var(--primary-color); */
-  background-color: var(--primary-color);
+  color: var(--primary-color) !important;
+  background-color: var(--bg-secondary);
 }
 
 /* Active state for current page */
