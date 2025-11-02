@@ -85,7 +85,7 @@ export function EditorHeader({ onClose, route }) {
             <li onClick={onClose}>
               <NavLink
                 className={
-                  styles[`${currentPath.endsWith("new") ? "active" : ""}`]
+                  styles[`${!currentPath.endsWith("preview") ? "active" : ""}`]
                 }
                 to="."
                 state={{ blogContent: route.state }}
