@@ -11,6 +11,7 @@ import PreviewBlog, { EditorPreview } from "./pages/PreviewBlog/PreviewBlog";
 import ErrorPage from "./Error/ErrorPage";
 import newBlogAction from "./utils/CreateBlog";
 import updateBlogAction from "./utils/UpdateBlog";
+import UpdateUser from "./pages/UpdateUser/UpdateUser";
 import "./index.css";
 
 const router = createBrowserRouter(
@@ -46,6 +47,9 @@ const router = createBrowserRouter(
           action={newBlogAction}
         />
         <Route path="/api/blog/:slug" element={<PreviewBlog />} />
+
+        {/* auth */}
+        <Route path="/auth/user/update" element={<UpdateUser />} />
       </Route>
     </>
   )
