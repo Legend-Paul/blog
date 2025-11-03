@@ -32,6 +32,14 @@ export default function Dashboard() {
     );
   }
 
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   const published = (data.blogs || []).filter((b) => b.status === "PUBLISHED");
   const draft = (data.blogs || []).filter((b) => b.status === "DRAFT").length;
   const pending = (data.blogs || []).filter(
@@ -64,11 +72,11 @@ export default function Dashboard() {
               </tr>
               <tr>
                 <td>Created At</td>
-                <td>{data.user.createdAt}</td>
+                <td>{formatDate(data.user.createdAt)}</td>
               </tr>
               <tr>
                 <td>Updated At</td>
-                <td>{data.user.updatedAt}</td>
+                <td>{formatDate(data.user.updatedAt)}</td>
               </tr>
             </tbody>
           </table>
@@ -77,6 +85,13 @@ export default function Dashboard() {
         <div className={styles["published-blogs-container"]}>
           <h3>Published blogs</h3>
           <div className={styles["published-blogs"]}>
+            {published.length < 1 && (
+              <div
+                className={`${styles["no-published-blog"]} ${styles["blog"]}`}
+              >
+                <p>You don't have published blog yet</p>
+              </div>
+            )}
             {published.map((blog) => {
               return (
                 <div

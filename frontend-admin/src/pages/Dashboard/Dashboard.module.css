@@ -178,7 +178,10 @@
   color: var(--text-primary);
   margin: 0;
 }
-
+.no-published-blog {
+  display: flex;
+  color: var(--primary-color);
+}
 /* Status-specific colors */
 .blogs-summary .blog-status:nth-child(1) .status {
   color: var(--success-color);
