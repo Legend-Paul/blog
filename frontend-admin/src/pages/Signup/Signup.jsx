@@ -42,10 +42,10 @@ export default function Signup() {
   const navigation = useNavigation();
 
   return (
-    <div className={styles["signup-container"]}>
-      <section className={styles["signup"]}>
+    <div className={formStyles["signup-container"]}>
+      <section className={formStyles["signup"]}>
         <div
-          className={`${formStyles["form-container"]} ${styles["signup-form-container"]}`}
+          className={`${formStyles["form-container"]} ${formStyles["large-form-container"]}`}
         >
           <div className={formStyles["header"]}>
             <h2 className={formStyles["title"]}>Sign Up </h2>
