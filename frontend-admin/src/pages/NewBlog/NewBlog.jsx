@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { EditorHeader } from "../../components/Header/Header";
 import Dialog from "../../components/Dialog/Dialog";
-import { useLocation, redirect, useNavigation } from "react-router-dom";
+import { useLocation, useNavigation } from "react-router-dom";
 
 export default function NewBlog() {
   const location = useLocation();
@@ -16,7 +16,7 @@ export default function NewBlog() {
   const totalBrowserHeight = window.outerHeight - 200;
   const navigation = useNavigation();
   const navigationState = navigation.state;
-  console.log(location.state);
+
   const previewRoute = {
     label: "Preview",
     endpoint: "preview",
