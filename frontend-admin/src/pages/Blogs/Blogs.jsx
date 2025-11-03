@@ -4,13 +4,28 @@ import Header from "../../components/Header/Header";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import CreateBlog from "../../components/CreateBlog/CreateBlog";
 import Button from "../../components/Button/Button";
+import Notification from "../../components/Notification/Notification"; // New component
 import styles from "./Blogs.module.css";
 
 export default function Blogs() {
   const [data, setData] = useState(null);
   const [loadingStates, setLoadingStates] = useState({});
   const [searchParams, setSearchParams] = useSearchParams();
+  const [notifications, setNotifications] = useState([]); // Notification state
   const activeStatus = searchParams.get("status") || "ALL";
+
+  // Add notification function
+  const addNotification = (message, type = "info") => {
+    const id = Date.now();
+    setNotifications((prev) => [...prev, { id, message, type }]);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      setNotifications((prev) =>
+        prev.filter((notification) => notification.id !== id)
+      );
+    }, 5000);
+  };
 
   useEffect(() => {
     fetch("http://localhost:5000/api/blogs", {
@@ -25,15 +40,11 @@ export default function Blogs() {
 
   const handleStatusFilter = (status) => {
     if (status === "ALL") {
-      // Remove status parameter to show all
-      // const newParams = new URLSearchParams(searchParams);
-      // newParams.delete("status");
       setSearchParams((prevParams) => {
         prevParams.delete("status");
         return prevParams;
       });
     } else {
-      // Set the status parameter
       setSearchParams({ status });
     }
   };
@@ -61,11 +72,14 @@ export default function Blogs() {
         }).then((res) => res.json());
 
         setData(updatedData.data);
+        addNotification(`Blog ${action}ed successfully!`, "success");
       } else {
         console.error(`Failed to ${action} blog`);
+        addNotification(`Failed to ${action} blog`, "error");
       }
     } catch (error) {
       console.error(`Error ${action}ing blog:`, error);
+      addNotification(`Error ${action}ing blog: ${error.message}`, "error");
     } finally {
       setLoadingStates((prev) => ({ ...prev, [blogId]: null }));
     }
@@ -74,7 +88,7 @@ export default function Blogs() {
   const handleDelete = async (slug) => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
-    setLoadingStates((prev) => ({ ...prev, slug: "delete" }));
+    setLoadingStates((prev) => ({ ...prev, [slug]: "delete" }));
 
     try {
       const response = await fetch(`http://localhost:5000/api/blog/${slug}`, {
@@ -92,18 +106,27 @@ export default function Blogs() {
         }).then((res) => res.json());
 
         setData(updatedData.data);
+        addNotification("Blog deleted successfully!", "success");
       } else {
         console.error("Failed to delete blog");
+        addNotification("Failed to delete blog", "error");
       }
     } catch (error) {
       console.error("Error deleting blog:", error);
+      addNotification("Error deleting blog", "error");
     } finally {
       setLoadingStates((prev) => ({ ...prev, [slug]: null }));
     }
   };
 
-  console.log(loadingStates);
-  if (!data || loadingStates.slug) {
+  // Remove notification function
+  const removeNotification = (id) => {
+    setNotifications((prev) =>
+      prev.filter((notification) => notification.id !== id)
+    );
+  };
+
+  if (!data) {
     return (
       <div className={styles["dashboard-container"]}>
         <Header searchParams={searchParams.toString()} />
@@ -133,6 +156,19 @@ export default function Blogs() {
     <div className={styles["blogs-container"]}>
       <Header searchParams={searchParams.toString()} />
       <CreateBlog />
+
+      {/* Notification Container */}
+      <div className={styles["notifications-container"]}>
+        {notifications.map((notification) => (
+          <Notification
+            key={notification.id}
+            message={notification.message}
+            type={notification.type}
+            onClose={() => removeNotification(notification.id)}
+          />
+        ))}
+      </div>
+
       <section className={styles["blogs-content"]}>
         <div className={styles["blogs-header"]}>
           <h1>My Blogs</h1>
@@ -171,7 +207,6 @@ export default function Blogs() {
 
         <div className={styles["blogs-grid"]}>
           {activeStatus === "ALL" ? (
-            // Show all sections when "ALL" is selected
             statusOrder.map(
               (status) =>
                 blogs[status]?.length > 0 && (
@@ -185,8 +220,7 @@ export default function Blogs() {
                   />
                 )
             )
-          ) : // Show only the selected status section
-          blogs[activeStatus]?.length > 0 ? (
+          ) : blogs[activeStatus]?.length > 0 ? (
             <BlogSection
               status={activeStatus}
               blogs={blogs[activeStatus]}
@@ -209,7 +243,7 @@ export default function Blogs() {
   );
 }
 
-// Blog Section Component (same as before)
+// Blog Section Component (unchanged)
 function BlogSection({ status, blogs, onAction, onDelete, loadingStates }) {
   const statusConfig = {
     DRAFT: { color: "var(--warning-color)", label: "Drafts" },
@@ -246,7 +280,7 @@ function BlogSection({ status, blogs, onAction, onDelete, loadingStates }) {
   );
 }
 
-// Blog Card Component (same as before)
+// Blog Card Component (unchanged)
 function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
   const navigate = useNavigate();
   const formatDate = (dateString) => {
@@ -337,18 +371,6 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
             action={action}
             variant={variant}
           />
-          // <button
-          //   key={action}
-          //   className={`${styles["action-btn"]} ${styles[`action-${variant}`]}`}
-          //   onClick={() => handleActionClick(action)}
-          //   disabled={isLoading === action}
-          // >
-          //   {isLoading === action ? (
-          //     <div className={styles["btn-spinner"]}></div>
-          //   ) : (
-          //     label
-          //   )}
-          // </button>
         ))}
       </div>
     </div>

@@ -173,7 +173,14 @@
   }
 }
 
-/* Add these styles to your existing Blogs.module.css */
+/* notification */
+.notifications-container {
+  position: fixed;
+  top: var(--space-xl);
+  right: var(--space-xl);
+  z-index: 1000;
+  max-width: 400px;
+}
 
 /* Status Filter Chips */
 .status-filters {
