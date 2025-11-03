@@ -4,9 +4,39 @@ import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import formStyles from "../../globalStyles/formStyles.module.css";
 
+export async function Action({ request }) {
+  const formData = await request.formData();
+  const username = formData.get("username");
+  const password = formData.get("password");
+
+  const signupData = {
+    username,
+    password,
+  };
+
+  try {
+    const response = await fetch("http://localhost:5000/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(signupData),
+    });
+
+    const data = await response.json();
+    console.log(data);
+    if (!response.ok) return data;
+    localStorage.setItem("Authorization", data.token);
+    // return redirect("/auth/login");
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
 export default function Login() {
   const data = useActionData();
   const navigation = useNavigation();
+  console.log(localStorage.getItem("Authorization"));
 
   return (
     <div className={formStyles["signup-container"]}>
