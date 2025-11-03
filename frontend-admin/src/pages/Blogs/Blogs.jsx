@@ -17,7 +17,7 @@ export default function Blogs() {
   // Add notification function
   const addNotification = (message, type = "info") => {
     const id = Date.now();
-    setNotifications((prev) => [...prev, { id, message, type }]);
+    setNotifications(() => [{ id, message, type }]);
 
     // Auto remove after 5 seconds
     setTimeout(() => {

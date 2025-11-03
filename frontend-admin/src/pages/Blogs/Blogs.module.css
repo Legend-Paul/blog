@@ -176,7 +176,7 @@
 /* notification */
 .notifications-container {
   position: fixed;
-  top: var(--space-xl);
+  top: calc(var(--space-4xl) * 2);
   right: var(--space-xl);
   z-index: 1000;
   max-width: 400px;

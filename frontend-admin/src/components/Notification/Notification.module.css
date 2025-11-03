@@ -39,13 +39,13 @@
 }
 
 .notification-success {
-  background-color: color-mix(in srgb, var(--success-color) 10%, transparent);
+  background-color: color-mix(in srgb, var(--success-color) 20%, transparent);
   border-left-color: var(--success-color);
   color: var(--success-color);
 }
 
 .notification-error {
-  background-color: color-mix(in srgb, var(--error-color) 10%, transparent);
+  background-color: color-mix(in srgb, var(--error-color) 20%, transparent);
   border-left-color: var(--error-color);
   color: var(--error-color);
 }
@@ -71,13 +71,4 @@
     transform: translateX(0);
     opacity: 1;
   }
-}
-
-/* Add to your Blogs.module.css */
-.notifications-container {
-  position: fixed;
-  top: var(--space-xl);
-  right: var(--space-xl);
-  z-index: 1000;
-  max-width: 400px;
 }
