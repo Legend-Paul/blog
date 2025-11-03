@@ -1,0 +1,12 @@
+.signup {
+  margin-top: 0 !important;
+}
+
+.signup-form-container {
+  max-height: 100vh !important;
+  margin-top: calc(var(--space-4xl));
+  button {
+    width: 100%;
+    padding: var(--space-md);
+  }
+}

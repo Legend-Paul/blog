@@ -31,7 +31,9 @@ export async function Action({ request }) {
 
     if (response.status == 400) return data;
     return redirect("/dashboard");
-  } catch (err) {}
+  } catch (error) {
+    return { error: error.message };
+  }
 }
 
 export default function UpdateUser() {
