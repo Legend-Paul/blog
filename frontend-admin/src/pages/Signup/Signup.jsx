@@ -31,6 +31,7 @@ export async function Action({ request }) {
     const data = await response.json();
 
     if (!response.ok) return { ...data, isError: true };
+    localStorage.removeItem("Authorization");
     return redirect("/auth/login");
   } catch (error) {
     return { error: error.message };
