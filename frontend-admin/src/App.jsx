@@ -12,6 +12,7 @@ import ErrorPage from "./Error/ErrorPage";
 import newBlogAction from "./utils/CreateBlog";
 import updateBlogAction from "./utils/UpdateBlog";
 import Signup, { Action as signupAction } from "./pages/Signup/Signup";
+import Login from "./pages/Login/Login";
 import UpdateUser, {
   Action as updateUserAction,
 } from "./pages/UpdateUser/UpdateUser";
@@ -53,6 +54,7 @@ const router = createBrowserRouter(
 
         {/* auth */}
         <Route path="/auth/signup" element={<Signup />} action={signupAction} />
+        <Route path="/auth/login" element={<Login />} />
         <Route
           path="/auth/user/update"
           element={<UpdateUser />}

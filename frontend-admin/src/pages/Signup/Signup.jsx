@@ -1,9 +1,4 @@
-import {
-  Form,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-} from "react-router-dom";
+import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import styles from "./Signup.module.css";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
@@ -34,8 +29,9 @@ export async function Action({ request }) {
     });
 
     const data = await response.json();
+
     if (response.status == 400) return data;
-    return redirect("/dashboard");
+    return redirect("/auth/login");
   } catch (error) {
     return { error: error.message };
   }
