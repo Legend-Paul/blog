@@ -19,6 +19,7 @@ import ForgotPassword, {
 import UpdateUser, {
   Action as updateUserAction,
 } from "./pages/UpdateUser/UpdateUser";
+import Signout from "./pages/Signout/Signout";
 import "./globalStyles/index.css";
 
 const router = createBrowserRouter(
@@ -68,6 +69,7 @@ const router = createBrowserRouter(
           element={<UpdateUser />}
           action={updateUserAction}
         />
+        <Route path="/auth/signout" element={<Signout />} />
       </Route>
     </>
   )

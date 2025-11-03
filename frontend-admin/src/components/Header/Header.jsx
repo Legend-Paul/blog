@@ -78,7 +78,7 @@ export default function Header({ searchParams }) {
                   className={
                     styles[`${currentPath.includes("signout") ? "active" : ""}`]
                   }
-                  to="/signout"
+                  to="/auth/signout"
                 >
                   Signout
                 </NavLink>
