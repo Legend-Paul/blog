@@ -32,8 +32,8 @@ passportConfig(passport);
 // general Routes
 app.use("/auth/login", loginRoute);
 app.use("/auth/signup", signupRoute);
-app.use("/auth/user/update", updateUserRoute);
 app.use("/auth/forgot-password", forgotPasswordRoute);
+app.use("/auth/user/update", requireAuth, updateUserRoute);
 
 app.use("/api", requireAuth, blogRoute);
 // admin route
