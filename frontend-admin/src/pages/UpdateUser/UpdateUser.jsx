@@ -29,7 +29,7 @@ export async function Action({ request }) {
 
     const data = await response.json();
 
-    if (response.status == 400) return data;
+    if (!response.ok) return { ...data, isError: true };
     return redirect("/dashboard");
   } catch (error) {
     return { error: error.message };

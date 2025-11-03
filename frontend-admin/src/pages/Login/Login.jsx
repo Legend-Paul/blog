@@ -1,4 +1,10 @@
-import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
+import {
+  Form,
+  Link,
+  redirect,
+  useActionData,
+  useNavigation,
+} from "react-router-dom";
 import styles from "./Login.module.css";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
@@ -25,9 +31,9 @@ export async function Action({ request }) {
 
     const data = await response.json();
     console.log(data);
-    if (!response.ok) return data;
+    if (!response.ok) return { ...data, isError: true };
     localStorage.setItem("Authorization", data.token);
-    // return redirect("/auth/login");
+    return redirect("/dashboard");
   } catch (error) {
     return { error: error.message };
   }
@@ -54,8 +60,10 @@ export default function Login() {
             <div className={formStyles["error"]}>
               {data.error ? (
                 <p className={formStyles["error-text"]}>{data.error[0].msg}</p>
-              ) : (
+              ) : data.isError ? (
                 <p className={formStyles["error-text"]}>{data.message}</p>
+              ) : (
+                " "
               )}
             </div>
           ) : (
@@ -77,6 +85,7 @@ export default function Login() {
                 id={"password"}
                 placeholder={"********"}
               />
+              <Link to={"/auth/forgot-password"}>Forgot Password?</Link>
             </div>
             <div className={formStyles["footer"]}>
               <Button

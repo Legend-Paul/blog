@@ -30,7 +30,7 @@ export async function Action({ request }) {
 
     const data = await response.json();
 
-    if (response.status == 400) return data;
+    if (!response.ok) return { ...data, isError: true };
     return redirect("/auth/login");
   } catch (error) {
     return { error: error.message };
@@ -57,8 +57,10 @@ export default function Signup() {
             <div className={formStyles["error"]}>
               {data.error ? (
                 <p className={formStyles["error-text"]}>{data.error[0].msg}</p>
-              ) : (
+              ) : isError ? (
                 <p className={formStyles["error-text"]}>{data.message}</p>
+              ) : (
+                " "
               )}
             </div>
           ) : (
