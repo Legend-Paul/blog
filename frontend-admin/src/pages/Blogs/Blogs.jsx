@@ -49,18 +49,22 @@ export default function Blogs() {
     }
   };
 
-  const handleBlogAction = async (blogId, action) => {
-    setLoadingStates((prev) => ({ ...prev, [blogId]: action }));
+  const handleBlogAction = async (slug, action) => {
+    setLoadingStates((prev) => ({ ...prev, [slug]: action }));
+    let status = "PUBLISHED";
+    if (action === "unpublish") status = "PENDING";
+    if (action === "archive") status = "ARCHIVED";
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/blogs/${blogId}/${action}`,
+        `http://localhost:5000/api/blog/edit/${slug}`,
         {
-          method: "PATCH",
+          method: "PUT",
           headers: {
             Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({ status }),
         }
       );
 
@@ -72,7 +76,12 @@ export default function Blogs() {
         }).then((res) => res.json());
 
         setData(updatedData.data);
-        addNotification(`Blog ${action}ed successfully!`, "success");
+        addNotification(
+          `Blog ${
+            action == "archive" ? action.slice(0, -1) : action
+          }ed successfully!`,
+          "success"
+        );
       } else {
         console.error(`Failed to ${action} blog`);
         addNotification(`Failed to ${action} blog`, "error");
@@ -81,7 +90,7 @@ export default function Blogs() {
       console.error(`Error ${action}ing blog:`, error);
       addNotification(`Error ${action}ing blog: ${error.message}`, "error");
     } finally {
-      setLoadingStates((prev) => ({ ...prev, [blogId]: null }));
+      setLoadingStates((prev) => ({ ...prev, [slug]: null }));
     }
   };
 
@@ -91,7 +100,7 @@ export default function Blogs() {
     setLoadingStates((prev) => ({ ...prev, [slug]: "delete" }));
 
     try {
-      const response = await fetch(`http://localhost:5000/api/blog/${slug}`, {
+      const response = await fetch(`http://localhost:5000/api/blog/f${slug}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
@@ -272,7 +281,7 @@ function BlogSection({ status, blogs, onAction, onDelete, loadingStates }) {
             status={status}
             onAction={onAction}
             onDelete={onDelete}
-            isLoading={loadingStates[blog.id]}
+            isLoading={loadingStates[blog.slug]}
           />
         ))}
       </div>
@@ -313,6 +322,7 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
         return [
           ...baseActions,
           { label: "Unpublish", action: "unpublish", variant: "warning" },
+          { label: "Archive", action: "archive", variant: "error" },
         ];
       case "ARCHIVED":
         return [
@@ -344,7 +354,7 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
     } else if (action === "delete") {
       onDelete(blog.slug);
     } else {
-      onAction(blog.id, action);
+      onAction(blog.slug, action);
     }
   };
 

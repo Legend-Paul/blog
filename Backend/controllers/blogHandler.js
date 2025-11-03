@@ -108,7 +108,8 @@ export const updateBlog = async (req, res) => {
   const filteredData = Object.fromEntries(
     Object.entries(data).filter(([_, v]) => v !== undefined)
   );
-  const { slug } = filteredData;
+
+  const { slug } = req.params;
   try {
     const [_blogExist, _slugNameTaken] = await Promise.all([
       prisma.blog.findUnique({
