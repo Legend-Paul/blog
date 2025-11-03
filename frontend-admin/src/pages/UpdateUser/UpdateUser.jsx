@@ -28,6 +28,7 @@ export async function Action({ request }) {
 
     const data = await response.json();
 
+    if (response.status == 400) return data;
     return redirect("/dashboard");
   } catch (err) {}
 }
@@ -35,6 +36,7 @@ export async function Action({ request }) {
 export default function UpdateUser() {
   const navigate = useNavigate();
   const navigation = useNavigation();
+  const data = useActionData();
 
   const handleCancleUpdate = () => {
     navigate(-1);
@@ -50,7 +52,13 @@ export default function UpdateUser() {
           <p className={styles["form-instruction"]}>
             Fill all the fields with <span>*</span>
           </p>
-
+          {data ? (
+            <div className={styles["error"]}>
+              <p className={styles["error-text"]}>{data.message}</p>
+            </div>
+          ) : (
+            ""
+          )}
           <Form method="post" replace>
             <div className={styles["form-content"]}>
               <Input
