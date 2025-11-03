@@ -13,6 +13,7 @@ import newBlogAction from "./utils/CreateBlog";
 import updateBlogAction from "./utils/UpdateBlog";
 import Signup, { Action as signupAction } from "./pages/Signup/Signup";
 import Login, { Action as loginAction } from "./pages/Login/Login";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import UpdateUser, {
   Action as updateUserAction,
 } from "./pages/UpdateUser/UpdateUser";
@@ -55,6 +56,7 @@ const router = createBrowserRouter(
         {/* auth */}
         <Route path="/auth/signup" element={<Signup />} action={signupAction} />
         <Route path="/auth/login" element={<Login />} action={loginAction} />
+        <Route path="/auth/forgot-password" element={<ForgotPassword />} />
         <Route
           path="/auth/user/update"
           element={<UpdateUser />}
