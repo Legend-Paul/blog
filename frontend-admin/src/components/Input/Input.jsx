@@ -15,6 +15,7 @@ export default function Input({
   inputRef,
   title,
   pattern,
+  minLength = 2,
 }) {
   return (
     <div className={styles["container"]}>
@@ -29,7 +30,7 @@ export default function Input({
         type={type}
         pattern={pattern}
         maxLength={maxLength}
-        minLength={"2"}
+        minLength={minLength}
         id={id}
         name={name}
         className={`${styles["input"]} ${
