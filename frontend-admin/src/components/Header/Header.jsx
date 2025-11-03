@@ -53,9 +53,13 @@ export default function Header({ searchParams }) {
             </li>
           </ul>
           <ul className={styles["profile-cont"]}>
-            <li className={styles["profile"]}>
+            <li
+              className={`${styles["profile"]} ${
+                styles[`${currentPath.includes("auth") ? "active" : ""}`]
+              }`}
+            >
               <svg
-                className={styles["nav-icon"]}
+                className={`${styles["nav-icon"]} `}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

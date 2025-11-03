@@ -37,7 +37,7 @@ export default function Dialog({
       onClick={onClose}
     >
       <div
-        className={`${styles["dialog"]} `}
+        className={`${styles["dialog"]} ${styles["form-container"]}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className={styles["header"]}>
