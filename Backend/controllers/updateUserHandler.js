@@ -2,12 +2,7 @@ import prisma from "../config/prisma.js";
 import { body, validationResult } from "express-validator";
 
 const validate = [
-  body("fullName")
-    .trim()
-    .notEmpty()
-    .withMessage("FullName is required")
-    .isAlpha("en-US", { ignore: " " })
-    .withMessage("FullName must be only letters"),
+  body("fullName").trim().notEmpty().withMessage("FullName is required"),
   body("username").trim().notEmpty().withMessage("Username is required"),
 ];
 
@@ -15,8 +10,6 @@ const updateUserHandler = [
   validate,
   async (req, res) => {
     const data = req.body;
-
-    console.log(req.user);
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -28,7 +21,6 @@ const updateUserHandler = [
       },
     });
 
-    console.log(canUpate);
     if (canUpate)
       return res.status(400).json({ message: "Username already taken" });
 

@@ -13,18 +13,21 @@ export default function Input({
   required = true,
   className = "",
   inputRef,
+  title,
+  pattern,
 }) {
   return (
     <div className={styles["container"]}>
       {label && (
         <label className={styles["label"]} htmlFor={id}>
-          {label}
+          <h4>{label}</h4>
           {required && <span className={styles["required"]}>*</span>}
         </label>
       )}
 
       <input
         type={type}
+        pattern={pattern}
         maxLength={maxLength}
         minLength={"2"}
         id={id}
@@ -36,6 +39,7 @@ export default function Input({
         disabled={disabled}
         required={required}
         ref={inputRef}
+        title={title}
       />
 
       {error && <div className={styles.errorText}>{error}</div>}
