@@ -15,7 +15,7 @@ import Signup from "./pages/Signup/Signup";
 import UpdateUser, {
   Action as updateUserAction,
 } from "./pages/UpdateUser/UpdateUser";
-import "./index.css";
+import "./globalStyles/index.css";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

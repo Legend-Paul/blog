@@ -8,6 +8,7 @@ import {
 import Header from "../../components/Header/Header";
 import Input from "../../components/Input/Input";
 import styles from "./UpdateUser.module.css";
+import formStyles from "../../globalStyles/formStyles.module.css";
 import Button from "../../components/Button/Button";
 
 export async function Action({ request }) {
@@ -45,22 +46,22 @@ export default function UpdateUser() {
     <div className={styles["update-user-container"]}>
       <Header />
       <section className={styles["update-user"]}>
-        <div className={styles["form-container"]}>
-          <div className={styles["header"]}>
-            <h2 className={styles["title"]}>Update </h2>
+        <div className={formStyles["form-container"]}>
+          <div className={formStyles["header"]}>
+            <h2 className={formStyles["title"]}>Update </h2>
           </div>
-          <p className={styles["form-instruction"]}>
+          <p className={formStyles["form-instruction"]}>
             Fill all the fields with <span>*</span>
           </p>
           {data ? (
-            <div className={styles["error"]}>
-              <p className={styles["error-text"]}>{data.message}</p>
+            <div className={formStyles["error"]}>
+              <p className={formStyles["error-text"]}>{data.message}</p>
             </div>
           ) : (
             ""
           )}
           <Form method="post" replace>
-            <div className={styles["form-content"]}>
+            <div className={formStyles["form-content"]}>
               <Input
                 label={"Fullname"}
                 name={"fullName"}
@@ -76,7 +77,7 @@ export default function UpdateUser() {
                 placeholder={"Enter username"}
               />
             </div>
-            <div className={styles["footer"]}>
+            <div className={formStyles["footer"]}>
               <Button
                 type="button"
                 variant={"danger"}

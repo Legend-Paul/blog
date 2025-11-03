@@ -3,6 +3,7 @@ import Input, { Textarea } from "../Input/Input";
 import Button from "../Button/Button";
 import styles from "./Dialog.module.css";
 import { Form } from "react-router-dom";
+import formStyles from "../../globalStyles/formStyles.module.css";
 
 export default function Dialog({
   isOpen,
@@ -37,20 +38,20 @@ export default function Dialog({
       onClick={onClose}
     >
       <div
-        className={`${styles["dialog"]} ${styles["form-container"]}`}
+        className={`${styles["dialog"]} ${formStyles["form-container"]}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className={styles["header"]}>
-          <h2 className={styles["title"]}>Create New Blog</h2>
-          <button className={styles["close-button"]} onClick={onClose}>
+        <div className={formStyles["header"]}>
+          <h2 className={formStyles["title"]}>Create New Blog</h2>
+          <button className={formStyles["close-button"]} onClick={onClose}>
             ×
           </button>
         </div>
-        <p className={styles["form-instruction"]}>
+        <p className={formStyles["form-instruction"]}>
           Fill all the fields with <span>*</span>
         </p>
         <Form method="post" replace>
-          <div className={styles["form-content"]}>
+          <div className={formStyles["form-content"]}>
             <input readOnly type="hidden" value={content} name="content" />
             <Input
               label="Slug"
