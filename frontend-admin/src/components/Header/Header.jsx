@@ -52,16 +52,44 @@ export default function Header({ searchParams }) {
               </NavLink>
             </li>
           </ul>
-          <ul>
-            <li>
-              <NavLink
-                className={
-                  styles[`${currentPath.includes("signout") ? "active" : ""}`]
-                }
-                to="/signout"
+          <ul className={styles["profile-cont"]}>
+            <li className={styles["profile"]}>
+              <svg
+                className={styles["nav-icon"]}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                Sign Out
-              </NavLink>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+              </svg>
+            </li>
+            <li className={styles["profile-action"]}>
+              <div className={styles["signout"]}>
+                <NavLink
+                  className={
+                    styles[`${currentPath.includes("signout") ? "active" : ""}`]
+                  }
+                  to="/signout"
+                >
+                  Signout
+                </NavLink>
+              </div>
+
+              <div className={styles["update"]}>
+                <NavLink
+                  className={
+                    styles[`${currentPath.includes("signout") ? "active" : ""}`]
+                  }
+                  to="/auth/user/update"
+                >
+                  Update
+                </NavLink>
+              </div>
             </li>
           </ul>
         </nav>

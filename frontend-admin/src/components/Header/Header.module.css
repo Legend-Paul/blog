@@ -78,7 +78,8 @@
   list-style: none;
 }
 
-.header-container nav a {
+.header-container nav a,
+nav .profile {
   color: var(--text-primary);
   text-decoration: none;
   font-family: var(--font-primary);
@@ -89,7 +90,8 @@
   transition: all var(--transition-fast);
 }
 
-.header-container nav a:hover {
+.header-container nav a:hover,
+nav .profile:hover {
   color: var(--primary-color);
   background-color: var(--bg-muted);
 }
@@ -97,6 +99,45 @@
 nav .active {
   color: var(--primary-color) !important;
   background-color: var(--bg-secondary);
+}
+
+nav .profile-cont {
+  position: relative;
+  transform: scale(1);
+}
+
+nav .profile-cont:hover .profile-action {
+  transform: scale(1);
+}
+
+nav .profile {
+  cursor: pointer;
+  svg {
+    width: var(--space-xl);
+  }
+}
+
+nav .signout a:hover {
+  background-color: var(--error-color);
+  color: var(--text-primary);
+}
+
+nav .update a:hover {
+  background-color: var(--success-color);
+  color: var(--text-primary);
+}
+
+nav .profile-action {
+  position: absolute;
+  display: grid;
+  background-color: var(--bg-secondary);
+  padding: var(--space-md) var(--space-xs);
+  gap: var(--space-md);
+  border-radius: var(--radius-sm);
+  right: -20px;
+  box-shadow: var(--shadow-md);
+  transform: scale(0);
+  transition: var(--transition-fast);
 }
 
 /* Active state for current page */
