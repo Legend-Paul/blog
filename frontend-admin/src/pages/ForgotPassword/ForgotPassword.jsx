@@ -1,22 +1,47 @@
-import {
-  Form,
-  Link,
-  redirect,
-  useActionData,
-  useNavigation,
-} from "react-router-dom";
+import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import formStyles from "../../globalStyles/formStyles.module.css";
 
-export default function Login() {
+export async function Action({ request }) {
+  const formData = await request.formData();
+  const username = formData.get("username");
+  const password = formData.get("password");
+  const confirmPassword = formData.get("confirmPassword");
+
+  const forrgotPasswordData = {
+    username,
+    password,
+    confirmPassword,
+  };
+
+  try {
+    const response = await fetch("http://localhost:5000/auth/forgot-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(forrgotPasswordData),
+    });
+
+    const data = await response.json();
+    console.log(data);
+    console.log(response);
+    if (!response.ok) return { ...data, isError: true };
+
+    return redirect("/auth/login");
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
+export default function ForgotPassword() {
   const data = useActionData();
   const navigation = useNavigation();
-  console.log(localStorage.getItem("Authorization"));
 
   return (
-    <div className={formStyles["signup-container"]}>
-      <section className={formStyles["signup"]}>
+    <div className={formStyles["forrgot-password-container"]}>
+      <section className={formStyles["forrgot-password"]}>
         <div
           className={`${formStyles["form-container"]} ${formStyles["large-form-container"]}`}
         >

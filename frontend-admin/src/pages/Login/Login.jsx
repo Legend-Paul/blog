@@ -15,7 +15,7 @@ export async function Action({ request }) {
   const username = formData.get("username");
   const password = formData.get("password");
 
-  const signupData = {
+  const loginData = {
     username,
     password,
   };
@@ -26,7 +26,7 @@ export async function Action({ request }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(signupData),
+      body: JSON.stringify(loginData),
     });
 
     const data = await response.json();
@@ -45,8 +45,8 @@ export default function Login() {
   console.log(localStorage.getItem("Authorization"));
 
   return (
-    <div className={formStyles["signup-container"]}>
-      <section className={formStyles["signup"]}>
+    <div className={formStyles["login-container"]}>
+      <section className={formStyles["login"]}>
         <div
           className={`${formStyles["form-container"]} ${formStyles["large-form-container"]}`}
         >
