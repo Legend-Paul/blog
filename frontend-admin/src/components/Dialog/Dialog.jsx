@@ -1,4 +1,3 @@
-// components/Dialog/Dialog.jsx
 import { useEffect, useRef, useState } from "react";
 import Input, { Textarea } from "../Input/Input";
 import Button from "../Button/Button";

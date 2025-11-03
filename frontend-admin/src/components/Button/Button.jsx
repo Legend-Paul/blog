@@ -5,7 +5,6 @@ export default function Button({
   label,
   onClick,
   variant,
-
   disabled = false,
   type = "button",
 }) {

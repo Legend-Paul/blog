@@ -71,21 +71,18 @@ export default function Blogs() {
     }
   };
 
-  const handleDelete = async (blogId) => {
+  const handleDelete = async (slug) => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
-    setLoadingStates((prev) => ({ ...prev, [blogId]: "delete" }));
+    setLoadingStates((prev) => ({ ...prev, slug: "delete" }));
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/blogs/${blogId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:5000/api/blog/${slug}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5NDExOTU0LTU3MjAtNDQwOC1iM2I3LTRjZTg2YjU1M2RhYSIsImZ1bGxOYW1lIjoiUGF1bCBNYWluYSIsInVzZXJuYW1lIjoibGVnZW5kIiwicm9sZSI6IkFVVEhPUiIsImNyZWF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsInVwZGF0ZWRBdCI6IjIwMjUtMTAtMjlUMTc6NDk6MDYuNjU4WiIsImlhdCI6MTc2MTc2MTY5NCwiZXhwIjoxNzY0MzUzNjk0fQ.KFXzG0_HJYNgWfNfQ4M4kIdV-bdK6Mh4T4GEZvJBxs8`,
+        },
+      });
 
       if (response.ok) {
         const updatedData = await fetch("http://localhost:5000/api/blogs", {
@@ -101,11 +98,12 @@ export default function Blogs() {
     } catch (error) {
       console.error("Error deleting blog:", error);
     } finally {
-      setLoadingStates((prev) => ({ ...prev, [blogId]: null }));
+      setLoadingStates((prev) => ({ ...prev, [slug]: null }));
     }
   };
 
-  if (!data) {
+  console.log(loadingStates);
+  if (!data || loadingStates.slug) {
     return (
       <div className={styles["dashboard-container"]}>
         <Header searchParams={searchParams.toString()} />
@@ -310,7 +308,7 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
         },
       });
     } else if (action === "delete") {
-      onDelete(blog.id);
+      onDelete(blog.slug);
     } else {
       onAction(blog.id, action);
     }
@@ -334,9 +332,10 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
           <Button
             key={action}
             onClick={() => handleActionClick(action)}
-            isLoading={isLoading}
+            disabled={isLoading == action}
             label={label}
             action={action}
+            variant={variant}
           />
           // <button
           //   key={action}
