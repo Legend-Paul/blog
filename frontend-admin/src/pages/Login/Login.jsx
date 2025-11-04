@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
-import formStyles from "../../globalStyles/formStyles.module.css";
+import styles from "../../globalStyles/formStyles.module.css";
 
 export async function Action({ request }) {
   const formData = await request.formData();
@@ -43,23 +43,23 @@ export default function Login() {
   const navigation = useNavigation();
 
   return (
-    <div className={formStyles["login-container"]}>
-      <section className={formStyles["login"]}>
+    <div className={styles["login-container"]}>
+      <section className={styles["login"]}>
         <div
-          className={`${formStyles["form-container"]} ${formStyles["large-form-container"]}`}
+          className={`${styles["form-container"]} ${styles["large-form-container"]}`}
         >
-          <div className={formStyles["header"]}>
-            <h2 className={formStyles["title"]}>Log In</h2>
+          <div className={styles["header"]}>
+            <h2 className={styles["title"]}>Log In</h2>
           </div>
-          <p className={formStyles["form-instruction"]}>
+          <p className={styles["form-instruction"]}>
             Fill all the fields with <span>*</span>
           </p>
           {data ? (
-            <div className={formStyles["error"]}>
+            <div className={styles["error"]}>
               {Array.isArray(data.error) ? (
-                <p className={formStyles["error-text"]}>{data.error[0].msg}</p>
+                <p className={styles["error-text"]}>{data.error[0].msg}</p>
               ) : data.isError ? (
-                <p className={formStyles["error-text"]}>
+                <p className={styles["error-text"]}>
                   {data.message || data.error}
                 </p>
               ) : (
@@ -70,7 +70,7 @@ export default function Login() {
             ""
           )}
           <Form method="post" replace>
-            <div className={formStyles["form-content"]}>
+            <div className={styles["form-content"]}>
               <Input
                 label={"Username"}
                 name={"username"}
@@ -87,7 +87,7 @@ export default function Login() {
               />
               <Link to={"/auth/forgot-password"}>Forgot Password?</Link>
             </div>
-            <div className={formStyles["footer"]}>
+            <div className={styles["footer"]}>
               <Button
                 label={"Log In"}
                 type="submit"
@@ -96,7 +96,7 @@ export default function Login() {
                 //   className={styles["submit-button"]}
               />
             </div>
-            <div className={formStyles["auth-link"]}>
+            <div className={styles["auth-link"]}>
               <p>Don't have an account?</p>
               <Link to={"/auth/signup"}>Sign Up</Link>
             </div>
