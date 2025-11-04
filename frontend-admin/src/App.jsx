@@ -26,50 +26,52 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route errorElement={<ErrorPage />}>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/api/blogs" element={<Blog />} />
+        <Route path="/">
+          <Route index element={<Dashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="api/blogs" element={<Blog />} />
 
-        {/* Editor Route */}
-        <Route
-          path="/api/blogs/new"
-          element={<NewBlog />}
-          action={newBlogAction}
-        />
-        <Route
-          path="/api/blog/edit/:slug"
-          element={<NewBlog />}
-          action={updateBlogAction}
-        />
+          {/* Editor Route */}
+          <Route
+            path="api/blogs/new"
+            element={<NewBlog />}
+            action={newBlogAction}
+          />
+          <Route
+            path="api/blog/edit/:slug"
+            element={<NewBlog />}
+            action={updateBlogAction}
+          />
+          {/* Prveiew Route */}
+          <Route
+            path="api/blog/edit/:slug/preview"
+            element={<EditorPreview />}
+            action={updateBlogAction}
+          />
 
-        {/* Prveiew Route */}
-        <Route
-          path="/api/blog/edit/:slug/preview"
-          element={<EditorPreview />}
-          action={updateBlogAction}
-        />
+          <Route
+            path="api/blogs/new/preview"
+            element={<EditorPreview />}
+            action={newBlogAction}
+          />
 
-        <Route
-          path="/api/blogs/new/preview"
-          element={<EditorPreview />}
-          action={newBlogAction}
-        />
-        <Route path="/api/blog/:slug" element={<PreviewBlog />} />
+          <Route path="api/blog/:slug" element={<PreviewBlog />} />
 
+          <Route
+            path="auth/user/update"
+            element={<UpdateUser />}
+            action={updateUserAction}
+          />
+          <Route path="/auth/signout" element={<Signout />} />
+        </Route>
         {/* auth */}
-        <Route path="/auth/signup" element={<Signup />} action={signupAction} />
+        <Route path="/auth/signup" action={signupAction} element={<Signup />} />
         <Route path="/auth/login" element={<Login />} action={loginAction} />
         <Route
           path="/auth/forgot-password"
           element={<ForgotPassword />}
           action={forgotPasswordAction}
         />
-        <Route
-          path="/auth/user/update"
-          element={<UpdateUser />}
-          action={updateUserAction}
-        />
-        <Route path="/auth/signout" element={<Signout />} />
       </Route>
     </>
   )
