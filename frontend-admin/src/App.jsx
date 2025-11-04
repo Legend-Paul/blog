@@ -20,13 +20,14 @@ import UpdateUser, {
   Action as updateUserAction,
 } from "./pages/UpdateUser/UpdateUser";
 import Signout from "./pages/Signout/Signout";
+import CheckAuth from "./pages/CheckAuth/CheckAuth";
 import "./globalStyles/index.css";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route errorElement={<ErrorPage />}>
-        <Route path="/">
+        <Route path="/" element={<CheckAuth />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="api/blogs" element={<Blog />} />

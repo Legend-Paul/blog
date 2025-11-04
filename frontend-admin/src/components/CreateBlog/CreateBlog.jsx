@@ -9,7 +9,7 @@ export default function () {
       onClick={() => navigate("/api/blogs/new")}
     >
       <svg
-        class="nav-icon"
+        className="nav-icon"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
