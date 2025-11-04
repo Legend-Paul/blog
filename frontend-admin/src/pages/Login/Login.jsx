@@ -29,7 +29,7 @@ export async function Action({ request }) {
     });
 
     const data = await response.json();
-    console.log(data);
+
     if (!response.ok) return { ...data, isError: true };
     localStorage.setItem("Authorization", data.token);
     return redirect("/dashboard");
@@ -41,7 +41,6 @@ export async function Action({ request }) {
 export default function Login() {
   const data = useActionData();
   const navigation = useNavigation();
-  console.log(localStorage.getItem("Authorization"));
 
   return (
     <div className={formStyles["login-container"]}>
@@ -57,10 +56,12 @@ export default function Login() {
           </p>
           {data ? (
             <div className={formStyles["error"]}>
-              {data.error ? (
+              {Array.isArray(data.error) ? (
                 <p className={formStyles["error-text"]}>{data.error[0].msg}</p>
               ) : data.isError ? (
-                <p className={formStyles["error-text"]}>{data.message}</p>
+                <p className={formStyles["error-text"]}>
+                  {data.message || data.error}
+                </p>
               ) : (
                 " "
               )}

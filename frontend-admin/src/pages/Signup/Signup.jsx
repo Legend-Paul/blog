@@ -56,10 +56,12 @@ export default function Signup() {
           </p>
           {data ? (
             <div className={formStyles["error"]}>
-              {data.error ? (
+              {Array.isArray(data.error) ? (
                 <p className={formStyles["error-text"]}>{data.error[0].msg}</p>
-              ) : isError ? (
-                <p className={formStyles["error-text"]}>{data.message}</p>
+              ) : data.isError ? (
+                <p className={formStyles["error-text"]}>
+                  {data.message || data.error}
+                </p>
               ) : (
                 " "
               )}

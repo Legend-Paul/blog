@@ -58,7 +58,15 @@ export default function UpdateUser() {
           </p>
           {data ? (
             <div className={formStyles["error"]}>
-              <p className={formStyles["error-text"]}>{data.message}</p>
+              {Array.isArray(data.error) ? (
+                <p className={formStyles["error-text"]}>{data.error[0].msg}</p>
+              ) : data.isError ? (
+                <p className={formStyles["error-text"]}>
+                  {data.message || data.error}
+                </p>
+              ) : (
+                " "
+              )}
             </div>
           ) : (
             ""
