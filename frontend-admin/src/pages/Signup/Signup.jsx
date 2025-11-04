@@ -4,7 +4,10 @@ import {
   useActionData,
   useNavigation,
   Link,
+  useLocation,
+  useNavigate,
 } from "react-router-dom";
+import { useEffect } from "react";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import styles from "../../globalStyles/formStyles.module.css";
@@ -16,6 +19,7 @@ export async function Action({ request }) {
   const password = formData.get("password");
   const confirmPassword = formData.get("confirmPassword");
   const role = formData.get("role");
+  const redirectPath = formData.get("redirectPath");
   const signupData = {
     fullName,
     username,
@@ -23,7 +27,6 @@ export async function Action({ request }) {
     confirmPassword,
     role,
   };
-
   try {
     const response = await fetch("http://localhost:5000/auth/signup", {
       method: "POST",
@@ -37,7 +40,7 @@ export async function Action({ request }) {
 
     if (!response.ok) return { ...data, isError: true };
     localStorage.removeItem("Authorization");
-    return redirect("/auth/login");
+    return { ...data, redirectPath };
   } catch (error) {
     return { error: error.message };
   }
@@ -46,6 +49,17 @@ export async function Action({ request }) {
 export default function Signup() {
   const data = useActionData();
   const navigation = useNavigation();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  let redirectPath = location.state?.redirectPath || "";
+
+  useEffect(() => {
+    if (data && !data.isError) {
+      const finalRedirectPath = data.redirectPath || "";
+      navigate(`/auth/login${finalRedirectPath}`);
+    }
+  }, [data, navigate]);
 
   return (
     <div className={styles["signup-container"]}>
@@ -77,6 +91,7 @@ export default function Signup() {
           <Form method="post" replace>
             <div className={styles["form-content"]}>
               <input type="hidden" name="role" value={"AUTHOR"} />
+              <input type="hidden" name="redirectPath" value={redirectPath} />
               <Input
                 label={"Fullname"}
                 name={"fullName"}
@@ -119,7 +134,7 @@ export default function Signup() {
             </div>
             <div className={styles["auth-link"]}>
               <p>Already have an account?</p>
-              <Link to={"/auth/login"}>Log In</Link>
+              <Link to={`/auth/login${redirectPath}`}>Log In</Link>
             </div>
           </Form>
         </div>

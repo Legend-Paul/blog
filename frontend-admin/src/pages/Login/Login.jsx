@@ -46,14 +46,14 @@ export default function Login() {
   const location = useLocation();
   const navigate = useNavigate();
   const search = location.search;
-  console.log(location);
+  console.log("search", search);
   let redirectPath = "";
   if (search) {
     const [path, pathnameSearch] = search.split("&");
     const pathname = path.split("?").at(-1).split("=").at(-1);
     redirectPath = pathnameSearch ? `${pathname}?${pathnameSearch}` : pathname;
   }
-  console.log("redirectPath", redirectPath);
+
   if (data && !data.isError)
     redirectPath ? navigate(redirectPath) : navigate("/dashboard");
   return (
@@ -99,7 +99,12 @@ export default function Login() {
                 id={"password"}
                 placeholder={"********"}
               />
-              <Link to={"/auth/forgot-password"}>Forgot Password?</Link>
+              <Link
+                to={"/auth/forgot-password"}
+                state={{ redirectPath: search }}
+              >
+                Forgot Password?
+              </Link>
             </div>
             <div className={styles["footer"]}>
               <Button
@@ -112,7 +117,9 @@ export default function Login() {
             </div>
             <div className={styles["auth-link"]}>
               <p>Don't have an account?</p>
-              <Link to={"/auth/signup"}>Sign Up</Link>
+              <Link to={"/auth/signup"} state={{ redirectPath: search }}>
+                Sign Up
+              </Link>
             </div>
           </Form>
         </div>

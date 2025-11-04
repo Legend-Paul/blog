@@ -3,8 +3,11 @@ import {
   Link,
   redirect,
   useActionData,
+  useLocation,
+  useNavigate,
   useNavigation,
 } from "react-router-dom";
+import { useEffect } from "react";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import styles from "../../globalStyles/formStyles.module.css";
@@ -14,8 +17,9 @@ export async function Action({ request }) {
   const username = formData.get("username");
   const password = formData.get("password");
   const confirmPassword = formData.get("confirmPassword");
+  const redirectPath = formData.get("redirectPath");
 
-  const forrgotPasswordData = {
+  const forgotPasswordData = {
     username,
     password,
     confirmPassword,
@@ -27,15 +31,14 @@ export async function Action({ request }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(forrgotPasswordData),
+      body: JSON.stringify(forgotPasswordData),
     });
 
     const data = await response.json();
-    console.log(data);
-    console.log(response);
+
     if (!response.ok) return { ...data, isError: true };
 
-    return redirect("/auth/login");
+    return { ...data, redirectPath };
   } catch (error) {
     return { error: error.message };
   }
@@ -44,15 +47,26 @@ export async function Action({ request }) {
 export default function ForgotPassword() {
   const data = useActionData();
   const navigation = useNavigation();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  let redirectPath = location.state?.redirectPath || "";
+
+  useEffect(() => {
+    if (data && !data.isError) {
+      const finalRedirectPath = data.redirectPath || "";
+      navigate(`/auth/login${finalRedirectPath}`);
+    }
+  }, [data, navigate]);
 
   return (
-    <div className={styles["forrgot-password-container"]}>
-      <section className={styles["forrgot-password"]}>
+    <div className={styles["forgot-password-container"]}>
+      <section className={styles["forgot-password"]}>
         <div
           className={`${styles["form-container"]} ${styles["large-form-container"]}`}
         >
           <div className={styles["header"]}>
-            <h2 className={styles["title"]}>Log In</h2>
+            <h2 className={styles["title"]}>Forgot Password</h2>
           </div>
           <p className={styles["form-instruction"]}>
             Fill all the fields with <span>*</span>
@@ -72,6 +86,7 @@ export default function ForgotPassword() {
           )}
           <Form method="post" replace>
             <div className={styles["form-content"]}>
+              <input type="hidden" name="redirectPath" value={redirectPath} />
               <Input
                 label={"Username"}
                 name={"username"}
@@ -105,8 +120,8 @@ export default function ForgotPassword() {
               />
             </div>
             <div className={styles["auth-link"]}>
-              <p>Remember Password</p>
-              <Link to={"/auth/login"}>Log In</Link>
+              <p>Remember Password?</p>
+              <Link to={`/auth/login${redirectPath}`}>Log In</Link>
             </div>
           </Form>
         </div>
