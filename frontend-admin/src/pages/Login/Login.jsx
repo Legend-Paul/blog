@@ -3,6 +3,8 @@ import {
   Link,
   redirect,
   useActionData,
+  useLocation,
+  useNavigate,
   useNavigation,
 } from "react-router-dom";
 import Input from "../../components/Input/Input";
@@ -32,7 +34,7 @@ export async function Action({ request }) {
 
     if (!response.ok) return { ...data, isError: true };
     localStorage.setItem("Authorization", data.token);
-    return redirect("/dashboard");
+    return { data };
   } catch (error) {
     return { error: error.message };
   }
@@ -41,7 +43,19 @@ export async function Action({ request }) {
 export default function Login() {
   const data = useActionData();
   const navigation = useNavigation();
-
+  const location = useLocation();
+  const navigate = useNavigate();
+  const search = location.search;
+  console.log(location);
+  let redirectPath = "";
+  if (search) {
+    const [path, pathnameSearch] = search.split("&");
+    const pathname = path.split("?").at(-1).split("=").at(-1);
+    redirectPath = pathnameSearch ? `${pathname}?${pathnameSearch}` : pathname;
+  }
+  console.log("redirectPath", redirectPath);
+  if (data && !data.isError)
+    redirectPath ? navigate(redirectPath) : navigate("/dashboard");
   return (
     <div className={styles["login-container"]}>
       <section className={styles["login"]}>

@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, Navigate, useLocation } from "react-router-dom";
 import Spinnner from "../../components/Spinnner/Spinnner";
 
 export default function CheckAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const search = location.search.split("?").at(-1);
+  let searchParams = "";
+  if (search) searchParams = `?redirectTo=${currentPath}&${search}`;
+  else searchParams = `?redirectTo=${currentPath}`;
 
   useEffect(() => {
     const token = localStorage.getItem("Authorization");
@@ -24,7 +30,6 @@ export default function CheckAuth() {
       },
     })
       .then((response) => {
-        console.log("Response status:", response.status);
         if (response.ok) {
           return response.json(); // ← Parse the response
         } else {
@@ -32,7 +37,6 @@ export default function CheckAuth() {
         }
       })
       .then((data) => {
-        console.log("Response data:", data); // ← See what you're getting
         if (data.user) {
           // ← Check if user exists in response
           setIsAuthenticated(true);
@@ -42,7 +46,6 @@ export default function CheckAuth() {
         }
       })
       .catch((error) => {
-        console.error("Error verifying token:", error);
         localStorage.removeItem("Authorization");
         setIsAuthenticated(false);
       })
@@ -51,14 +54,12 @@ export default function CheckAuth() {
       });
   }, []);
 
-  console.log("isAuthenticated:", isAuthenticated);
-
   if (loading) {
     return <Spinnner />; // ← FIXED: Added return
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/auth/login" replace />;
+    return <Navigate to={`/auth/login/${searchParams}`} replace />;
   }
 
   return <Outlet />;
