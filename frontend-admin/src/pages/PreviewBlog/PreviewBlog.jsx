@@ -9,8 +9,10 @@ import Spinnner from "../../components/Spinnner/Spinnner";
 import { EditorHeader } from "../../components/Header/Header";
 import styles from "./PreviewBlog.module.css";
 import Dialog from "../../components/Dialog/Dialog";
+import checkAuth from "../../utils/checkAuth";
 
 export default function PreviewBlog() {
+  checkAuth();
   const [data, setData] = useState();
   const { slug } = useParams();
   const token = localStorage.getItem("Authorization");

@@ -3,9 +3,11 @@ import { useState, useRef, useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { EditorHeader } from "../../components/Header/Header";
 import Dialog from "../../components/Dialog/Dialog";
+import checkAuth from "../../utils/checkAuth";
 import { useLocation, useNavigation } from "react-router-dom";
 
 export default function NewBlog() {
+  checkAuth();
   const location = useLocation();
   const prevContent = location.state?.blogContent || "";
   const dialogFieldsValue = location.state?.dialogFieldsValue || "";

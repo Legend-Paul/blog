@@ -10,6 +10,7 @@ import Input from "../../components/Input/Input";
 import styles from "./UpdateUser.module.css";
 import formStyles from "../../globalStyles/formStyles.module.css";
 import Button from "../../components/Button/Button";
+import checkAuth from "../../utils/checkAuth";
 
 export async function Action({ request }) {
   const formData = await request.formData();
@@ -38,6 +39,7 @@ export async function Action({ request }) {
 }
 
 export default function UpdateUser() {
+  checkAuth();
   const navigate = useNavigate();
   const navigation = useNavigation();
   const data = useActionData();

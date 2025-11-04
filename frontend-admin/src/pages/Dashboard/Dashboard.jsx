@@ -3,9 +3,12 @@ import styles from "./Dashboard.module.css";
 import Header from "../../components/Header/Header";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import CreateBlog from "../../components/CreateBlog/CreateBlog";
+import checkAuth from "../../utils/checkAuth";
 import { useLocation } from "react-router-dom";
 
 export default function Dashboard() {
+  checkAuth();
+
   const [data, setData] = useState(null);
   const location = useLocation();
   const blogsSearchParams = location.state?.searchParams || "";

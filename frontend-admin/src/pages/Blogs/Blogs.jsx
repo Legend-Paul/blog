@@ -5,15 +5,19 @@ import Spinnner from "../../components/Spinnner/Spinnner";
 import CreateBlog from "../../components/CreateBlog/CreateBlog";
 import Button from "../../components/Button/Button";
 import Notification from "../../components/Notification/Notification"; // New component
+import checkAuth from "../../utils/checkAuth";
 import styles from "./Blogs.module.css";
 
 export default function Blogs() {
+  checkAuth();
+
   const [data, setData] = useState(null);
   const [loadingStates, setLoadingStates] = useState({});
   const [searchParams, setSearchParams] = useSearchParams();
   const [notifications, setNotifications] = useState([]); // Notification state
   const activeStatus = searchParams.get("status") || "ALL";
   const token = localStorage.getItem("Authorization");
+
   // Add notification function
   const addNotification = (message, type = "info") => {
     const id = Date.now();
