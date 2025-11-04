@@ -96,6 +96,10 @@ export default function Login() {
                 //   className={styles["submit-button"]}
               />
             </div>
+            <div className={formStyles["auth-link"]}>
+              <p>Don't have an account?</p>
+              <Link to={"/auth/signup"}>Sign Up</Link>
+            </div>
           </Form>
         </div>
       </section>

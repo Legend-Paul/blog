@@ -9,6 +9,7 @@
   max-height: 80vh;
   overflow: hidden;
   display: flex;
+  padding: var(--space-lg) 0;
   flex-direction: column;
   form {
     display: flex;
@@ -103,10 +104,18 @@
 }
 
 .large-form-container {
-  max-height: 100vh !important;
-  margin-top: calc(var(--space-4xl));
+  max-height: 100% !important;
+  margin: var(--space-4xl) auto;
+  .footer {
+    background-color: var(--bg-primary);
+  }
   button {
     width: 100%;
-    padding: var(--space-md);
+    padding: var(--space-sm);
+  }
+  .auth-link {
+    padding: var(--space-lg);
+    display: flex;
+    gap: var(--space-lg);
   }
 }

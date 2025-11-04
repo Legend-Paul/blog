@@ -1,5 +1,10 @@
-import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
-import styles from "./Signup.module.css";
+import {
+  Form,
+  redirect,
+  useActionData,
+  useNavigation,
+  Link,
+} from "react-router-dom";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import formStyles from "../../globalStyles/formStyles.module.css";
@@ -111,6 +116,10 @@ export default function Signup() {
                 disabled={navigation.state == "submitting"}
                 //   className={styles["submit-button"]}
               />
+            </div>
+            <div className={formStyles["auth-link"]}>
+              <p>Already have an account?</p>
+              <Link to={"/auth/login"}>Log In</Link>
             </div>
           </Form>
         </div>
