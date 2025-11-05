@@ -13,6 +13,7 @@ import requireAuth from "./config/auth.js";
 import publicSignupRoute from "./routes/publicSignup.js";
 import publicLoginRoute from "./routes/publicLogin.js";
 import publicforgotPasswordRoute from "./routes/publicforgotPassword.js";
+import publicBlogRouter from "./routes/publicBlog.js";
 dotenv.config();
 
 const app = express();
@@ -32,18 +33,21 @@ app.use(cors(corsOptions));
 app.use(passport.initialize());
 passportConfig(passport);
 
-// author Routes
+// author auth Routes
 app.use("/auth/login", loginRoute);
 app.use("/auth/signup", signupRoute);
 app.use("/auth/forgot-password", forgotPasswordRoute);
 app.use("/auth/user/update", requireAuth, updateUserRoute);
 
-// public Routes
+// public auth Routes
 app.use("/:author/auth/signup", publicSignupRoute);
 app.use("/:author/auth/login", publicLoginRoute);
 app.use("/:author/auth/forgot-password", publicforgotPasswordRoute);
 
-// admin route
+// public routes
+app.use("/:author", publicBlogRouter);
+
+// author route
 app.use("/dashboard", requireAuth, adminDashboardRoute);
 app.use("/api", requireAuth, blogRoute);
 
