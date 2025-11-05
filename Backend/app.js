@@ -45,7 +45,7 @@ app.use("/:author/auth/login", publicLoginRoute);
 app.use("/:author/auth/forgot-password", publicforgotPasswordRoute);
 
 // public routes
-app.use("/:author", publicBlogRouter);
+app.use("/:author/api", requireAuth, publicBlogRouter);
 
 // author route
 app.use("/dashboard", requireAuth, adminDashboardRoute);
