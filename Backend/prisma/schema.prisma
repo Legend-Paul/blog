@@ -39,6 +39,7 @@ model User {
 
   likes        Like[]        @relation("UserLikes")
   commentLikes CommentLike[] @relation("UserCommentLikes")
+  comments Comment[] @relation("CommentUser")
 
   @@unique([username, authorId])
 }
@@ -67,6 +68,9 @@ model Comment {
 
   author   Author @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
+
+  user   User @relation("CommentUser", fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 
   blog   Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId String
