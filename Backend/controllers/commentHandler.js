@@ -40,9 +40,8 @@ export const createComment = async (req, res) => {
 
 // get Blog Comments
 export const getBlogComments = async (req, res) => {
+  const { slug } = req.params;
   try {
-    const { slug } = req.params;
-
     const blog = await prisma.blog.findUnique({
       where: { slug },
     });
@@ -108,28 +107,38 @@ export const getBlogComments = async (req, res) => {
 
 // create comment replies
 export const createCommentReply = async (req, res) => {
-  const { slug, id } = req.params;
   const { content } = req.body;
+  const params = req.params;
 
   try {
-    const blog = await prisma.blog.findUnique({
-      where: { slug },
-    });
+    const [blog, author] = await Promise.all([
+      prisma.blog.findUnique({
+        where: { slug: params.slug },
+      }),
+      prisma.author.findUnique({
+        where: {
+          username: params.author,
+        },
+      }),
+    ]);
 
     if (!blog) return res.status(400).json({ message: "Blog not found!" });
+
+    if (!author) return res.status(400).json({ message: "Author not found!" });
 
     const comment = await prisma.comment.create({
       data: {
         content,
-        authorId: req.user.id,
-        parentId: id,
+        authorId: author.id,
+        userId: req.user.id,
+        parentId: params.id,
         blogId: blog.id,
       },
     });
 
     return res
       .status(200)
-      .json({ message: "Comments found successfully", data: comment });
+      .json({ message: "Replied successfully", data: comment });
   } catch (error) {
     console.error("Error fetching comments:", error);
     return res.status(500).json({ message: "Server error" });

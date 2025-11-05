@@ -17,6 +17,7 @@ const publicBlogRoute = express.Router({ mergeParams: true });
 
 // Comments
 publicBlogRoute.post("/blogs/:slug/comments/new", createComment);
+publicBlogRoute.post("/blogs/:slug/comments/:id/reply", createCommentReply);
 
 //likes
 publicBlogRoute.post("/blogs/:slug/likes/new", createBlogLike);
