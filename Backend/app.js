@@ -14,7 +14,10 @@ import publicSignupRoute from "./routes/publicSignup.js";
 import publicLoginRoute from "./routes/publicLogin.js";
 import publicforgotPasswordRoute from "./routes/publicforgotPassword.js";
 import publicActionRouter from "./routes/publicAction.js";
-import { getPublicBlogs } from "./controllers/publicBlogHandler.js";
+import {
+  getPublicBlogs,
+  getPublicBlog,
+} from "./controllers/publicBlogHandler.js";
 dotenv.config();
 
 const app = express();
@@ -47,6 +50,7 @@ app.use("/:author/auth/forgot-password", publicforgotPasswordRoute);
 
 // public routes
 app.get("/:author/api/blogs", getPublicBlogs);
+app.get("/:author/api/blog/:slug", getPublicBlog);
 app.use("/:author/api", requireAuth, publicActionRouter);
 
 // author route
