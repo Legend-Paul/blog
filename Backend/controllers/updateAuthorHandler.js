@@ -6,7 +6,7 @@ const validate = [
   body("username").trim().notEmpty().withMessage("Username is required"),
 ];
 
-const updateUserHandler = [
+const updateAuthorHandler = [
   validate,
   async (req, res) => {
     const data = req.body;
@@ -17,7 +17,7 @@ const updateUserHandler = [
     }
 
     try {
-      const canUpate = await prisma.user.findUnique({
+      const canUpate = await prisma.author.findUnique({
         where: {
           username: data.username,
         },
@@ -26,13 +26,13 @@ const updateUserHandler = [
       if (canUpate)
         return res.status(400).json({ message: "Username already taken" });
 
-      const user = await prisma.user.update({
+      const author = await prisma.author.update({
         where: {
           id: req.user.id,
         },
         data: data,
       });
-      return res.status(201).json({ message: "User updated", user });
+      return res.status(201).json({ message: "User updated", author });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Server error" });
@@ -40,4 +40,4 @@ const updateUserHandler = [
   },
 ];
 
-export default updateUserHandler;
+export default updateAuthorHandler;

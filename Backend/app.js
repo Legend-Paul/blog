@@ -5,7 +5,7 @@ import signupRoute from "./routes/signup.js";
 import blogRoute from "./routes/blog.js";
 import adminDashboardRoute from "./routes/adminDashboard.js";
 import loginRoute from "./routes/login.js";
-import updateUserRoute from "./routes/updateUser.js";
+import updateAuthorHandler from "./routes/updateAuthor.js";
 import forgotPasswordRoute from "./routes/forgotPassword.js";
 import passport from "passport";
 import passportConfig from "./config/passport.js";
@@ -37,7 +37,7 @@ passportConfig(passport);
 app.use("/auth/login", loginRoute);
 app.use("/auth/signup", signupRoute);
 app.use("/auth/forgot-password", forgotPasswordRoute);
-app.use("/auth/user/update", requireAuth, updateUserRoute);
+app.use("/auth/update", requireAuth, updateAuthorHandler);
 
 // public auth Routes
 app.use("/:author/auth/signup", publicSignupRoute);
