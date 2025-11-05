@@ -37,7 +37,7 @@ app.use("/auth/forgot-password", forgotPasswordRoute);
 app.use("/auth/user/update", requireAuth, updateUserRoute);
 
 // public Routes
-app.use("/:author/auth", publicSignupRoute);
+app.use("/:author/auth/signup", publicSignupRoute);
 
 app.use("/api", requireAuth, blogRoute);
 // admin route

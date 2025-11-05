@@ -3,6 +3,6 @@ import { createUser } from "../controllers/publicSignupHandler.js";
 
 const publicSignupRoute = express.Router({ mergeParams: true });
 
-publicSignupRoute.post("/signup", createUser);
+publicSignupRoute.post("/", createUser);
 
 export default publicSignupRoute;
