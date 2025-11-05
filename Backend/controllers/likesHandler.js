@@ -77,6 +77,7 @@ export const deleteBlogLike = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
 export const deleteCommentLike = async (req, res) => {
   const { id } = req.params;
   try {
