@@ -37,20 +37,35 @@ export const createBlogLike = async (req, res) => {
 };
 
 export const createCommentLike = async (req, res) => {
-  try {
-    const { id } = req.params;
+  const params = req.params;
 
-    const comment = await prisma.comment.findUnique({
-      where: { id },
-    });
+  try {
+    const [blog, author, comment] = await Promise.all([
+      prisma.blog.findUnique({
+        where: { slug: params.slug },
+      }),
+      prisma.author.findUnique({
+        where: {
+          username: params.author,
+        },
+      }),
+      prisma.comment.findUnique({
+        where: { id: params.id },
+      }),
+    ]);
 
     if (!comment)
       return res.status(400).json({ message: "Comment not found!" });
+
+    if (!blog) return res.status(400).json({ message: "Comment not found!" });
+
+    if (!author) return res.status(400).json({ message: "Comment not found!" });
 
     const like = await prisma.commentLike.create({
       data: {
         commentId: comment.id,
         userId: req.user.id,
+        authorId: author.id,
       },
     });
 
