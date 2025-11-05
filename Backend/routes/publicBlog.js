@@ -16,6 +16,7 @@ import {
 const publicBlogRoute = express.Router({ mergeParams: true });
 
 // Comments
+publicBlogRoute.get("/blogs/:slug/comments", getBlogComments);
 publicBlogRoute.post("/blogs/:slug/comments/new", createComment);
 publicBlogRoute.post("/blogs/:slug/comments/:id/reply", createCommentReply);
 

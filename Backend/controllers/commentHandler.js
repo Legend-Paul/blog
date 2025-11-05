@@ -40,62 +40,25 @@ export const createComment = async (req, res) => {
 
 // get Blog Comments
 export const getBlogComments = async (req, res) => {
-  const { slug } = req.params;
+  const params = req.params;
+
   try {
-    const blog = await prisma.blog.findUnique({
-      where: { slug },
-    });
-
-    if (!blog) return res.status(404).json({ message: "Blog not found!" });
-
-    const comments = await prisma.comment.findMany({
-      where: {
-        blogId: blog.id,
-        parentId: null, // Only fetch top-level comments
-      },
-      include: {
-        _count: {
-          select: {
-            likes: true,
-            replies: true,
-          },
+    const [blog, author] = await Promise.all([
+      prisma.blog.findUnique({
+        where: { slug: params.slug },
+      }),
+      prisma.author.findUnique({
+        where: {
+          username: params.author,
         },
-        author: {
-          select: {
-            id: true,
-            fullName: true,
-            username: true,
-            role: true,
-            createdAt: true,
-          },
-        },
-        replies: {
-          include: {
-            _count: {
-              select: {
-                likes: true,
-              },
-            },
-            author: {
-              select: {
-                id: true,
-                fullName: true,
-                username: true,
-                role: true,
-                createdAt: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: "asc",
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+      }),
+    ]);
 
+    if (!blog) return res.status(400).json({ message: "Blog not found!" });
+
+    if (!author) return res.status(400).json({ message: "Author not found!" });
+
+    const comments = await getCommentsWithAllReplies(blog.id);
     return res
       .status(200)
       .json({ message: "Comments found successfully", data: comments });
@@ -104,6 +67,60 @@ export const getBlogComments = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+// Helper function to recursively fetch replies
+async function getCommentsWithAllReplies(blogId) {
+  // First, fetch all comments for the blog
+  const allComments = await prisma.comment.findMany({
+    where: {
+      blogId: blogId,
+    },
+    include: {
+      _count: {
+        select: {
+          likes: true,
+          replies: true,
+        },
+      },
+      author: {
+        select: {
+          id: true,
+          username: true,
+          createdAt: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+
+  // Build a nested structure
+  const commentMap = new Map();
+  const rootComments = [];
+
+  // First pass: create map of all comments
+  allComments.forEach((comment) => {
+    commentMap.set(comment.id, { ...comment, replies: [] });
+  });
+
+  // Second pass: build the tree structure
+  allComments.forEach((comment) => {
+    if (comment.parentId === null) {
+      rootComments.push(commentMap.get(comment.id));
+    } else {
+      const parent = commentMap.get(comment.parentId);
+      if (parent) {
+        parent.replies.push(commentMap.get(comment.id));
+      }
+    }
+  });
+
+  // Sort root comments by createdAt desc
+  rootComments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  return rootComments;
+}
 
 // create comment replies
 export const createCommentReply = async (req, res) => {
