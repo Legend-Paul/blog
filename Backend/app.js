@@ -13,7 +13,7 @@ import requireAuth from "./config/auth.js";
 import publicSignupRoute from "./routes/publicSignup.js";
 import publicLoginRoute from "./routes/publicLogin.js";
 import publicforgotPasswordRoute from "./routes/publicforgotPassword.js";
-import publicBlogRouter from "./routes/publicBlog.js";
+import publicActionRouter from "./routes/publicAction.js";
 import { getBlog, getBlogs } from "./controllers/blogHandler.js";
 dotenv.config();
 
@@ -48,7 +48,7 @@ app.use("/:author/auth/forgot-password", publicforgotPasswordRoute);
 // public routes
 app.get("/:author/api/blogs", getBlogs);
 app.get("/:author/api/blog/:slug", getBlog);
-app.use("/:author/api", requireAuth, publicBlogRouter);
+app.use("/:author/api", requireAuth, publicActionRouter);
 
 // author route
 app.use("/dashboard", requireAuth, adminDashboardRoute);
