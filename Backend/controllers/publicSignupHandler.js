@@ -26,14 +26,12 @@ const createUser = [
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: errors.array() });
     }
-    console.log(authorName);
     // find the Author
     const author = await prisma.author.findUnique({
       where: {
         username: authorName,
       },
     });
-    console.log(author);
     // check if username already exists
     const existing = await prisma.user.findUnique({
       where: {
