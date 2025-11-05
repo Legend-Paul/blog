@@ -3,32 +3,28 @@ import prisma from "../config/prisma.js";
 // create blog
 export const createBlog = async (req, res) => {
   const { title, content, description, slug, status } = req.body;
-  console.log({ title, content, description, slug, status });
+  console.log(req.user);
 
-  try {
-    const blogExist = await prisma.blog.findUnique({
-      where: {
-        slug,
-        authorId: req.user.id,
-      },
-    });
-    if (blogExist)
-      return res.status(400).json({ message: "Blog slug already exist" });
+  const blogExist = await prisma.blog.findUnique({
+    where: {
+      slug,
+      authorId: req.user.id,
+    },
+  });
+  if (blogExist)
+    return res.status(400).json({ message: "Blog slug already exist" });
 
-    const blog = await prisma.blog.create({
-      data: {
-        title,
-        content,
-        slug,
-        status,
-        description,
-        authorId: req.user.id,
-      },
-    });
-    return res.status(201).json({ message: "Blog created", data: blog });
-  } catch (err) {
-    return res.status(500).json({ message: "Server error" });
-  }
+  const blog = await prisma.blog.create({
+    data: {
+      title,
+      content,
+      slug,
+      status,
+      description,
+      authorId: req.user.id,
+    },
+  });
+  return res.status(201).json({ message: "Blog created", data: blog });
 };
 
 // get all blogs

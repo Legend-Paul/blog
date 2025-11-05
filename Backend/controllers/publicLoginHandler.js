@@ -58,7 +58,7 @@ const validateLogin = [
     const payload = { ...restField };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1m",
+      expiresIn: "30d",
     });
 
     return res.status(200).json({

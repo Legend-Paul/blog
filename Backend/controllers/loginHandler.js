@@ -34,7 +34,7 @@ const validateLogin = [
           .status(404)
           .json({ message: "Incorrect username or password" });
 
-      const isMatch = await bcryptjs.compare(password, user.password);
+      const isMatch = await bcryptjs.compare(password, author.password);
       if (!isMatch)
         return res
           .status(401)
@@ -44,7 +44,7 @@ const validateLogin = [
       const payload = { ...restField };
 
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: "1m",
+        expiresIn: "30d",
       });
 
       return res.status(200).json({
