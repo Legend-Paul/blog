@@ -27,4 +27,5 @@ publicBlogRoute.delete("/blogs/:slug/likes/:id", deleteBlogLike);
 publicBlogRoute.post("/blogs/:slug/comments/:id/likes/new", createCommentLike);
 publicBlogRoute.delete("/blogs/:slug/comments/likes/:id", deleteCommentLike);
 
+// blog
 export default publicBlogRoute;
