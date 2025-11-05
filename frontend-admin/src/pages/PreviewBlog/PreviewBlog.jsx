@@ -27,6 +27,7 @@ export default function PreviewBlog() {
       .then((res) => setData(res.data))
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
+
   if (!data) {
     return (
       <div>
@@ -34,7 +35,6 @@ export default function PreviewBlog() {
       </div>
     );
   }
-  console.log(data);
 
   return (
     <div className={styles["preview-blog-container"]}>

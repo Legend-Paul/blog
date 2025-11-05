@@ -1,7 +1,7 @@
 .preview-blog-container {
   section {
+    max-width: var(--container-xl) !important;
     padding: var(--space-xl);
-    max-width: var(--container-xl);
     margin: 0 auto;
     margin-top: 0 !important;
   }

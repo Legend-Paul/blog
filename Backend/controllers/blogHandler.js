@@ -62,7 +62,6 @@ export const getBlog = async (req, res) => {
             id: true,
             fullName: true,
             username: true,
-            role: true,
           },
         },
       },
