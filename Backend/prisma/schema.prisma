@@ -1,5 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Corrected Prisma schema
 
 generator client {
   provider = "prisma-client-js"
@@ -12,20 +11,38 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model User {
+model Author {
   id        String   @id @default(uuid())
   fullName  String
   username  String   @unique
   password  String
-  role      Role
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // More specific relation names
   blogs        Blog[]        @relation("AuthoredBlogs")
   comments     Comment[]     @relation("CommentAuthor")
-  blogLikes    Like[]        @relation("BlogLikes")
-  commentLikes CommentLike[] @relation("CommentLikes")
+  authorLikes  Like[]        @relation("AuthorLikes")
+  commentLikes CommentLike[] @relation("AuthorCommentLikes")
+  users        User[]        @relation("AuthorUsers")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author   Author @relation("AuthorUsers", fields: [authorId], references: [id])
+  authorId String
+
+  blog   Blog   @relation("UserBlogs", fields: [blogId], references: [id])
+  blogId String
+
+  likes        Like[]        @relation("UserLikes")
+  commentLikes CommentLike[] @relation("UserCommentLikes")
+
+  @@unique([username, authorId])
 }
 
 model Blog {
@@ -38,11 +55,12 @@ model Blog {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
-  author   User   @relation("AuthoredBlogs", fields: [authorId], references: [id], onDelete: Cascade)
+  author   Author @relation("AuthoredBlogs", fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
-
+  
+  users    User[]    @relation("UserBlogs")
   comments Comment[]
-  likes    Like[]
+  likes    Like[] 
 }
 
 model Comment {
@@ -50,7 +68,7 @@ model Comment {
   content   String   @db.Text
   createdAt DateTime @default(now())
 
-  author   User   @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  author   Author @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
 
   blog   Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
@@ -74,8 +92,11 @@ model Like {
   blog   Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId String
 
-  user   User   @relation("BlogLikes", fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation("UserLikes", fields: [userId], references: [id], onDelete: Cascade)
   userId String
+
+  author   Author @relation("AuthorLikes", fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
 
   @@unique([blogId, userId])
 }
@@ -87,15 +108,13 @@ model CommentLike {
   comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String
 
-  user   User   @relation("CommentLikes", fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation("UserCommentLikes", fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
-  @@unique([commentId, userId])
-}
+  author   Author @relation("AuthorCommentLikes", fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
 
-enum Role {
-  AUTHOR
-  READER
+  @@unique([commentId, userId])
 }
 
 enum BlogStatus {
