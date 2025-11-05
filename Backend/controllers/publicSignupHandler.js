@@ -26,40 +26,45 @@ const createUser = [
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: errors.array() });
     }
-    // find the Author
-    const author = await prisma.author.findUnique({
-      where: {
-        username: authorName,
-      },
-    });
+    try {
+      // find the Author
+      const author = await prisma.author.findUnique({
+        where: {
+          username: authorName,
+        },
+      });
 
-    if (!author) return res.status(400).json({ message: "Author not found" });
-    // check if username already exists
-    const existing = await prisma.user.findUnique({
-      where: {
-        username_authorId: {
-          username: username,
+      if (!author) return res.status(400).json({ message: "Author not found" });
+      // check if username already exists
+      const existing = await prisma.user.findUnique({
+        where: {
+          username_authorId: {
+            username: username,
+            authorId: author.id,
+          },
+        },
+      });
+      if (existing)
+        return res.status(400).json({ message: "Username already taken" });
+
+      const hashedPassword = await bcryptjs.hash(password, 10);
+      const user = await prisma.user.create({
+        data: {
+          username,
+          password: hashedPassword,
           authorId: author.id,
         },
-      },
-    });
-    if (existing)
-      return res.status(400).json({ message: "Username already taken" });
-
-    const hashedPassword = await bcryptjs.hash(password, 10);
-    const user = await prisma.user.create({
-      data: {
-        username,
-        password: hashedPassword,
-        authorId: author.id,
-      },
-      select: {
-        id: true,
-        username: true,
-        createdAt: true,
-      },
-    });
-    return res.status(200).json({ message: "User created", user });
+        select: {
+          id: true,
+          username: true,
+          createdAt: true,
+        },
+      });
+      return res.status(200).json({ message: "User created", user });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Server error" });
+    }
   },
 ];
 

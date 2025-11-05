@@ -95,15 +95,12 @@ export const deleteBlogLike = async (req, res) => {
 
 export const deleteCommentLike = async (req, res) => {
   const { id } = req.params;
-  try {
-    const like = await prisma.commentLike.delete({
-      where: { id },
-    });
 
-    return res
-      .status(200)
-      .json({ message: "Like deleted successifully", data: like });
-  } catch (err) {
-    return res.status(500).json({ message: "Server error" });
-  }
+  const like = await prisma.commentLike.delete({
+    where: { id },
+  });
+
+  return res
+    .status(200)
+    .json({ message: "Like deleted successifully", data: like });
 };

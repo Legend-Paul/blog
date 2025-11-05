@@ -26,49 +26,53 @@ const updatePassword = [
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: errors.array() });
     }
-
-    // check author
-    const author = await prisma.author.findUnique({
-      where: {
-        username: authorName,
-      },
-    });
-
-    if (!author) return res.status(400).json({ message: "Author not found" });
-
-    // Check user
-    const user = await prisma.user.findUnique({
-      where: {
-        username_authorId: {
-          username,
-          authorId: author.id,
+    try {
+      // check author
+      const author = await prisma.author.findUnique({
+        where: {
+          username: authorName,
         },
-      },
-    });
+      });
 
-    if (!user)
+      if (!author) return res.status(400).json({ message: "Author not found" });
+
+      // Check user
+      const user = await prisma.user.findUnique({
+        where: {
+          username_authorId: {
+            username,
+            authorId: author.id,
+          },
+        },
+      });
+
+      if (!user)
+        return res
+          .status(400)
+          .json({ message: "Incorrect username or password" });
+
+      const hashedPassword = await bcryptjs.hash(password, 10);
+
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          password: hashedPassword,
+        },
+        select: {
+          id: true,
+          username: true,
+          createdAt: true,
+        },
+      });
       return res
-        .status(400)
-        .json({ message: "Incorrect username or password" });
-
-    const hashedPassword = await bcryptjs.hash(password, 10);
-
-    const updatedUser = await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        password: hashedPassword,
-      },
-      select: {
-        id: true,
-        username: true,
-        createdAt: true,
-      },
-    });
-    return res
-      .status(201)
-      .json({ message: "Password updated", user: updatedUser });
+        .status(201)
+        .json({ message: "Password updated", user: updatedUser });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Server error" });
+    }
   },
 ];
 export default updatePassword;

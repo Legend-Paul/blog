@@ -15,22 +15,28 @@ const updateUserHandler = [
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: errors.array() });
     }
-    const canUpate = await prisma.user.findUnique({
-      where: {
-        username: data.username,
-      },
-    });
 
-    if (canUpate)
-      return res.status(400).json({ message: "Username already taken" });
+    try {
+      const canUpate = await prisma.user.findUnique({
+        where: {
+          username: data.username,
+        },
+      });
 
-    const user = await prisma.user.update({
-      where: {
-        id: req.user.id,
-      },
-      data: data,
-    });
-    return res.status(201).json({ message: "User updated", user });
+      if (canUpate)
+        return res.status(400).json({ message: "Username already taken" });
+
+      const user = await prisma.user.update({
+        where: {
+          id: req.user.id,
+        },
+        data: data,
+      });
+      return res.status(201).json({ message: "User updated", user });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Server error" });
+    }
   },
 ];
 
