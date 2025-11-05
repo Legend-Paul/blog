@@ -16,11 +16,13 @@ export async function Action({ request }) {
   const formData = await request.formData();
   const fullName = formData.get("fullName");
   const username = formData.get("username");
-  const userData = { fullName, username };
+  const password = formData.get("password");
+  const userData = { fullName, username, password };
   const token = localStorage.getItem("Authorization");
+  console.log(token);
 
   try {
-    const response = await fetch("http://localhost:5000/auth/user/update", {
+    const response = await fetch("http://localhost:5000/auth/update", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -30,6 +32,7 @@ export async function Action({ request }) {
     });
 
     const data = await response.json();
+    console.log(data);
 
     if (!response.ok) return { ...data, isError: true };
     return redirect("/dashboard");
@@ -88,6 +91,13 @@ export default function UpdateUser() {
                 name={"username"}
                 id={"username"}
                 placeholder={"Enter username"}
+              />
+              <Input
+                label={"Password"}
+                name={"password"}
+                id={"password"}
+                type="password"
+                placeholder={"********"}
               />
             </div>
             <div className={formStyles["footer"]}>

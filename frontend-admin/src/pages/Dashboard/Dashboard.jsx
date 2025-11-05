@@ -71,10 +71,6 @@ export default function Dashboard() {
                 <td>{data.user.username}</td>
               </tr>
               <tr>
-                <td>Role</td>
-                <td>{data.user.role}</td>
-              </tr>
-              <tr>
                 <td>Created At</td>
                 <td>{formatDate(data.user.createdAt)}</td>
               </tr>

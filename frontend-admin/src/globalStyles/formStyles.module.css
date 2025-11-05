@@ -6,10 +6,9 @@
   box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 500px;
-  max-height: 80vh;
+  max-height: 100%;
   overflow: hidden;
   display: flex;
-  padding: var(--space-lg) 0;
   flex-direction: column;
   form {
     display: flex;
@@ -106,6 +105,7 @@
 .large-form-container {
   max-height: 100% !important;
   margin: var(--space-4xl) auto;
+  padding: var(--space-lg) 0;
   .footer {
     background-color: var(--bg-primary);
   }
