@@ -6,20 +6,23 @@ export const createComment = async (req, res) => {
   const params = req.params;
 
   try {
-    const [blog, author] = await Promise.all([
-      prisma.blog.findUnique({
-        where: { slug: params.slug },
-      }),
-      prisma.author.findUnique({
-        where: {
-          username: params.author,
-        },
-      }),
-    ]);
-
-    if (!blog) return res.status(400).json({ message: "Blog not found!" });
-
+    // find author
+    const author = await prisma.author.findUnique({
+      where: {
+        username: params.author,
+      },
+    });
     if (!author) return res.status(400).json({ message: "Author not found!" });
+
+    const blog = await prisma.blog.findUnique({
+      where: {
+        slug_authorId: {
+          slug: params.slug,
+          authorId: author.id,
+        },
+      },
+    });
+    if (!blog) return res.status(400).json({ message: "Blog not found!" });
 
     const comment = await prisma.comment.create({
       data: {
@@ -43,20 +46,23 @@ export const getBlogComments = async (req, res) => {
   const params = req.params;
 
   try {
-    const [blog, author] = await Promise.all([
-      prisma.blog.findUnique({
-        where: { slug: params.slug },
-      }),
-      prisma.author.findUnique({
-        where: {
-          username: params.author,
-        },
-      }),
-    ]);
-
-    if (!blog) return res.status(400).json({ message: "Blog not found!" });
-
+    // find author
+    const author = await prisma.author.findUnique({
+      where: {
+        username: params.author,
+      },
+    });
     if (!author) return res.status(400).json({ message: "Author not found!" });
+
+    const blog = await prisma.blog.findUnique({
+      where: {
+        slug_authorId: {
+          slug: params.slug,
+          authorId: author.id,
+        },
+      },
+    });
+    if (!blog) return res.status(400).json({ message: "Blog not found!" });
 
     const comments = await getCommentsWithAllReplies(blog.id);
     return res
@@ -128,20 +134,23 @@ export const createCommentReply = async (req, res) => {
   const params = req.params;
 
   try {
-    const [blog, author] = await Promise.all([
-      prisma.blog.findUnique({
-        where: { slug: params.slug },
-      }),
-      prisma.author.findUnique({
-        where: {
-          username: params.author,
-        },
-      }),
-    ]);
-
-    if (!blog) return res.status(400).json({ message: "Blog not found!" });
-
+    // find author
+    const author = await prisma.author.findUnique({
+      where: {
+        username: params.author,
+      },
+    });
     if (!author) return res.status(400).json({ message: "Author not found!" });
+
+    const blog = await prisma.blog.findUnique({
+      where: {
+        slug_authorId: {
+          slug: params.slug,
+          authorId: author.id,
+        },
+      },
+    });
+    if (!blog) return res.status(400).json({ message: "Blog not found!" });
 
     const comment = await prisma.comment.create({
       data: {
@@ -164,21 +173,25 @@ export const createCommentReply = async (req, res) => {
 
 // delete reply
 export const deleteComments = async (req, res) => {
-  const { slug, id } = req.params;
+  const params = req.params;
   try {
-    const [_blog, _comment] = await Promise.all([
-      prisma.blog.findUnique({
-        where: { slug },
-      }),
-      prisma.comment.findUnique({
-        where: { id },
-      }),
-    ]);
+    // find author
+    const author = await prisma.author.findUnique({
+      where: {
+        username: params.author,
+      },
+    });
+    if (!author) return res.status(400).json({ message: "Author not found!" });
 
-    if (!_blog) return res.status(400).json({ message: "Blog not found!" });
-
-    if (!_comment)
-      return res.status(400).json({ message: "Comment not found!" });
+    const blog = await prisma.blog.findUnique({
+      where: {
+        slug_authorId: {
+          slug: params.slug,
+          authorId: author.id,
+        },
+      },
+    });
+    if (!blog) return res.status(400).json({ message: "Blog not found!" });
 
     const comment = await prisma.comment.delete({
       where: { id },

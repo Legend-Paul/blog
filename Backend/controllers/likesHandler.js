@@ -4,20 +4,23 @@ export const createBlogLike = async (req, res) => {
   const params = req.params;
 
   try {
-    const [blog, author] = await Promise.all([
-      prisma.blog.findUnique({
-        where: { slug: params.slug },
-      }),
-      prisma.author.findUnique({
-        where: {
-          username: params.author,
-        },
-      }),
-    ]);
-
-    if (!blog) return res.status(400).json({ message: "Blog not found!" });
-
+    // find author
+    const author = await prisma.author.findUnique({
+      where: {
+        username: params.author,
+      },
+    });
     if (!author) return res.status(400).json({ message: "Author not found!" });
+
+    const blog = await prisma.blog.findUnique({
+      where: {
+        slug_authorId: {
+          slug: params.slug,
+          authorId: author.id,
+        },
+      },
+    });
+    if (!blog) return res.status(400).json({ message: "Blog not found!" });
 
     const like = await prisma.like.create({
       data: {
@@ -40,10 +43,7 @@ export const createCommentLike = async (req, res) => {
   const params = req.params;
 
   try {
-    const [blog, author, comment] = await Promise.all([
-      prisma.blog.findUnique({
-        where: { slug: params.slug },
-      }),
+    const [author, comment] = await Promise.all([
       prisma.author.findUnique({
         where: {
           username: params.author,
@@ -57,9 +57,17 @@ export const createCommentLike = async (req, res) => {
     if (!comment)
       return res.status(400).json({ message: "Comment not found!" });
 
-    if (!blog) return res.status(400).json({ message: "Comment not found!" });
+    if (!author) return res.status(400).json({ message: "Author not found!" });
 
-    if (!author) return res.status(400).json({ message: "Comment not found!" });
+    const blog = await prisma.blog.findUnique({
+      where: {
+        slug_authorId: {
+          slug: params.slug,
+          authorId: author.id,
+        },
+      },
+    });
+    if (!blog) return res.status(400).json({ message: "Blog not found!" });
 
     const like = await prisma.commentLike.create({
       data: {

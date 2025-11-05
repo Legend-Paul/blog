@@ -42,7 +42,10 @@ export const getPublicBlog = async (req, res) => {
     if (!author) return res.status(400).json({ message: "Author not found" });
 
     const blog = await prisma.blog.findUnique({
-      where: { slug: params.slug, authorId: author.id, status: "PUBLISHED" },
+      where: {
+        slug_authorId: { slug: params.slug, authorId: author.id },
+        status: "PUBLISHED",
+      },
       include: {
         _count: {
           select: {

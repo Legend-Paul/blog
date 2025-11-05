@@ -7,8 +7,10 @@ export const createBlog = async (req, res) => {
 
   const blogExist = await prisma.blog.findUnique({
     where: {
-      slug,
-      authorId: req.user.id,
+      slug_authorId: {
+        slug,
+        authorId: req.user.id,
+      },
     },
   });
   if (blogExist)
@@ -50,7 +52,12 @@ export const getBlog = async (req, res) => {
   try {
     const { slug } = req.params;
     const blog = await prisma.blog.findUnique({
-      where: { slug },
+      where: {
+        slug_authorId: {
+          slug,
+          authorId: req.user.id,
+        },
+      },
       include: {
         _count: {
           select: {
@@ -85,7 +92,12 @@ export const deleteBlog = async (req, res) => {
   try {
     const { slug } = req.params;
     const blog = await prisma.blog.delete({
-      where: { slug, authorId: req.user.id },
+      where: {
+        slug_authorId: {
+          slug,
+          authorId: req.user.id,
+        },
+      },
     });
 
     return res
@@ -109,14 +121,18 @@ export const updateBlog = async (req, res) => {
     const [_blogExist, _slugNameTaken] = await Promise.all([
       prisma.blog.findUnique({
         where: {
-          slug: _slug,
-          authorId: req.user.id,
+          slug_authorId: {
+            slug: _slug,
+            authorId: req.user.id,
+          },
         },
       }),
       prisma.blog.findUnique({
         where: {
-          slug,
-          authorId: req.user.id,
+          slug_authorId: {
+            slug,
+            authorId: req.user.id,
+          },
         },
       }),
     ]);
