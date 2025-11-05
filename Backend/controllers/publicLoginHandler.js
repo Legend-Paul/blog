@@ -54,7 +54,7 @@ const validateLogin = [
         .status(401)
         .json({ message: "Incorrect username or password" });
 
-    const { password: _userPassword, ...restField } = author;
+    const { password: _userPassword, ...restField } = user;
     const payload = { ...restField };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, {

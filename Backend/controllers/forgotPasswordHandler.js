@@ -26,16 +26,19 @@ const updatePassword = [
       return res.status(400).json({ error: errors.array() });
     }
     try {
-      const user = await prisma.user.findUnique({
+      const author = await prisma.author.findUnique({
         where: { username },
       });
-      if (!user) return res.status(400).json({ message: "User not found" });
+      if (!author)
+        return res
+          .status(400)
+          .json({ message: "Incorrect username or password" });
 
       const hashedPassword = await bcryptjs.hash(password, 10);
 
-      const updatedUser = await prisma.user.update({
+      const updatedAuthor = await prisma.author.update({
         where: {
-          id: user.id,
+          id: author.id,
         },
         data: {
           password: hashedPassword,
@@ -44,13 +47,12 @@ const updatePassword = [
           id: true,
           fullName: true,
           username: true,
-          role: true,
           createdAt: true,
         },
       });
       return res
         .status(201)
-        .json({ message: "Password updated", user: updatedUser });
+        .json({ message: "Password updated", author: updatedAuthor });
     } catch (err) {
       res.status(500).json({ error: "Server error" });
     }
