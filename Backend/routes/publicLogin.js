@@ -1,8 +1,8 @@
 import express from "express";
-import { validateUser } from "../controllers/publicLoginHandler.js";
+import validateLogin from "../controllers/publicLoginHandler.js";
 
 const publicLoginRoute = express.Router({ mergeParams: true });
 
-publicLoginRoute.post("/", validateUser);
+publicLoginRoute.post("/", validateLogin);
 
 export default publicLoginRoute;
