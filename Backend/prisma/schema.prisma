@@ -36,8 +36,6 @@ model User {
   author   Author @relation("AuthorUsers", fields: [authorId], references: [id])
   authorId String
 
-  blog   Blog   @relation("UserBlogs", fields: [blogId], references: [id])
-  blogId String
 
   likes        Like[]        @relation("UserLikes")
   commentLikes CommentLike[] @relation("UserCommentLikes")
@@ -57,8 +55,7 @@ model Blog {
 
   author   Author @relation("AuthoredBlogs", fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
-  
-  users    User[]    @relation("UserBlogs")
+ 
   comments Comment[]
   likes    Like[] 
 }

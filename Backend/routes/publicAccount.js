@@ -1,8 +1,8 @@
 import express from "express";
 import { createUser } from "../controllers/publicAccountHandler.js";
 
-const publicAccountRoute = express.Router();
+const publicAccountRoute = express.Router({ mergeParams: true });
 
-publicAccountRoute.post("/", createUser);
+publicAccountRoute.post("/signup", createUser);
 
 export default publicAccountRoute;

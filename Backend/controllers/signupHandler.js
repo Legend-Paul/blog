@@ -32,33 +32,28 @@ const createAuthor = [
       return res.status(400).json({ error: errors.array() });
     }
 
-    try {
-      // check if username already exists
-      const existing = await prisma.author.findUnique({
-        where: { username },
-      });
-      if (existing)
-        return res.status(400).json({ message: "Username already taken" });
+    // check if username already exists
+    const existing = await prisma.author.findUnique({
+      where: { username },
+    });
+    if (existing)
+      return res.status(400).json({ message: "Username already taken" });
 
-      const hashedPassword = await bcryptjs.hash(password, 10);
-      const author = await prisma.author.create({
-        data: {
-          fullName,
-          username,
-          password: hashedPassword,
-        },
-        select: {
-          id: true,
-          fullName: true,
-          username: true,
-          role: true,
-          createdAt: true,
-        },
-      });
-      return res.status(200).json({ message: "User created", author });
-    } catch (error) {
-      return res.status(500).json({ message: "Server error" });
-    }
+    const hashedPassword = await bcryptjs.hash(password, 10);
+    const author = await prisma.author.create({
+      data: {
+        fullName,
+        username,
+        password: hashedPassword,
+      },
+      select: {
+        id: true,
+        fullName: true,
+        username: true,
+        createdAt: true,
+      },
+    });
+    return res.status(200).json({ message: "Author created", author });
   },
 ];
 
