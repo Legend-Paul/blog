@@ -60,7 +60,7 @@ export const getPublicBlog = async (req, res) => {
     });
 
     if (!blog) {
-      return res.status(404).json({ message: "Blog not found" });
+      return res.status(404).json({ message: "Blog not found", data: [] });
     }
 
     return res
