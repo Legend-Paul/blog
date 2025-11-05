@@ -25,7 +25,7 @@ const validate = [
 const createUser = [
   ...validate,
   async (req, res) => {
-    const { fullName, username, role, password } = req.body;
+    const { fullName, username, password } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -34,18 +34,17 @@ const createUser = [
 
     try {
       // check if username already exists
-      const existing = await prisma.user.findUnique({
+      const existing = await prisma.author.findUnique({
         where: { username },
       });
       if (existing)
         return res.status(400).json({ message: "Username already taken" });
 
       const hashedPassword = await bcryptjs.hash(password, 10);
-      const user = await prisma.user.create({
+      const user = await prisma.author.create({
         data: {
           fullName,
           username,
-          role,
           password: hashedPassword,
         },
         select: {

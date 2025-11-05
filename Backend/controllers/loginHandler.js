@@ -26,7 +26,7 @@ const validateLogin = [
     }
 
     try {
-      const user = await prisma.user.findUnique({
+      const user = await prisma.author.findUnique({
         where: { username },
       });
       if (!user) return res.status(404).json({ message: "User not found" });

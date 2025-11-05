@@ -29,7 +29,7 @@ app.use(cors(corsOptions));
 app.use(passport.initialize());
 passportConfig(passport);
 
-// general Routes
+// author Routes
 app.use("/auth/login", loginRoute);
 app.use("/auth/signup", signupRoute);
 app.use("/auth/forgot-password", forgotPasswordRoute);
