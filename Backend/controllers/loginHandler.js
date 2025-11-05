@@ -26,16 +26,16 @@ const validateLogin = [
     }
 
     try {
-      const user = await prisma.author.findUnique({
+      const author = await prisma.author.findUnique({
         where: { username },
       });
-      if (!user) return res.status(404).json({ message: "User not found" });
+      if (!author) return res.status(404).json({ message: "User not found" });
 
       const isMatch = await bcryptjs.compare(password, user.password);
       if (!isMatch)
         return res.status(401).json({ message: "Invalid password" });
 
-      const { password: _userPassword, ...restField } = user;
+      const { password: _userPassword, ...restField } = author;
       const payload = { ...restField };
 
       const token = jwt.sign(payload, process.env.JWT_SECRET, {

@@ -22,7 +22,7 @@ const validate = [
     .withMessage("Password must be equal"),
 ];
 
-const createUser = [
+const createAuthor = [
   ...validate,
   async (req, res) => {
     const { fullName, username, password } = req.body;
@@ -41,7 +41,7 @@ const createUser = [
         return res.status(400).json({ message: "Username already taken" });
 
       const hashedPassword = await bcryptjs.hash(password, 10);
-      const user = await prisma.author.create({
+      const author = await prisma.author.create({
         data: {
           fullName,
           username,
@@ -55,11 +55,11 @@ const createUser = [
           createdAt: true,
         },
       });
-      return res.status(200).json({ message: "User created", user });
+      return res.status(200).json({ message: "User created", author });
     } catch (error) {
       return res.status(500).json({ message: "Server error" });
     }
   },
 ];
 
-export { createUser };
+export { createAuthor };

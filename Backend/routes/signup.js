@@ -1,8 +1,8 @@
 import express from "express";
-import { createUser } from "../controllers/signupHandler.js";
+import { createAuthor } from "../controllers/signupHandler.js";
 
 const signupRoute = express.Router();
 
-signupRoute.post("/", createUser);
+signupRoute.post("/", createAuthor);
 
 export default signupRoute;

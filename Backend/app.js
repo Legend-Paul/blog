@@ -10,6 +10,7 @@ import forgotPasswordRoute from "./routes/forgotPassword.js";
 import passport from "passport";
 import passportConfig from "./config/passport.js";
 import requireAuth from "./config/auth.js";
+import publicAccountRoute from "./routes/publicAccount.js";
 dotenv.config();
 
 const app = express();
@@ -34,6 +35,9 @@ app.use("/auth/login", loginRoute);
 app.use("/auth/signup", signupRoute);
 app.use("/auth/forgot-password", forgotPasswordRoute);
 app.use("/auth/user/update", requireAuth, updateUserRoute);
+
+// public Routes
+app.use("/:author/auth", publicAccountRoute);
 
 app.use("/api", requireAuth, blogRoute);
 // admin route
