@@ -12,6 +12,7 @@ import passportConfig from "./config/passport.js";
 import requireAuth from "./config/auth.js";
 import publicSignupRoute from "./routes/publicSignup.js";
 import publicLoginRoute from "./routes/publicLogin.js";
+import publicforgotPasswordRoute from "./routes/publicforgotPassword.js";
 dotenv.config();
 
 const app = express();
@@ -40,6 +41,7 @@ app.use("/auth/user/update", requireAuth, updateUserRoute);
 // public Routes
 app.use("/:author/auth/signup", publicSignupRoute);
 app.use("/:author/auth/login", publicLoginRoute);
+app.use("/:author/auth/forgot-password", publicforgotPasswordRoute);
 
 // admin route
 app.use("/dashboard", requireAuth, adminDashboardRoute);
