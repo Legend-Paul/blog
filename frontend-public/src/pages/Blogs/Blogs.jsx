@@ -12,23 +12,22 @@ export default function Blogs() {
   console.log(token);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/${author}/api/blogs`)
-      .then((response) => response.json())
-      .then((res) => {
-        console.log(res);
-        return setData(res.data);
+    Promise.all([
+      fetch(`http://localhost:5000/${author}/api/blogs`).then((res) =>
+        res.json()
+      ),
+      fetch("http://localhost:5000/", {
+        headers: { Authorization: token },
+      }).then((res) => res.json()),
+    ])
+      .then(([blogsResponse, userResponse]) => {
+        setData(blogsResponse.data);
+        setUser(userResponse.user);
       })
       .catch((error) => {
-        throw new Error("Error fetching user:");
+        console.error("Error fetching data:", error);
       });
-
-    fetch("http://localhost:5000/", { headers: { Authorization: token } })
-      .then((response) => response)
-      .then((res) => setUser(res.user))
-      .catch((err) => {
-        throw new Error("Error fetching user:");
-      });
-  }, []);
+  }, [author, token]);
 
   if (!data) {
     return (
