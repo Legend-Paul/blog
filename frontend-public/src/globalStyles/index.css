@@ -174,11 +174,15 @@ section {
   max-width: 1200px !important;
   margin: 0 auto;
   width: 100%;
+  padding-left: var(--space-sm) !important;
+  padding-right: var(--space-sm) !important;
 }
 section {
   padding: 0, var(--space-2xl);
   color: var(--text-primary);
   margin-top: calc(var(--space-2xl) * 2) !important;
+  padding-left: var(--space-2xl) !important;
+  padding-right: var(--space-2xl) !important;
 }
 
 svg {

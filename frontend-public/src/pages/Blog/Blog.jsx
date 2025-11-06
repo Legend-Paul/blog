@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import styles from "./Blog.module.css";
 
@@ -42,6 +42,14 @@ export default function Blog() {
     );
   }
 
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   if (!blogData) {
     return (
       <div>
@@ -51,14 +59,45 @@ export default function Blog() {
   }
 
   const blog = blogData;
-  console.log(blog);
-  console.log(commentsData);
+  const blogs = blogsData.blogs.filter((b) => b.slug != blog.slug);
+
+  console.log(blogs);
 
   return (
     <div className={styles["preview-blog-container"]}>
       <section>
         <div dangerouslySetInnerHTML={{ __html: blog.content }} />
+
+        <OtherBlogs blogs={blogs} author={author} formatDate={formatDate} />
       </section>
+    </div>
+  );
+}
+
+function OtherBlogs({ blogs, author, formatDate }) {
+  return (
+    <div className={styles["other-blogs"]}>
+      {blogs.map((blog) => {
+        return (
+          <div className={styles["blog-card"]}>
+            <div className={styles["blog-header"]}>
+              <Link
+                to={`/${author}/blogs/${blog.slug}`}
+                className={styles["blog-title"]}
+              >
+                {blog.title}
+              </Link>
+              <span className={styles["blog-date"]}>
+                Created At {formatDate(blog.createdAt)}
+              </span>
+            </div>
+
+            <p className={styles["blog-description"]}>
+              {blog.description || "No description available"}
+            </p>
+          </div>
+        );
+      })}
     </div>
   );
 }
