@@ -1,0 +1,186 @@
+:root {
+  /* Modern Blue */
+  --primary-color: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #3b82f6;
+  --secondary-color: #64748b;
+  --secondary-dark: #475569;
+  --secondary-light: #94a3b8;
+  --tertiary-color: #06b6d4;
+  --tertiary-dark: #0891b2;
+  --tertiary-light: #22d3ee;
+
+  /* Neutral Colors */
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-muted: #f1f5f9;
+  --border-color: #e5e7eb;
+  --border-light: #f3f4f6;
+  --border-dark: #d1d5db;
+
+  /* Semantic Colors */
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+  --info-color: #3b82f6;
+
+  /* Typography */
+  --font-primary: "Inter", sans-serif;
+  --font-heading: "Georgia", serif;
+  --font-mono: "SF Mono", monospace;
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+
+  /* Spacing */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.25rem;
+  --space-xl: 1.5rem;
+  --space-2xl: 2rem;
+  --space-3xl: 2.5rem;
+  --space-4xl: 3rem;
+
+  /* Layout */
+  --container-max-width: 768px;
+  --content-width: 65ch;
+  --container-padding: var(--space-6);
+
+  /* Blog Elements */
+  --code-bg: #212830;
+  --code-text: #e2e8f0;
+  --code-border: #151b23;
+  --inline-code-bg: #f1f5f9;
+  --inline-code-text: #212830;
+  --blockquote-bg: #f8fafc;
+  --blockquote-border: var(--primary-color);
+  --blockquote-text: var(--text-secondary);
+  --link-color: var(--primary-color);
+  --link-hover: var(--primary-dark);
+
+  /* Effects */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+
+  /* Container Widths */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --bg-primary: #0d1117;
+    --bg-secondary: #212830;
+    --bg-muted: #151b23;
+    --border-color: #151b23;
+    --border-light: #475569;
+    --border-dark: #64748b;
+
+    --code-bg: #212830;
+    --code-text: #e2e8f0;
+    --inline-code-bg: #151b23;
+    --inline-code-text: #e2e8f0;
+    --blockquote-bg: #212830;
+    --blockquote-text: #cbd5e1;
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  }
+}
+
+[data-theme="dark"] {
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --bg-primary: #0d1117;
+  --bg-secondary: #212830;
+  --bg-muted: #151b23;
+  --border-color: #151b23;
+  --border-light: #475569;
+  --border-dark: #64748b;
+
+  --code-bg: #212830;
+  --code-text: #e2e8f0;
+  --inline-code-bg: #151b23;
+  --inline-code-text: #e2e8f0;
+  --blockquote-bg: #212830;
+  --blockquote-text: #cbd5e1;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] {
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-muted: #f1f5f9;
+  --border-color: #e5e7eb;
+  --border-light: #f3f4f6;
+  --border-dark: #d1d5db;
+
+  --code-bg: #212830;
+  --code-text: #e2e8f0;
+  --inline-code-bg: #f1f5f9;
+  --inline-code-text: #212830;
+  --blockquote-bg: #f8fafc;
+  --blockquote-text: var(--text-secondary);
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+section {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: 0, var(--space-2xl);
+  color: var(--text-primary);
+  margin-top: calc(var(--space-2xl) * 2) !important;
+}
+
+svg {
+  width: var(--space-2xl);
+}
+
+a {
+  color: var(--primary-color);
+}
