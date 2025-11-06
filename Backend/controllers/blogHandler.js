@@ -4,6 +4,7 @@ import prisma from "../config/prisma.js";
 export const createBlog = async (req, res) => {
   const { title, content, description, slug, status } = req.body;
   console.log(req.user);
+  // console.log({ title, content, description, slug, status });
 
   const blogExist = await prisma.blog.findUnique({
     where: {
@@ -13,6 +14,7 @@ export const createBlog = async (req, res) => {
       },
     },
   });
+  // console.log(blogExist);
   if (blogExist)
     return res.status(400).json({ message: "Blog slug already exist" });
 
