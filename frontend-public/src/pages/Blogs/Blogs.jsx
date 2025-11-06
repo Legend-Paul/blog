@@ -6,8 +6,10 @@ import styles from "./Blogs.module.css";
 
 export default function Blogs() {
   const [data, setData] = useState(null);
+  const [user, setUser] = useState(null);
   const { author } = useParams();
-  console.log(author);
+  const token = localStorage.getItem("Authorization");
+  console.log(token);
 
   useEffect(() => {
     fetch(`http://localhost:5000/${author}/api/blogs`)
@@ -16,24 +18,36 @@ export default function Blogs() {
         console.log(res);
         return setData(res.data);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => {
+        throw new Error("Error fetching user:");
+      });
+
+    fetch("http://localhost:5000/", { headers: { Authorization: token } })
+      .then((response) => response)
+      .then((res) => setUser(res.user))
+      .catch((err) => {
+        throw new Error("Error fetching user:");
+      });
   }, []);
 
   if (!data) {
     return (
       <div className={styles["dashboard-container"]}>
-        <Header />
         <Spinnner />
       </div>
     );
   }
-
   const { blogs } = data;
-  console.log(blogs);
+  const userStaus =
+    user?.userType === "user"
+      ? { author, label: "Signout", route: "signout" }
+      : { author, label: "Login", route: "login" };
+
+  console.log(user);
 
   return (
     <div className={styles["blogs-container"]}>
-      <Header />
+      <Header userStaus={userStaus} />
 
       <section className={styles["blogs-content"]}>
         <div className={styles["blogs-header"]}>

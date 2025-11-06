@@ -2,7 +2,7 @@ import { useState } from "react";
 import styles from "./Header.module.css";
 import { NavLink, useLocation } from "react-router-dom";
 
-export default function Header({ searchParams }) {
+export default function Header({ searchParams, userStaus }) {
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -13,7 +13,7 @@ export default function Header({ searchParams }) {
       <header>
         <div className={styles["logo"]}>
           <NavLink
-            to="/"
+            to={`/${userStaus.author}/blogs`}
             state={{ searchParams: searchParams ? searchParams : "" }}
           >
             bloog
@@ -26,7 +26,7 @@ export default function Header({ searchParams }) {
                 className={
                   styles[`${currentPath.includes("blogs") ? "active" : ""}`]
                 }
-                to={`/api/blogs?${blogsSearchParams}`}
+                to={`/${userStaus.author}/blogs`}
               >
                 Blogs
               </NavLink>
@@ -53,14 +53,13 @@ export default function Header({ searchParams }) {
               </svg>
             </li>
             <li className={styles["profile-action"]}>
-              <div className={styles["signout"]}>
-                <NavLink
-                  className={
-                    styles[`${currentPath.includes("signout") ? "active" : ""}`]
-                  }
-                  to="/auth/signout"
-                >
-                  Signout
+              <div
+                className={
+                  styles[`${userStaus.route === "login" ? "login" : "signout"}`]
+                }
+              >
+                <NavLink to={`/${userStaus.author}/auth/${userStaus.route}`}>
+                  {userStaus.label}
                 </NavLink>
               </div>
             </li>
