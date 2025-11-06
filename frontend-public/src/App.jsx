@@ -10,7 +10,7 @@ import "./globalStyles/index.css";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Blogs />} />
+      <Route path="/:author/blogs" element={<Blogs />} />
     </>
   )
 );

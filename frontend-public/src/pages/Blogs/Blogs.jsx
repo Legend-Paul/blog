@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import styles from "./Blogs.module.css";
 
 export default function Blogs() {
   const [data, setData] = useState(null);
-
-  const activeStatus = "PUBLISHED";
+  const { author } = useParams();
+  console.log(author);
 
   useEffect(() => {
-    fetch("http://localhost:5000/legend/api/blogs")
+    fetch(`http://localhost:5000/${author}/api/blogs`)
       .then((response) => response.json())
-      .then((res) => setData(res.data))
+      .then((res) => {
+        console.log(res);
+        return setData(res.data);
+      })
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
@@ -26,6 +29,7 @@ export default function Blogs() {
   }
 
   const { blogs } = data;
+  console.log(blogs);
 
   return (
     <div className={styles["blogs-container"]}>
@@ -33,16 +37,16 @@ export default function Blogs() {
 
       <section className={styles["blogs-content"]}>
         <div className={styles["blogs-header"]}>
-          <h1>My Blogs</h1>
+          <h1>{author} Blogs</h1>
         </div>
 
         <div className={styles["blogs-grid"]}>
           {blogs?.length > 0 ? (
-            <BlogSection status={activeStatus} blogs={blogs} />
+            <BlogSection author={author} blogs={blogs} />
           ) : (
             <div className={styles["empty-state"]}>
               <h3>Opps!</h3>
-              <p>No Published blogs found</p>
+              <p>{author}'s Published blogs not found</p>
             </div>
           )}
         </div>
@@ -52,7 +56,7 @@ export default function Blogs() {
 }
 
 // Blog Section Component (unchanged)
-function BlogSection({ blogs }) {
+function BlogSection({ blogs, author }) {
   return (
     <div className={styles["blog-section"]}>
       <div className={styles["section-header"]}>
@@ -70,7 +74,7 @@ function BlogSection({ blogs }) {
 }
 
 // Blog Card Component (unchanged)
-function BlogCard({ blog }) {
+function BlogCard({ blog, author }) {
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -78,8 +82,6 @@ function BlogCard({ blog }) {
       day: "numeric",
     });
   };
-
-  const author = useLocation().pathname.split("/")[0];
 
   return (
     <div className={styles["blog-card"]}>

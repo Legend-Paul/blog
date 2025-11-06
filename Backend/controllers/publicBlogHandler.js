@@ -11,7 +11,10 @@ export const getPublicBlogs = async (req, res) => {
       },
     });
 
-    if (!author) return res.status(400).json({ message: "Author not found" });
+    if (!author)
+      return res
+        .status(200)
+        .json({ message: "Author not found", data: { blogs: [] } });
 
     const blogs = await prisma.blog.findMany({
       where: {
@@ -62,7 +65,7 @@ export const getPublicBlog = async (req, res) => {
     });
 
     if (!blog) {
-      return res.status(404).json({ message: "Blog not found", data: [] });
+      return res.status(404).json({ message: "Blog not found", data: {} });
     }
 
     return res

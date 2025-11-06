@@ -18,6 +18,10 @@
   margin-bottom: var(--space-3xl);
 }
 
+.blogs-name {
+  color: var(--success-color);
+}
+
 .blogs-header h1 {
   font-size: var(--text-3xl);
   font-weight: 700;
