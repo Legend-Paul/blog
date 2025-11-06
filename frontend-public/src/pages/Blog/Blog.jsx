@@ -13,7 +13,9 @@ export default function Blog() {
     fetch(`http://localhost:5000/${author}/api/blogs`)
       .then((response) => response.json())
       .then((res) => setData(res.data))
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => {
+        throw new Error(error.message);
+      });
   }, []);
 
   if (!data) {
@@ -25,6 +27,7 @@ export default function Blog() {
   }
 
   const blog = data.blogs.find((blog) => blog.slug === slug);
+  console.log(blog);
 
   return (
     <div className={styles["preview-blog-container"]}>
