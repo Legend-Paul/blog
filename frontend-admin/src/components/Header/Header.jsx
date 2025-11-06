@@ -115,13 +115,7 @@ export function EditorHeader({ onClose, route }) {
         <nav>
           <ul>
             <li onClick={onClose}>
-              <NavLink
-                className={
-                  styles[`${!currentPath.endsWith("preview") ? "active" : ""}`]
-                }
-                to="."
-                state={route.state}
-              >
+              <NavLink to="." state={route.state}>
                 {route.state.dialogFieldsValue ? "Update" : "Save"} Blog
               </NavLink>
             </li>
@@ -130,7 +124,14 @@ export function EditorHeader({ onClose, route }) {
             <li>
               <NavLink
                 className={
-                  styles[`${currentPath.endsWith("preview") ? "active" : ""}`]
+                  styles[
+                    `${
+                      currentPath.endsWith("preview") ||
+                      !currentPath.endsWith("preview")
+                        ? "active"
+                        : ""
+                    }`
+                  ]
                 }
                 to={route.endpoint}
                 state={route.state}
