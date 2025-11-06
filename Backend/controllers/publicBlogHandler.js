@@ -4,6 +4,7 @@ export const getPublicBlogs = async (req, res) => {
   const params = req.params;
   try {
     // check author
+
     const author = await prisma.author.findUnique({
       where: {
         username: params.author,
@@ -19,9 +20,7 @@ export const getPublicBlogs = async (req, res) => {
       },
     });
 
-    return res
-      .status(200)
-      .json({ message: "All blogs", data: { blogs, user: req.user } });
+    return res.status(200).json({ message: "All blogs", data: { blogs } });
   } catch (err) {
     console.error("Error fetching blogs:", err);
     return res.status(500).json({ message: "Server error" });

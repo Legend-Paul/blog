@@ -4,12 +4,19 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+import Blogs from "./pages/Blogs/Blogs";
 import "./globalStyles/index.css";
 
-const router = createBrowserRouter(createRoutesFromElements(<></>));
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      <Route path="/" element={<Blogs />} />
+    </>
+  )
+);
 
 function App() {
-  <RouterProvider router={router} />;
+  return <RouterProvider router={router} />;
 }
 
 export default App;
