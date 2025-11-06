@@ -169,9 +169,13 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
 }
+header,
 section {
-  max-width: var(--container-xl);
+  max-width: 1200px !important;
   margin: 0 auto;
+  width: 100%;
+}
+section {
   padding: 0, var(--space-2xl);
   color: var(--text-primary);
   margin-top: calc(var(--space-2xl) * 2) !important;

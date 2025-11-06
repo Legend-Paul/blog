@@ -80,7 +80,7 @@ function BlogSection({ blogs, author }) {
 
       <div className={styles["blogs-list"]}>
         {blogs.map((blog) => (
-          <BlogCard key={blog.id} blog={blog} />
+          <BlogCard key={blog.id} blog={blog} author={author} />
         ))}
       </div>
     </div>
@@ -101,7 +101,7 @@ function BlogCard({ blog, author }) {
     <div className={styles["blog-card"]}>
       <div className={styles["blog-header"]}>
         <Link
-          to={`${author}/blogs/${blog.slug}`}
+          to={`/${author}/blogs/${blog.slug}`}
           className={styles["blog-title"]}
         >
           {blog.title}
