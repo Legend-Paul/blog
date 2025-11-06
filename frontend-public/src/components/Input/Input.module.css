@@ -1,0 +1,81 @@
+/* components/Input/Input.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.required {
+  color: var(--error-color);
+  margin-left: var(--space-2xs);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.textarea:focus,
+.input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.textarea:hover:not(:disabled),
+.input:hover:not(:disabled) {
+  border-color: var(--border-dark);
+}
+
+.textarea:disabled,
+.input:disabled {
+  background-color: var(--bg-muted);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.error {
+  border-color: var(--error-color);
+}
+
+.error:focus {
+  border-color: var(--error-color);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.errorText {
+  font-size: var(--text-sm);
+  color: var(--error-color);
+  line-height: 1.4;
+}
+
+/* Not focused, has value, and valid: success color */
+input:not(:focus):not(:placeholder-shown):valid,
+textarea:not(:focus):not(:placeholder-shown):valid {
+  border-color: var(--success-color);
+}
+
+/* Not focused, has value, and invalid: error color */
+input:not(:focus):not(:placeholder-shown):invalid,
+textarea:not(:focus):not(:placeholder-shown):invalid {
+  border-color: var(--error-color);
+}
