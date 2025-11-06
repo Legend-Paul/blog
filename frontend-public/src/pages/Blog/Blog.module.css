@@ -37,6 +37,11 @@
 }
 
 /* Other Blogs */
+.other-blogs-container {
+  background-color: var(--bg-secondary);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+}
 .other-blogs {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

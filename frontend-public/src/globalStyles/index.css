@@ -171,7 +171,7 @@ body {
 }
 header,
 section {
-  max-width: 1200px !important;
+  max-width: 1000px !important;
   margin: 0 auto;
   width: 100%;
   padding-left: var(--space-sm) !important;

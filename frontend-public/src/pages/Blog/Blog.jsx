@@ -76,28 +76,31 @@ export default function Blog() {
 
 function OtherBlogs({ blogs, author, formatDate }) {
   return (
-    <div className={styles["other-blogs"]}>
-      {blogs.map((blog) => {
-        return (
-          <div className={styles["blog-card"]}>
-            <div className={styles["blog-header"]}>
-              <Link
-                to={`/${author}/blogs/${blog.slug}`}
-                className={styles["blog-title"]}
-              >
-                {blog.title}
-              </Link>
-              <span className={styles["blog-date"]}>
-                Created At {formatDate(blog.createdAt)}
-              </span>
-            </div>
+    <article className={styles["other-blogs-container"]}>
+      <h3>Other Blogs</h3>
+      <div className={styles["other-blogs"]}>
+        {blogs.map((blog) => {
+          return (
+            <div className={styles["blog-card"]}>
+              <div className={styles["blog-header"]}>
+                <Link
+                  to={`/${author}/blogs/${blog.slug}`}
+                  className={styles["blog-title"]}
+                >
+                  {blog.title}
+                </Link>
+                <span className={styles["blog-date"]}>
+                  Created At {formatDate(blog.createdAt)}
+                </span>
+              </div>
 
-            <p className={styles["blog-description"]}>
-              {blog.description || "No description available"}
-            </p>
-          </div>
-        );
-      })}
-    </div>
+              <p className={styles["blog-description"]}>
+                {blog.description || "No description available"}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </article>
   );
 }

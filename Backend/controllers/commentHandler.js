@@ -4,7 +4,8 @@ import prisma from "../config/prisma.js";
 export const createComment = async (req, res) => {
   const { content } = req.body;
   const params = req.params;
-
+  console.log(content);
+  console.log(params);
   try {
     // find author
     const author = await prisma.author.findUnique({
@@ -37,6 +38,7 @@ export const createComment = async (req, res) => {
       .status(200)
       .json({ message: "Comment sent successifuly", data: comment });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: "Server error" });
   }
 };
