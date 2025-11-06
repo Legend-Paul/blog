@@ -3,8 +3,6 @@ import prisma from "../config/prisma.js";
 // create blog
 export const createBlog = async (req, res) => {
   const { title, content, description, slug, status } = req.body;
-  console.log(req.user);
-  // console.log({ title, content, description, slug, status });
 
   const blogExist = await prisma.blog.findUnique({
     where: {
@@ -14,7 +12,7 @@ export const createBlog = async (req, res) => {
       },
     },
   });
-  // console.log(blogExist);
+
   if (blogExist)
     return res.status(400).json({ message: "Blog slug already exist" });
 
@@ -44,7 +42,6 @@ export const getBlogs = async (req, res) => {
       .status(200)
       .json({ message: "All blogs", data: { blogs, user: req.user } });
   } catch (err) {
-    console.error("Error fetching blogs:", err);
     return res.status(500).json({ message: "Server error" });
   }
 };
@@ -84,7 +81,6 @@ export const getBlog = async (req, res) => {
       .status(200)
       .json({ message: "Blog accessed successfully", data: blog });
   } catch (err) {
-    console.error("Error fetching blog:", err);
     return res.status(500).json({ message: "Server error" });
   }
 };
@@ -120,35 +116,24 @@ export const updateBlog = async (req, res) => {
 
   const { slug } = req.params;
   try {
-    const [_blogExist, _slugNameTaken] = await Promise.all([
-      prisma.blog.findUnique({
-        where: {
-          slug_authorId: {
-            slug: _slug,
-            authorId: req.user.id,
-          },
+    const _blogExist = await prisma.blog.findUnique({
+      where: {
+        slug_authorId: {
+          slug: _slug,
+          authorId: req.user.id,
         },
-      }),
-      prisma.blog.findUnique({
-        where: {
-          slug_authorId: {
-            slug,
-            authorId: req.user.id,
-          },
-        },
-      }),
-    ]);
+      },
+    });
 
     if (!_blogExist) return res.status(400).json({ message: "Blog not found" });
-
-    if (_slugNameTaken && _slug !== slug)
-      return res.status(400).json({ message: "Slug already in use" });
 
     const blog = await prisma.blog.update({
       data: filteredData,
       where: {
-        authorId: req.user.id,
-        slug: _slug,
+        slug_authorId: {
+          slug: _slug,
+          authorId: req.user.id,
+        },
       },
     });
 
