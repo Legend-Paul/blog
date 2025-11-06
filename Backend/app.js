@@ -14,6 +14,7 @@ import publicSignupRoute from "./routes/publicSignup.js";
 import publicLoginRoute from "./routes/publicLogin.js";
 import publicforgotPasswordRoute from "./routes/publicforgotPassword.js";
 import publicActionRouter from "./routes/publicAction.js";
+import { getBlogComments } from "./controllers/commentHandler.js";
 import {
   getPublicBlogs,
   getPublicBlog,
@@ -51,6 +52,7 @@ app.use("/:author/auth/forgot-password", publicforgotPasswordRoute);
 // public routes
 app.get("/:author/api/blogs", getPublicBlogs);
 app.get("/:author/api/blog/:slug", getPublicBlog);
+app.get("/:author/api/blog/:slug/comments", getBlogComments);
 app.use("/:author/api", requireAuth, publicActionRouter);
 
 // author route

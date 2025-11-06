@@ -9,7 +9,6 @@ export default function Blogs() {
   const [user, setUser] = useState(null);
   const { author } = useParams();
   const token = localStorage.getItem("Authorization");
-  console.log(token);
 
   useEffect(() => {
     Promise.all([
