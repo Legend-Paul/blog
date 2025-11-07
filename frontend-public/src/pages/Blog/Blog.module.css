@@ -150,7 +150,7 @@
   display: grid;
   gap: var(--space-4xl);
   padding: 0 var(--space-2xl);
-  margin-top: 0 !important;
+  margin-top: var(--space-2xl) !important;
 }
 .comments {
   display: grid;

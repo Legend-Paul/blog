@@ -125,6 +125,15 @@ export default function Blog() {
 }
 
 function Comments({ comments, formatDate }) {
+  const [reply, setReply] = useState({});
+
+  function handleDisplayRepy(id) {
+    setReply((prevReply) => {
+      if (prevReply[id]) return { ...prevReply, [id]: !prevReply[id] };
+      return { ...prevReply, [id]: true };
+    });
+  }
+
   return (
     <section className={styles["comments-section"]}>
       <div className={styles["comments"]}>
@@ -160,7 +169,10 @@ function Comments({ comments, formatDate }) {
                     </svg>
                     <span>Likes {comment._count.likes}</span>
                   </button>
-                  <button className={styles["comment-icon"]}>
+                  <button
+                    className={styles["comment-icon"]}
+                    onClick={() => handleDisplayRepy(comment.id)}
+                  >
                     <svg
                       className={styles["nav-icon"]}
                       fill="none"
@@ -177,6 +189,8 @@ function Comments({ comments, formatDate }) {
                     <span>Replies {comment._count.replies}</span>
                   </button>
                 </div>
+
+                {reply[comment.id] && <CommentsTextarea />}
               </div>
               <div className={styles["replies"]}>
                 {comment.replies.length > 0 ? (
@@ -196,7 +210,7 @@ function Comments({ comments, formatDate }) {
   );
 }
 
-function CommentsTextarea({ commentsCount }) {
+function CommentsTextarea() {
   return (
     <div className={styles["comment-textarea"]}>
       <Textarea
