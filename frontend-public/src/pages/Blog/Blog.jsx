@@ -10,6 +10,19 @@ import Spinnner from "../../components/Spinnner/Spinnner";
 import styles from "./Blog.module.css";
 import { Textarea } from "../../components/Input/Input";
 
+async function fetchData(url, data) {
+  const token = localStorage.getItem("Authorization");
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  return await response.json();
+}
+
 export async function Action({ request }) {
   const formData = await request.formData();
   const content = await formData.get("content");
@@ -17,7 +30,6 @@ export async function Action({ request }) {
   const author = await formData.get("author");
   const slug = await formData.get("slug");
   const user = await formData.get("user");
-  const token = localStorage.getItem("Authorization");
 
   if (!user)
     return redirect(
@@ -26,18 +38,10 @@ export async function Action({ request }) {
 
   const commentData = { content, parentId };
   try {
-    const response = await fetch(
+    const data = await fetchData(
       `http://localhost:5000/${author}/api/blog/${slug}/comments/new`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(commentData),
-      }
+      commentData
     );
-    const data = await response.json();
     return { data };
   } catch (error) {
     return { error: error.message };
