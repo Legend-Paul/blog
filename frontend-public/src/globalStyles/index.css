@@ -170,7 +170,8 @@ body {
   color: var(--text-primary);
 }
 header,
-section {
+section,
+main {
   max-width: 1000px !important;
   margin: 0 auto;
   width: 100%;

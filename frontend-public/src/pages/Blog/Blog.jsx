@@ -10,7 +10,6 @@ export default function Blog() {
   const [commentsData, setCommentsData] = useState();
   const [error, setError] = useState(null);
   const { author, slug } = useParams();
-  const token = localStorage.getItem("Authorization");
 
   useEffect(() => {
     Promise.all([
@@ -66,24 +65,21 @@ export default function Blog() {
 
   return (
     <div className={styles["preview-blog-container"]}>
-      <section>
+      <main>
         <div dangerouslySetInnerHTML={{ __html: blog.content }} />
         <OtherBlogs blogs={blogs} author={author} formatDate={formatDate} />
-
         <CommentsTextarea commentsCount={blog?._count.comments} />
         <Comments comments={commentsData} formatDate={formatDate} />
-      </section>
+      </main>
     </div>
   );
 }
 
 function Comments({ comments, formatDate }) {
-  console.log("global replies", comments);
   return (
-    <article className={styles["comments-article"]}>
+    <section className={styles["comments-section"]}>
       <div className={styles["comments"]}>
         {comments.map((comment) => {
-          console.log("replies", comment.replies);
           return (
             <div className={`${styles["comment-container"]}`} key={comment.id}>
               <div
@@ -147,7 +143,7 @@ function Comments({ comments, formatDate }) {
           );
         })}
       </div>
-    </article>
+    </section>
   );
 }
 

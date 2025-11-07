@@ -30,9 +30,7 @@ const updatePassword = [
         where: { username },
       });
       if (!author)
-        return res
-          .status(400)
-          .json({ message: "Incorrect username or password" });
+        return res.status(400).json({ message: "Username not found" });
 
       const hashedPassword = await bcryptjs.hash(password, 10);
 

@@ -1,7 +1,7 @@
 .preview-blog-container {
   padding-bottom: var(--space-2xl);
-  section {
-    padding: var(--space-xl);
+  main {
+    padding: var(--space-xl) !important;
     margin: 0 auto;
     margin-top: 0 !important;
     display: grid;
@@ -46,8 +46,7 @@
   border-radius: var(--radius-lg);
 }
 .other-blogs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
   gap: var(--space-2xl);
 }
 
@@ -142,7 +141,7 @@
   }
 }
 
-.comments-article {
+.comments-section {
   display: grid;
   gap: var(--space-4xl);
   padding: 0 var(--space-2xl);
@@ -189,5 +188,11 @@
     svg {
       width: var(--space-md);
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .other-blogs {
+    display: grid !important;
   }
 }
