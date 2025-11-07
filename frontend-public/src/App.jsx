@@ -8,6 +8,7 @@ import Blogs from "./pages/Blogs/Blogs";
 import Blog from "./pages/Blog/Blog";
 import Signup, { Action as signupAction } from "./pages/Signup/Signup";
 import Login, { Action as loginAction } from "./pages/Login/Login";
+import Signout from "./pages/Signout/Signout";
 import "./globalStyles/index.css";
 
 const router = createBrowserRouter(
@@ -24,7 +25,9 @@ const router = createBrowserRouter(
         element={<Login />}
         action={loginAction}
       />
+      <Route path="/:author/auth/signout" element={<Signout />} />
 
+      {/* Blogs */}
       <Route path="/:author/blogs" element={<Blogs />} />
       <Route path="/:author/blogs/:slug" element={<Blog />} />
     </>

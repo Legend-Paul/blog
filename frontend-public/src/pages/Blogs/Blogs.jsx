@@ -8,24 +8,31 @@ export default function Blogs() {
   const [data, setData] = useState(null);
   const [user, setUser] = useState(null);
   const { author } = useParams();
-  const token = localStorage.getItem("Authorization");
+  let token = localStorage.getItem("Authorization");
+  token = token ? token : "";
 
   useEffect(() => {
-    Promise.all([
-      fetch(`http://localhost:5000/${author}/api/blogs`).then((res) =>
-        res.json()
-      ),
-      fetch("http://localhost:5000/", {
-        headers: { Authorization: token },
-      }).then((res) => res.json()),
-    ])
-      .then(([blogsResponse, userResponse]) => {
-        setData(blogsResponse.data);
-        setUser(userResponse.user);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    if (token)
+      Promise.all([
+        fetch(`http://localhost:5000/${author}/api/blogs`).then((res) =>
+          res.json()
+        ),
+        fetch("http://localhost:5000/", {
+          headers: { Authorization: token },
+        }).then((res) => res.json()),
+      ])
+        .then(([blogsResponse, userResponse]) => {
+          setData(blogsResponse.data);
+          setUser(userResponse.user);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    else
+      fetch(`http://localhost:5000/${author}/api/blogs`)
+        .then((response) => response.json())
+        .then((res) => setData(res.data))
+        .catch((error) => console.log("Error fetching data:", error));
   }, [author, token]);
 
   if (!data) {
