@@ -150,9 +150,6 @@
   padding: var(--space-xs) var(--space-xl);
   border-radius: var(--space-sm);
 }
-/* .parent-comment {
-  background-color: var(--code-bg);
-} */
 
 .heading {
   display: flex;
@@ -164,5 +161,25 @@
   }
   span {
     color: var(--text-muted);
+  }
+}
+
+/* comment-icons */
+.comment-icons {
+  display: flex;
+  gap: var(--space-4xl);
+  margin: var(--space-lg) 0;
+  button {
+    background-color: var(--bg-primary);
+    color: var(--text-muted);
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-md);
+    cursor: pointer !important;
+    svg {
+      width: var(--space-md);
+    }
   }
 }
