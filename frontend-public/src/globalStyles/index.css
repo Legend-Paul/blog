@@ -190,6 +190,7 @@ svg {
 }
 
 a {
+  cursor: pointer !important;
   color: var(--primary-color);
 }
 

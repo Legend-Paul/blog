@@ -134,6 +134,14 @@
 }
 
 /* Comments */
+.comments-heading {
+  a {
+    cursor: pointer !important;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+}
+
 .comments-article {
   display: grid;
   gap: var(--space-4xl);

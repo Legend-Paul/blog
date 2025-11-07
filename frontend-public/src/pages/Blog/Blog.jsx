@@ -69,7 +69,7 @@ export default function Blog() {
       <section>
         <div dangerouslySetInnerHTML={{ __html: blog.content }} />
         <OtherBlogs blogs={blogs} author={author} formatDate={formatDate} />
-        <Link to={"#comments"}>Comments</Link>
+
         <CommentsTextarea commentsCount={blog?._count.comments} />
         <Comments comments={commentsData} formatDate={formatDate} />
       </section>
@@ -154,9 +154,11 @@ function Comments({ comments, formatDate }) {
 function CommentsTextarea({ commentsCount }) {
   return (
     <div id="comments" className={styles["comment-textarea"]}>
+      <h3 className={styles["comments-heading"]}>
+        <a href={"#comments"}>Comments ({commentsCount})</a>
+      </h3>
       <Textarea
         placeholder={"Enter your comment"}
-        label={`Comments (${commentsCount})`}
         id={"comments-textarea"}
         required={false}
       />
