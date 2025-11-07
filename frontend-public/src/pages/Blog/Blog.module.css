@@ -206,6 +206,21 @@
   animation: spin 1s linear infinite;
 }
 
+/* Likes */
+.blog-likes {
+  button {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border: none;
+    svg {
+      color: var(--error-color);
+    }
+  }
+}
+
 @media screen and (max-width: 768px) {
   .other-blogs {
     display: grid !important;
