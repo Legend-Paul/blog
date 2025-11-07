@@ -37,11 +37,21 @@ export async function Action({ request }) {
     );
 
   const commentData = { content, parentId };
+  console.log(commentData);
   try {
-    const data = await fetchData(
-      `http://localhost:5000/${author}/api/blog/${slug}/comments/new`,
-      commentData
-    );
+    let data = null;
+
+    if (parentId)
+      data = await fetchData(
+        `http://localhost:5000/${author}/api/blog/${slug}/comments/${parentId}/reply`,
+        commentData
+      );
+    else
+      data = await fetchData(
+        `http://localhost:5000/${author}/api/blog/${slug}/comments/new`,
+        commentData
+      );
+
     return { data };
   } catch (error) {
     return { error: error.message };
@@ -55,6 +65,7 @@ export default function Blog() {
   const [commentsData, setCommentsData] = useState();
   const [user, setUser] = useState();
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(null);
   const { author, slug } = useParams();
   let token = localStorage.getItem("Authorization");
   token = token ? token : "";
@@ -85,6 +96,7 @@ export default function Blog() {
   );
 
   useEffect(() => {
+    setLoading(true);
     const requests = token
       ? [
           fetchData.blog(),
@@ -105,7 +117,8 @@ export default function Blog() {
       .catch((err) => {
         console.error("Error fetching blog:", err);
         setError(err.message);
-      });
+      })
+      .finally(() => setLoading(false));
   }, [token, fetchData, data]);
 
   if (error) {
@@ -135,8 +148,6 @@ export default function Blog() {
   const blog = blogData;
   const blogs = blogsData.blogs.filter((b) => b.slug != blog.slug);
 
-  console.log(user);
-
   return (
     <div className={styles["preview-blog-container"]}>
       <main>
@@ -161,13 +172,19 @@ export default function Blog() {
               </Link>
             )}
           </div>
-          <CommentsTextarea author={author} slug={slug} user={user} />
+          <CommentsTextarea
+            author={author}
+            slug={slug}
+            user={user}
+            disabled={loading}
+          />
           <Comments
             comments={commentsData}
             formatDate={formatDate}
             author={author}
             slug={slug}
             user={user}
+            disabled={loading}
           />
         </div>
       </main>
@@ -175,7 +192,7 @@ export default function Blog() {
   );
 }
 
-function Comments({ comments, formatDate, author, slug, user }) {
+function Comments({ comments, formatDate, author, slug, user, disabled }) {
   const [reply, setReply] = useState({});
 
   function handleDisplayRepy(id) {
@@ -246,7 +263,7 @@ function Comments({ comments, formatDate, author, slug, user }) {
 
                 {reply[comment.id] && (
                   <CommentsTextarea
-                    parentId={comment.parentId}
+                    parentId={comment.id}
                     author={author}
                     slug={slug}
                     user={user}
@@ -258,6 +275,7 @@ function Comments({ comments, formatDate, author, slug, user }) {
                   <Comments
                     comments={comment.replies}
                     formatDate={formatDate}
+                    disabled={disabled}
                   />
                 ) : (
                   ""
@@ -271,7 +289,7 @@ function Comments({ comments, formatDate, author, slug, user }) {
   );
 }
 
-function CommentsTextarea({ parentId = "", author, slug, user }) {
+function CommentsTextarea({ parentId = "", author, slug, user, disabled }) {
   return (
     <div className={styles["comment-textarea"]}>
       <Form method="post">
@@ -287,19 +305,23 @@ function CommentsTextarea({ parentId = "", author, slug, user }) {
         />
         <div className={styles["icons"]}>
           <button type="submit">
-            <svg
-              className={styles["nav-icon"]}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-              />
-            </svg>
+            {disabled ? (
+              <div className={styles["btn-spinner"]}></div>
+            ) : (
+              <svg
+                className={styles["nav-icon"]}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                />
+              </svg>
+            )}
           </button>
         </div>
       </Form>
