@@ -102,7 +102,7 @@ export default function Blog() {
         console.error("Error fetching blog:", err);
         setError(err.message);
       });
-  }, [token, fetchData]);
+  }, [token, fetchData, data]);
 
   if (error) {
     return (
