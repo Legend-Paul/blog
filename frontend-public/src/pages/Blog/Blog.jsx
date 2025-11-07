@@ -1,10 +1,51 @@
-import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import {
+  useParams,
+  Link,
+  Form,
+  redirect,
+  useActionData,
+} from "react-router-dom";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import styles from "./Blog.module.css";
 import { Textarea } from "../../components/Input/Input";
 
+export async function Action({ request }) {
+  const formData = await request.formData();
+  const content = await formData.get("content");
+  const parentId = await formData.get("parentId");
+  const author = await formData.get("author");
+  const slug = await formData.get("slug");
+  const user = await formData.get("user");
+  const token = localStorage.getItem("Authorization");
+
+  if (!user)
+    return redirect(
+      `/${author}/auth/login?redirectTo=${`/${author}/blogs/${slug}#comments&content=${content}`}`
+    );
+
+  const commentData = { content, parentId };
+  try {
+    const response = await fetch(
+      `http://localhost:5000/${author}/api/blog/${slug}/comments/new`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(commentData),
+      }
+    );
+    const data = await response.json();
+    return { data };
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
 export default function Blog() {
+  const data = useActionData();
   const [blogData, setBlogData] = useState();
   const [blogsData, setBlogsData] = useState();
   const [commentsData, setCommentsData] = useState();
@@ -14,54 +55,54 @@ export default function Blog() {
   let token = localStorage.getItem("Authorization");
   token = token ? token : "";
 
-  useEffect(() => {
-    if (token)
-      Promise.all([
-        fetch(`http://localhost:5000/${author}/api/blog/${slug}`).then((res) =>
-          res.json()
-        ),
-        fetch(`http://localhost:5000/${author}/api/blogs`).then((res) =>
-          res.json()
-        ),
-        fetch(`http://localhost:5000/${author}/api/blog/${slug}/comments`).then(
-          (res) => res.json()
-        ),
-        fetch("http://localhost:5000/", {
+  // Memoize the API URLs to prevent recreating them on every render
+  const apiUrls = useMemo(
+    () => ({
+      blog: `http://localhost:5000/${author}/api/blog/${slug}`,
+      blogs: `http://localhost:5000/${author}/api/blogs`,
+      comments: `http://localhost:5000/${author}/api/blog/${slug}/comments`,
+      user: "http://localhost:5000/",
+    }),
+    [author, slug]
+  );
+
+  // Memoize the fetch functions
+  const fetchData = useMemo(
+    () => ({
+      blog: () => fetch(apiUrls.blog).then((res) => res.json()),
+      blogs: () => fetch(apiUrls.blogs).then((res) => res.json()),
+      comments: () => fetch(apiUrls.comments).then((res) => res.json()),
+      user: (token) =>
+        fetch(apiUrls.user, {
           headers: { Authorization: token },
         }).then((res) => res.json()),
-      ])
-        .then(([blogRes, blogsRes, commentsRes, userRes]) => {
-          setBlogData(blogRes.data);
-          setBlogsData(blogsRes.data);
-          setCommentsData(commentsRes.data);
-          setUser(userRes.user);
-        })
-        .catch((err) => {
-          console.error("Error fetching blog:", err);
-          setError(err.message);
-        });
-    else
-      Promise.all([
-        fetch(`http://localhost:5000/${author}/api/blog/${slug}`).then((res) =>
-          res.json()
-        ),
-        fetch(`http://localhost:5000/${author}/api/blogs`).then((res) =>
-          res.json()
-        ),
-        fetch(`http://localhost:5000/${author}/api/blog/${slug}/comments`).then(
-          (res) => res.json()
-        ),
-      ])
-        .then(([blogRes, blogsRes, commentsRes]) => {
-          setBlogData(blogRes.data);
-          setBlogsData(blogsRes.data);
-          setCommentsData(commentsRes.data);
-        })
-        .catch((err) => {
-          console.error("Error fetching blog:", err);
-          setError(err.message);
-        });
-  }, [author, slug]);
+    }),
+    [apiUrls]
+  );
+
+  useEffect(() => {
+    const requests = token
+      ? [
+          fetchData.blog(),
+          fetchData.blogs(),
+          fetchData.comments(),
+          fetchData.user(token),
+        ]
+      : [fetchData.blog(), fetchData.blogs(), fetchData.comments()];
+
+    Promise.all(requests)
+      .then((responses) => {
+        const [blogRes, blogsRes, commentsRes, userRes] = responses;
+        setBlogData(blogRes.data);
+        setBlogsData(blogsRes.data);
+        setCommentsData(commentsRes.data);
+        if (userRes) setUser(userRes.user);
+      })
+      .catch((err) => {
+        console.error("Error fetching blog:", err);
+        setError(err.message);
+      });
+  }, [token, fetchData]);
 
   if (error) {
     return (
@@ -116,15 +157,21 @@ export default function Blog() {
               </Link>
             )}
           </div>
-          <CommentsTextarea />
-          <Comments comments={commentsData} formatDate={formatDate} />
+          <CommentsTextarea author={author} slug={slug} user={user} />
+          <Comments
+            comments={commentsData}
+            formatDate={formatDate}
+            author={author}
+            slug={slug}
+            user={user}
+          />
         </div>
       </main>
     </div>
   );
 }
 
-function Comments({ comments, formatDate }) {
+function Comments({ comments, formatDate, author, slug, user }) {
   const [reply, setReply] = useState({});
 
   function handleDisplayRepy(id) {
@@ -193,7 +240,14 @@ function Comments({ comments, formatDate }) {
                   </button>
                 </div>
 
-                {reply[comment.id] && <CommentsTextarea />}
+                {reply[comment.id] && (
+                  <CommentsTextarea
+                    parentId={comment.parentId}
+                    author={author}
+                    slug={slug}
+                    user={user}
+                  />
+                )}
               </div>
               <div className={styles["replies"]}>
                 {comment.replies.length > 0 ? (
@@ -213,31 +267,38 @@ function Comments({ comments, formatDate }) {
   );
 }
 
-function CommentsTextarea() {
+function CommentsTextarea({ parentId = "", author, slug, user }) {
   return (
     <div className={styles["comment-textarea"]}>
-      <Textarea
-        placeholder={"Enter your comment"}
-        id={"comments-textarea"}
-        required={false}
-      />
-      <div className={styles["icons"]}>
-        <button>
-          <svg
-            className={styles["nav-icon"]}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-            />
-          </svg>
-        </button>
-      </div>
+      <Form method="post">
+        <input type="hidden" name="parentId" value={parentId} />
+        <input type="hidden" name="author" value={author} />
+        <input type="hidden" name="slug" value={slug} />
+        <input type="hidden" name="user" value={user} />
+        <Textarea
+          placeholder={"Enter your comment"}
+          id={"comments-textarea"}
+          required={false}
+          name={"content"}
+        />
+        <div className={styles["icons"]}>
+          <button type="submit">
+            <svg
+              className={styles["nav-icon"]}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+              />
+            </svg>
+          </button>
+        </div>
+      </Form>
     </div>
   );
 }
@@ -249,7 +310,7 @@ function OtherBlogs({ blogs, author, formatDate }) {
       <div className={styles["other-blogs"]}>
         {blogs.map((blog) => {
           return (
-            <div className={styles["blog-card"]}>
+            <div className={styles["blog-card"]} key={blog.id}>
               <div className={styles["blog-header"]}>
                 <Link
                   to={`/${author}/blogs/${blog.slug}`}

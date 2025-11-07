@@ -16,6 +16,7 @@ export async function Action({ request }) {
   const formData = await request.formData();
   const username = formData.get("username");
   const password = formData.get("password");
+  const redirectPath = formData.get("redirectPath");
   const author = formData.get("author");
 
   const loginData = {
@@ -36,7 +37,7 @@ export async function Action({ request }) {
 
     if (!response.ok) return { ...data, isError: true };
     localStorage.setItem("Authorization", data.token);
-    return { data };
+    return { ...data, redirectPath };
   } catch (error) {
     return { error: error.message };
   }
@@ -47,17 +48,26 @@ export default function Login() {
   const navigation = useNavigation();
   const location = useLocation();
   const navigate = useNavigate();
-  const search = location.search;
   const { author } = useParams();
-
+  const search = location.search;
+  console.log("search", search);
   let redirectPath = "";
+  let redirectContent = "";
+  console.log;
   if (search) {
-    const pathname = search.split("?").at(-1).split("=").at(-1);
-    redirectPath = pathnameSearch ? `${pathname}` : pathname;
+    const [path, pathnameSearch] = search.split("&");
+    const pathname = path.split("?").at(-1).split("=").at(-1);
+    redirectPath = pathname.split("=").at(-1);
+    redirectContent = pathnameSearch;
   }
-
+  console.log(redirectPath);
+  console.log(redirectContent);
   if (data && !data.isError)
-    redirectPath ? navigate(redirectPath) : navigate(`/${author}/blogs`);
+    redirectPath
+      ? navigate(`${redirectPath}#comments`, {
+          state: { content: redirectContent },
+        })
+      : navigate(`/${author}/blogs`);
 
   return (
     <div className={styles["login-container"]}>
@@ -94,6 +104,7 @@ export default function Login() {
           )}
           <Form method="post" replace>
             <div className={styles["form-content"]}>
+              <input type="hidden" name="redirectPath" value={redirectPath} />
               <input type="hidden" name="author" value={author} />
               <Input
                 label={"Username"}

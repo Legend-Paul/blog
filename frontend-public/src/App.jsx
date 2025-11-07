@@ -5,7 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Blogs from "./pages/Blogs/Blogs";
-import Blog from "./pages/Blog/Blog";
+import Blog, { Action as blogAction } from "./pages/Blog/Blog";
 import Signup, { Action as signupAction } from "./pages/Signup/Signup";
 import Login, { Action as loginAction } from "./pages/Login/Login";
 import Signout from "./pages/Signout/Signout";
@@ -37,7 +37,11 @@ const router = createBrowserRouter(
 
       {/* Blogs */}
       <Route path="/:author/blogs" element={<Blogs />} />
-      <Route path="/:author/blogs/:slug" element={<Blog />} />
+      <Route
+        path="/:author/blogs/:slug"
+        element={<Blog />}
+        action={blogAction}
+      />
     </>
   )
 );
