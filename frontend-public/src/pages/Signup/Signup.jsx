@@ -15,27 +15,29 @@ import styles from "../../globalStyles/formStyles.module.css";
 
 export async function Action({ request }) {
   const formData = await request.formData();
-  const fullName = formData.get("fullName");
   const username = formData.get("username");
   const password = formData.get("password");
   const confirmPassword = formData.get("confirmPassword");
-  const role = formData.get("role");
+
+  const author = formData.get("author");
   const redirectPath = formData.get("redirectPath");
+  console.log(author);
   const signupData = {
-    fullName,
     username,
     password,
     confirmPassword,
-    role,
   };
   try {
-    const response = await fetch("http://localhost:5000/auth/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(signupData),
-    });
+    const response = await fetch(
+      `http://localhost:5000/${author}/auth/signup`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(signupData),
+      }
+    );
 
     const data = await response.json();
 
@@ -54,12 +56,13 @@ export default function Signup() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  console.log(author);
   let redirectPath = location.state?.redirectPath || "";
 
   useEffect(() => {
     if (data && !data.isError) {
       const finalRedirectPath = data.redirectPath || "";
-      navigate(`/auth/login${finalRedirectPath}`);
+      navigate(`/${author}/auth/login${finalRedirectPath}`);
     }
   }, [data, navigate]);
 
@@ -92,7 +95,7 @@ export default function Signup() {
           )}
           <Form method="post" replace>
             <div className={styles["form-content"]}>
-              <input type="hidden" name="role" value={"AUTHOR"} />
+              <input type="hidden" name="author" value={author} />
               <input type="hidden" name="redirectPath" value={redirectPath} />
               <Input
                 label={"Username"}
