@@ -118,3 +118,15 @@
     gap: var(--space-lg);
   }
 }
+
+.back {
+  padding: 0 var(--space-lg);
+  display: flex;
+  align-items: center;
+  a {
+    text-decoration: none;
+  }
+  .back-arrow {
+    font-size: 2rem;
+  }
+}

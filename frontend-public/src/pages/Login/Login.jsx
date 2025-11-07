@@ -65,6 +65,12 @@ export default function Login() {
         <div
           className={`${styles["form-container"]} ${styles["large-form-container"]}`}
         >
+          <div className={styles["back"]}>
+            <Link to={`/${author}/blogs`}>
+              {" "}
+              <span className={styles["back-arrow"]}>←</span> Blogs
+            </Link>
+          </div>
           <div className={styles["header"]}>
             <h2 className={styles["title"]}>Log In</h2>
           </div>

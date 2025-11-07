@@ -134,10 +134,15 @@
 
 /* Comments */
 .comments-heading {
+  display: flex;
+  justify-content: space-between;
   a {
     cursor: pointer !important;
     color: var(--text-primary);
     text-decoration: none;
+  }
+  .account {
+    text-decoration: underline;
   }
 }
 
@@ -145,10 +150,11 @@
   display: grid;
   gap: var(--space-4xl);
   padding: 0 var(--space-2xl);
+  margin-top: 0 !important;
 }
 .comments {
   display: grid;
-  gap: var(--space-xl);
+  gap: var(--space-sm);
 }
 
 .comment {

@@ -8,30 +8,59 @@ export default function Blog() {
   const [blogData, setBlogData] = useState();
   const [blogsData, setBlogsData] = useState();
   const [commentsData, setCommentsData] = useState();
+  const [user, setUser] = useState();
   const [error, setError] = useState(null);
   const { author, slug } = useParams();
+  let token = localStorage.getItem("Authorization");
+  token = token ? token : "";
 
   useEffect(() => {
-    Promise.all([
-      fetch(`http://localhost:5000/${author}/api/blog/${slug}`).then((res) =>
-        res.json()
-      ),
-      fetch(`http://localhost:5000/${author}/api/blogs`).then((res) =>
-        res.json()
-      ),
-      fetch(`http://localhost:5000/${author}/api/blog/${slug}/comments`).then(
-        (res) => res.json()
-      ),
-    ])
-      .then(([blogRes, blogsRes, commentsRes]) => {
-        setBlogData(blogRes.data);
-        setBlogsData(blogsRes.data);
-        setCommentsData(commentsRes.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching blog:", err);
-        setError(err.message);
-      });
+    if (token)
+      Promise.all([
+        fetch(`http://localhost:5000/${author}/api/blog/${slug}`).then((res) =>
+          res.json()
+        ),
+        fetch(`http://localhost:5000/${author}/api/blogs`).then((res) =>
+          res.json()
+        ),
+        fetch(`http://localhost:5000/${author}/api/blog/${slug}/comments`).then(
+          (res) => res.json()
+        ),
+        fetch("http://localhost:5000/", {
+          headers: { Authorization: token },
+        }).then((res) => res.json()),
+      ])
+        .then(([blogRes, blogsRes, commentsRes, userRes]) => {
+          setBlogData(blogRes.data);
+          setBlogsData(blogsRes.data);
+          setCommentsData(commentsRes.data);
+          setUser(userRes.user);
+        })
+        .catch((err) => {
+          console.error("Error fetching blog:", err);
+          setError(err.message);
+        });
+    else
+      Promise.all([
+        fetch(`http://localhost:5000/${author}/api/blog/${slug}`).then((res) =>
+          res.json()
+        ),
+        fetch(`http://localhost:5000/${author}/api/blogs`).then((res) =>
+          res.json()
+        ),
+        fetch(`http://localhost:5000/${author}/api/blog/${slug}/comments`).then(
+          (res) => res.json()
+        ),
+      ])
+        .then(([blogRes, blogsRes, commentsRes]) => {
+          setBlogData(blogRes.data);
+          setBlogsData(blogsRes.data);
+          setCommentsData(commentsRes.data);
+        })
+        .catch((err) => {
+          console.error("Error fetching blog:", err);
+          setError(err.message);
+        });
   }, [author, slug]);
 
   if (error) {
@@ -61,15 +90,35 @@ export default function Blog() {
   const blog = blogData;
   const blogs = blogsData.blogs.filter((b) => b.slug != blog.slug);
 
-  console.log(blog);
+  console.log(user);
 
   return (
     <div className={styles["preview-blog-container"]}>
       <main>
         <div dangerouslySetInnerHTML={{ __html: blog.content }} />
         <OtherBlogs blogs={blogs} author={author} formatDate={formatDate} />
-        <CommentsTextarea commentsCount={blog?._count.comments} />
-        <Comments comments={commentsData} formatDate={formatDate} />
+
+        <div id="comments" className="comments-section-container">
+          <div className={styles["comments-heading"]}>
+            <h3>
+              <a href={"#comments"}>Comments ({blog?._count.comments})</a>
+            </h3>
+            {user?.userType === "user" ? (
+              <Link
+                to={`/${author}/auth/signout`}
+                className={styles["account"]}
+              >
+                Sign Out
+              </Link>
+            ) : (
+              <Link to={`/${author}/auth/login`} className={styles["account"]}>
+                Log In
+              </Link>
+            )}
+          </div>
+          <CommentsTextarea />
+          <Comments comments={commentsData} formatDate={formatDate} />
+        </div>
       </main>
     </div>
   );
@@ -149,10 +198,7 @@ function Comments({ comments, formatDate }) {
 
 function CommentsTextarea({ commentsCount }) {
   return (
-    <div id="comments" className={styles["comment-textarea"]}>
-      <h3 className={styles["comments-heading"]}>
-        <a href={"#comments"}>Comments ({commentsCount})</a>
-      </h3>
+    <div className={styles["comment-textarea"]}>
       <Textarea
         placeholder={"Enter your comment"}
         id={"comments-textarea"}
