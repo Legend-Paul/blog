@@ -61,6 +61,7 @@ export const getBlog = async (req, res) => {
         _count: {
           select: {
             likes: true,
+            comments: true,
           },
         },
         author: {

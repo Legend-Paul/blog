@@ -4,8 +4,7 @@ import prisma from "../config/prisma.js";
 export const createComment = async (req, res) => {
   const { content } = req.body;
   const params = req.params;
-  console.log(content);
-  console.log(params);
+
   try {
     // find author
     const author = await prisma.author.findUnique({
@@ -90,7 +89,7 @@ async function getCommentsWithAllReplies(blogId) {
           replies: true,
         },
       },
-      author: {
+      user: {
         select: {
           id: true,
           username: true,
