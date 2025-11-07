@@ -128,9 +128,12 @@ function Comments({ comments, formatDate }) {
   const [reply, setReply] = useState({});
 
   function handleDisplayRepy(id) {
-    setReply((prevReply) => {
-      if (prevReply[id]) return { ...prevReply, [id]: !prevReply[id] };
-      return { ...prevReply, [id]: true };
+    setReply((prevReplies) => {
+      if (prevReplies[id]) return { ...prevReplies, [id]: false };
+      const replies = Object.fromEntries(
+        Object.entries(([key, value]) => [key, false])
+      );
+      return { ...replies, [id]: true };
     });
   }
 
