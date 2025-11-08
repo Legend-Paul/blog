@@ -10,7 +10,10 @@ import Spinnner from "../../components/Spinnner/Spinnner";
 import styles from "./Blog.module.css";
 import { Textarea } from "../../components/Input/Input";
 
-async function fetchData(url, data) {
+async function postData(url, data, author, slug, user) {
+  if (!user)
+    return (window.location.href = `/${author}/auth/login?redirectTo=${`/${author}/blogs/${slug}`}`);
+
   const token = localStorage.getItem("Authorization");
   const response = await fetch(url, {
     method: "POST",
@@ -31,25 +34,25 @@ export async function Action({ request }) {
   const slug = await formData.get("slug");
   const user = await formData.get("user");
 
-  if (!user)
-    return redirect(
-      `/${author}/auth/login?redirectTo=${`/${author}/blogs/${slug}#comments&content=${content}`}`
-    );
-
   const commentData = { content, parentId };
   console.log(commentData);
   try {
     let data = null;
 
     if (parentId)
-      data = await fetchData(
+      data = await postData(
         `http://localhost:5000/${author}/api/blog/${slug}/comments/${parentId}/reply`,
-        commentData
+        commentData,
+        author,
+        slug,
+        user
       );
     else
-      data = await fetchData(
+      data = await postData(
         `http://localhost:5000/${author}/api/blog/${slug}/comments/new`,
-        commentData
+        commentData,
+        author,
+        slug
       );
 
     return { data };
@@ -66,6 +69,7 @@ export default function Blog() {
   const [user, setUser] = useState();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
+  const [update, setUpdate] = useState(false);
   const { author, slug } = useParams();
   let token = localStorage.getItem("Authorization");
   token = token ? token : "";
@@ -148,13 +152,25 @@ export default function Blog() {
   const blog = blogData;
   const blogs = blogsData.blogs.filter((b) => b.slug != blog.slug);
 
+  const handleLikeBlog = async () => {
+    console.log(user);
+    const data = await postData(
+      `http://localhost:5000/${author}/api/blog/${slug}/likes/new`,
+      {},
+      author,
+      slug,
+      user
+    );
+    setBlogData((prev) => !prev);
+  };
+
   return (
     <div className={styles["preview-blog-container"]}>
       <main>
         <div dangerouslySetInnerHTML={{ __html: blog.content }} />
         <OtherBlogs blogs={blogs} author={author} formatDate={formatDate} />
         <div className={styles["blog-likes"]}>
-          <button>
+          <button onClick={handleLikeBlog}>
             <svg
               className="nav-icon"
               fill="currentColor"
@@ -171,7 +187,7 @@ export default function Blog() {
             Likes {blog._count.likes}
           </button>
         </div>
-        <div id="comments" className="comments-section-container">
+        <div id="comments" className={styles["comments-section-container"]}>
           <div className={styles["comments-heading"]}>
             <h3>
               <a href={"#comments"}>Comments ({blog?._count.comments})</a>
@@ -202,6 +218,8 @@ export default function Blog() {
             slug={slug}
             user={user}
             disabled={loading}
+            setCommentsData={setCommentsData}
+            fetchData={fetchData}
           />
         </div>
       </main>
@@ -209,8 +227,18 @@ export default function Blog() {
   );
 }
 
-function Comments({ comments, formatDate, author, slug, user, disabled }) {
+function Comments({
+  comments,
+  formatDate,
+  author,
+  slug,
+  user,
+  disabled,
+  setCommentsData,
+  fetchData,
+}) {
   const [reply, setReply] = useState({});
+  const [liking, setLiking] = useState({});
 
   function handleDisplayRepy(id) {
     setReply((prevReplies) => {
@@ -221,6 +249,35 @@ function Comments({ comments, formatDate, author, slug, user, disabled }) {
       return { ...replies, [id]: true };
     });
   }
+
+  const handleLikeComment = async (id) => {
+    try {
+      setLiking((prev) => {
+        return { ...prev, [id]: true };
+      });
+
+      await postData(
+        `http://localhost:5000/${author}/api/blog/${slug}/comments/${id}/likes/new`,
+        {},
+        author,
+        slug,
+        user
+      );
+
+      const res = await fetchData.comments();
+
+      setLiking((prev) => {
+        return { ...prev, [id]: false };
+      });
+
+      setCommentsData(res.data);
+    } catch (error) {
+      setLiking((prev) => {
+        return { ...prev, [id]: false };
+      });
+      throw new Error(error.message);
+    }
+  };
 
   return (
     <section className={styles["comments-section"]}>
@@ -241,22 +298,29 @@ function Comments({ comments, formatDate, author, slug, user, disabled }) {
                 </div>
                 <p className={styles["comment-text"]}>{comment.content}</p>
                 <div className={styles["comment-icons"]}>
-                  <button className={styles["comment-icon"]}>
-                    <svg
-                      className={styles["nav-icon"]}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                  {liking[comment.id] ? (
+                    <div className={styles["btn-spinner"]}></div>
+                  ) : (
+                    <button
+                      className={styles["comment-icon"]}
+                      onClick={() => handleLikeComment(comment.id)}
                     >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
-                      />
-                    </svg>
-                    <span>Likes {comment._count.likes}</span>
-                  </button>
+                      <svg
+                        className={styles["nav-icon"]}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                        />
+                      </svg>
+                      <span>Likes {comment._count.likes}</span>
+                    </button>
+                  )}
                   <button
                     className={styles["comment-icon"]}
                     onClick={() => handleDisplayRepy(comment.id)}
@@ -292,7 +356,11 @@ function Comments({ comments, formatDate, author, slug, user, disabled }) {
                   <Comments
                     comments={comment.replies}
                     formatDate={formatDate}
+                    author={author}
+                    slug={slug}
+                    user={user}
                     disabled={disabled}
+                    setCommentsData={setCommentsData}
                   />
                 ) : (
                   ""

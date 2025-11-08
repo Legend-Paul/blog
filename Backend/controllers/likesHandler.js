@@ -77,7 +77,7 @@ export const createCommentLike = async (req, res) => {
       },
     });
 
-    res.status(201).json({
+    res.status(200).json({
       message: "Comment liked successifully",
       data: like,
     });
