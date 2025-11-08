@@ -69,7 +69,7 @@ export default function Blog() {
   const [user, setUser] = useState();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
-  const [update, setUpdate] = useState(false);
+  const [liking, setLiking] = useState(false);
   const { author, slug } = useParams();
   let token = localStorage.getItem("Authorization");
   token = token ? token : "";
@@ -153,15 +153,25 @@ export default function Blog() {
   const blogs = blogsData.blogs.filter((b) => b.slug != blog.slug);
 
   const handleLikeBlog = async () => {
-    console.log(user);
-    const data = await postData(
-      `http://localhost:5000/${author}/api/blog/${slug}/likes/new`,
-      {},
-      author,
-      slug,
-      user
-    );
-    setBlogData((prev) => !prev);
+    setLiking(true);
+
+    try {
+      const data = await postData(
+        `http://localhost:5000/${author}/api/blog/${slug}/likes/new`,
+        {},
+        author,
+        slug,
+        user
+      );
+      const res = await fetchData.blog();
+
+      setLiking(false);
+
+      setBlogData(res.data);
+    } catch (error) {
+      setLiking(false);
+      throw new Error(error.message);
+    }
   };
 
   return (
@@ -170,22 +180,26 @@ export default function Blog() {
         <div dangerouslySetInnerHTML={{ __html: blog.content }} />
         <OtherBlogs blogs={blogs} author={author} formatDate={formatDate} />
         <div className={styles["blog-likes"]}>
-          <button onClick={handleLikeBlog}>
-            <svg
-              className="nav-icon"
-              fill="currentColor"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>{" "}
-            Likes {blog._count.likes}
-          </button>
+          {liking ? (
+            <div className={styles["btn-spinner"]}></div>
+          ) : (
+            <button onClick={handleLikeBlog}>
+              <svg
+                className="nav-icon"
+                fill="currentColor"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>{" "}
+              Likes {blog._count.likes}
+            </button>
+          )}
         </div>
         <div id="comments" className={styles["comments-section-container"]}>
           <div className={styles["comments-heading"]}>
@@ -251,11 +265,10 @@ function Comments({
   }
 
   const handleLikeComment = async (id) => {
+    setLiking((prev) => {
+      return { ...prev, [id]: true };
+    });
     try {
-      setLiking((prev) => {
-        return { ...prev, [id]: true };
-      });
-
       await postData(
         `http://localhost:5000/${author}/api/blog/${slug}/comments/${id}/likes/new`,
         {},
