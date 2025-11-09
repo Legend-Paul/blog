@@ -28,9 +28,14 @@ async function postData(url, data, author, slug, user) {
       body: JSON.stringify(data),
     });
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
   } catch (error) {
-    throw new Error(error.message);
+    console.error("postData error:", error);
+    throw error;
   }
 }
 
@@ -66,7 +71,7 @@ export async function Action({ request }) {
 
     return { data };
   } catch (error) {
-    return { error: error.message };
+    return { error: error.message || "An error occurred" };
   }
 }
 
@@ -130,7 +135,7 @@ export default function Blog() {
       })
       .catch((err) => {
         console.error("Error fetching blog:", err);
-        setError(err.message);
+        setError(err.message || "An error occurred");
       })
       .finally(() => setLoading(false));
   }, [token, fetchData, data]);
@@ -171,16 +176,15 @@ export default function Blog() {
         {},
         author,
         slug,
-        user
+        JSON.stringify(user)
       );
       const res = await fetchData.blog();
 
       setLiking(false);
-
       setBlogData(res.data);
     } catch (error) {
+      console.error("Error liking blog:", error);
       setLiking(false);
-      throw new Error(error.message);
     }
   };
 
@@ -203,9 +207,9 @@ export default function Blog() {
                 viewBox="0 0 24 24"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                 />
               </svg>{" "}
@@ -275,8 +279,9 @@ function Comments({
   function handleDisplayRepy(id) {
     setReply((prevReplies) => {
       if (prevReplies[id]) return { ...prevReplies, [id]: false };
+      // Fixed: Properly create object with all keys set to false
       const replies = Object.fromEntries(
-        Object.entries(([key, value]) => [key, false])
+        Object.keys(prevReplies).map((key) => [key, false])
       );
       return { ...replies, [id]: true };
     });
@@ -292,7 +297,7 @@ function Comments({
         {},
         author,
         slug,
-        user
+        JSON.stringify(user)
       );
 
       const res = await fetchData.comments();
@@ -303,10 +308,10 @@ function Comments({
 
       setCommentsData(res.data);
     } catch (error) {
+      console.error("Error liking comment:", error);
       setLiking((prev) => {
         return { ...prev, [id]: false };
       });
-      throw new Error(error.message);
     }
   };
 
@@ -343,9 +348,9 @@ function Comments({
                         viewBox="0 0 24 24"
                       >
                         <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
                         />
                       </svg>
@@ -363,9 +368,9 @@ function Comments({
                       viewBox="0 0 24 24"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6M9 10h.01"
                       />
                     </svg>
@@ -395,6 +400,7 @@ function Comments({
                     user={user}
                     loading={loading}
                     setCommentsData={setCommentsData}
+                    fetchData={fetchData}
                   />
                 ) : (
                   ""
@@ -447,9 +453,9 @@ function CommentsTextarea({
                 viewBox="0 0 24 24"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                 />
               </svg>
