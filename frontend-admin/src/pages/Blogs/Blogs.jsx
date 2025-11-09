@@ -32,7 +32,7 @@ export default function Blogs() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/blogs", {
+    fetch("https://blog-backend-tf6n.onrender.com/api/blogs", {
       headers: {
         Authorization: token,
       },
@@ -61,7 +61,7 @@ export default function Blogs() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/blog/edit/${slug}`,
+        `https://blog-backend-tf6n.onrender.com/api/blog/edit/${slug}`,
         {
           method: "PUT",
           headers: {
@@ -73,11 +73,14 @@ export default function Blogs() {
       );
 
       if (response.ok) {
-        const updatedData = await fetch("http://localhost:5000/api/blogs", {
-          headers: {
-            Authorization: token,
-          },
-        }).then((res) => res.json());
+        const updatedData = await fetch(
+          "https://blog-backend-tf6n.onrender.com/api/blogs",
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        ).then((res) => res.json());
 
         setData(updatedData.data);
         addNotification(
@@ -104,19 +107,25 @@ export default function Blogs() {
     setLoadingStates((prev) => ({ ...prev, [slug]: "delete" }));
 
     try {
-      const response = await fetch(`http://localhost:5000/api/blog/f${slug}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (response.ok) {
-        const updatedData = await fetch("http://localhost:5000/api/blogs", {
+      const response = await fetch(
+        `https://blog-backend-tf6n.onrender.com/api/blog/f${slug}`,
+        {
+          method: "DELETE",
           headers: {
             Authorization: token,
           },
-        }).then((res) => res.json());
+        }
+      );
+
+      if (response.ok) {
+        const updatedData = await fetch(
+          "https://blog-backend-tf6n.onrender.com/api/blogs",
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        ).then((res) => res.json());
 
         setData(updatedData.data);
         addNotification("Blog deleted successfully!", "success");

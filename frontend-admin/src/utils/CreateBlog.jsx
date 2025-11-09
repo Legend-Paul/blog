@@ -11,14 +11,17 @@ export default async function Action({ request }) {
   const token = localStorage.getItem("Authorization");
 
   try {
-    const response = await fetch("http://localhost:5000/api/blogs/new", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-      body: JSON.stringify(blogData),
-    });
+    const response = await fetch(
+      "https://blog-backend-tf6n.onrender.com/api/blogs/new",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify(blogData),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to create blog");

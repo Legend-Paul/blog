@@ -24,7 +24,7 @@ export default function CheckAuth() {
     // Add Bearer prefix if your backend expects it
     const authHeader = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
 
-    fetch("http://localhost:5000/", {
+    fetch("https://blog-backend-tf6n.onrender.com/", {
       headers: {
         Authorization: authHeader, // ← Changed this
       },

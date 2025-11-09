@@ -26,13 +26,16 @@ export async function Action({ request }) {
   };
 
   try {
-    const response = await fetch("http://localhost:5000/auth/forgot-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(forgotPasswordData),
-    });
+    const response = await fetch(
+      "https://blog-backend-tf6n.onrender.com/auth/forgot-password",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(forgotPasswordData),
+      }
+    );
 
     const data = await response.json();
 

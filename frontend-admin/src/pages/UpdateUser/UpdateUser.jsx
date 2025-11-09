@@ -22,14 +22,17 @@ export async function Action({ request }) {
   console.log(token);
 
   try {
-    const response = await fetch("http://localhost:5000/auth/update", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-      body: JSON.stringify(userData),
-    });
+    const response = await fetch(
+      "https://blog-backend-tf6n.onrender.com/auth/update",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify(userData),
+      }
+    );
 
     const data = await response.json();
     console.log(data);

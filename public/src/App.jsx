@@ -19,6 +19,11 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path=":author" errorElement={<ErrorPage />}>
+        {/* Blogs */}
+        <Route index element={<Blogs />} />
+        <Route path="blogs" element={<Blogs />} />
+        <Route path="blogs/:slug" element={<Blog />} action={blogAction} />
+
         {/* Account */}
         <Route path="auth/signup" element={<Signup />} action={signupAction} />
         <Route path="auth/login" element={<Login />} action={loginAction} />
@@ -28,10 +33,6 @@ const router = createBrowserRouter(
           action={forgotPasswordAction}
         />
         <Route path="auth/signout" element={<Signout />} />
-
-        {/* Blogs */}
-        <Route path="blogs" element={<Blogs />} />
-        <Route path="blogs/:slug" element={<Blog />} action={blogAction} />
       </Route>
     </>
   )

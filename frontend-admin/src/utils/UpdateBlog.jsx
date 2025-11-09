@@ -12,7 +12,7 @@ export default async function Action({ request }) {
 
   try {
     const response = await fetch(
-      `http://localhost:5000/api/blog/edit/${slug}`,
+      `https://blog-backend-tf6n.onrender.com/api/blog/edit/${slug}`,
       {
         method: "PUT",
         headers: {

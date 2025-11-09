@@ -14,10 +14,10 @@ export default function Blogs() {
   useEffect(() => {
     if (token)
       Promise.all([
-        fetch(`http://localhost:5000/${author}/api/blogs`).then((res) =>
-          res.json()
-        ),
-        fetch("http://localhost:5000/", {
+        fetch(
+          `https://blog-backend-tf6n.onrender.com/${author}/api/blogs`
+        ).then((res) => res.json()),
+        fetch("https://blog-backend-tf6n.onrender.com/", {
           headers: { Authorization: token },
         }).then((res) => res.json()),
       ])
@@ -29,7 +29,7 @@ export default function Blogs() {
           console.error("Error fetching data:", error);
         });
     else
-      fetch(`http://localhost:5000/${author}/api/blogs`)
+      fetch(`https://blog-backend-tf6n.onrender.com/${author}/api/blogs`)
         .then((response) => response.json())
         .then((res) => setData(res.data))
         .catch((error) => console.log("Error fetching data:", error));

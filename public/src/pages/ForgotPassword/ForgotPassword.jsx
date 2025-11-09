@@ -29,7 +29,7 @@ export async function Action({ request }) {
 
   try {
     const response = await fetch(
-      `http://localhost:5000/${author}/auth/forgot-password`,
+      `https://blog-backend-tf6n.onrender.com/${author}/auth/forgot-password`,
       {
         method: "POST",
         headers: {

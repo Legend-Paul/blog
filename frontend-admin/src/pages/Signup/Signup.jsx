@@ -28,13 +28,16 @@ export async function Action({ request }) {
     role,
   };
   try {
-    const response = await fetch("http://localhost:5000/auth/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(signupData),
-    });
+    const response = await fetch(
+      "https://blog-backend-tf6n.onrender.com/auth/signup",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(signupData),
+      }
+    );
 
     const data = await response.json();
 

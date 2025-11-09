@@ -54,7 +54,7 @@ export async function Action({ request }) {
 
     if (parentId)
       data = await postData(
-        `http://localhost:5000/${author}/api/blog/${slug}/comments/${parentId}/reply`,
+        `https://blog-backend-tf6n.onrender.com/${author}/api/blog/${slug}/comments/${parentId}/reply`,
         commentData,
         author,
         slug,
@@ -62,7 +62,7 @@ export async function Action({ request }) {
       );
     else
       data = await postData(
-        `http://localhost:5000/${author}/api/blog/${slug}/comments/new`,
+        `https://blog-backend-tf6n.onrender.com/${author}/api/blog/${slug}/comments/new`,
         commentData,
         author,
         slug,
@@ -92,10 +92,10 @@ export default function Blog() {
   // Memoize the API URLs to prevent recreating them on every render
   const apiUrls = useMemo(
     () => ({
-      blog: `http://localhost:5000/${author}/api/blog/${slug}`,
-      blogs: `http://localhost:5000/${author}/api/blogs`,
-      comments: `http://localhost:5000/${author}/api/blog/${slug}/comments`,
-      user: "http://localhost:5000/",
+      blog: `https://blog-backend-tf6n.onrender.com/${author}/api/blog/${slug}`,
+      blogs: `https://blog-backend-tf6n.onrender.com/${author}/api/blogs`,
+      comments: `https://blog-backend-tf6n.onrender.com/${author}/api/blog/${slug}/comments`,
+      user: "https://blog-backend-tf6n.onrender.com/",
     }),
     [author, slug]
   );
@@ -172,7 +172,7 @@ export default function Blog() {
 
     try {
       const data = await postData(
-        `http://localhost:5000/${author}/api/blog/${slug}/likes/new`,
+        `https://blog-backend-tf6n.onrender.com/${author}/api/blog/${slug}/likes/new`,
         {},
         author,
         slug,
@@ -297,7 +297,7 @@ function Comments({
     });
     try {
       await postData(
-        `http://localhost:5000/${author}/api/blog/${slug}/comments/${id}/likes/new`,
+        `https://blog-backend-tf6n.onrender.com/${author}/api/blog/${slug}/comments/${id}/likes/new`,
         {},
         author,
         slug,

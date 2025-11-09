@@ -15,7 +15,7 @@ export default function Dashboard() {
   const token = localStorage.getItem("Authorization");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/blogs", {
+    fetch("https://blog-backend-tf6n.onrender.com/api/blogs", {
       headers: {
         Authorization: token,
       },

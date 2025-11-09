@@ -18,7 +18,7 @@ export default function PreviewBlog() {
   const token = localStorage.getItem("Authorization");
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/blog/${slug}`, {
+    fetch(`https://blog-backend-tf6n.onrender.com/api/blog/${slug}`, {
       headers: {
         Authorization: token,
       },
