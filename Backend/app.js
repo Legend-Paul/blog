@@ -35,7 +35,7 @@ const corsOptions = {
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors(corsOptions));
+app.use(cors());
 
 // Auth
 app.use(passport.initialize());
