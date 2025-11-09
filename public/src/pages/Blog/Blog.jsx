@@ -188,7 +188,7 @@ export default function Blog() {
     }
   };
 
-  console.log(user);
+  console.log(commentsData);
 
   return (
     <div className={styles["preview-blog-container"]}>
@@ -226,11 +226,15 @@ export default function Blog() {
               <Link
                 to={`/${author}/auth/signout`}
                 className={styles["account"]}
+                state={{ slug }}
               >
                 Sign Out
               </Link>
             ) : (
-              <Link to={`/${author}/auth/login`} className={styles["account"]}>
+              <Link
+                to={`/${author}/auth/login?redirectTo=${`/${author}/blogs/${slug}`}`}
+                className={styles["account"]}
+              >
                 Log In
               </Link>
             )}
@@ -319,6 +323,9 @@ function Comments({
     <section className={styles["comments-section"]}>
       <div className={styles["comments"]}>
         {comments.map((comment) => {
+          const userLikedComment = user
+            ? comment.likes.some((like) => like.userId == user.id)
+            : false;
           return (
             <div className={`${styles["comment-container"]}`} key={comment.id}>
               <div
@@ -342,7 +349,9 @@ function Comments({
                       onClick={() => handleLikeComment(comment.id)}
                     >
                       <svg
-                        className={styles["nav-icon"]}
+                        className={`${styles["nav-icon"]} ${
+                          userLikedComment ? styles["user-liked-comment"] : ""
+                        }`}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -354,7 +363,7 @@ function Comments({
                           d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
                         />
                       </svg>
-                      <span>Likes {comment._count.likes}</span>
+                      <span>Likes {comment.likes.length}</span>
                     </button>
                   )}
                   <button

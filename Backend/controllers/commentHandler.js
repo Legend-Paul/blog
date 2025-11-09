@@ -83,9 +83,9 @@ async function getCommentsWithAllReplies(blogId) {
       blogId: blogId,
     },
     include: {
+      likes: true,
       _count: {
         select: {
-          likes: true,
           replies: true,
         },
       },

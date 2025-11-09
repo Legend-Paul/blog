@@ -50,7 +50,7 @@ export default function Login() {
   const navigate = useNavigate();
   const { author } = useParams();
   const search = location.search;
-  console.log("search", search);
+
   let redirectPath = "";
   let redirectContent = "";
   console.log;
@@ -64,7 +64,7 @@ export default function Login() {
   console.log(redirectContent);
   if (data && !data.isError)
     redirectPath
-      ? navigate(`${redirectPath}#comments`, {
+      ? navigate(`${redirectPath}`, {
           state: { content: redirectContent },
         })
       : navigate(`/${author}/blogs`);
