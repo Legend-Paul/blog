@@ -5,25 +5,33 @@ import {
   Form,
   redirect,
   useActionData,
+  useNavigation,
 } from "react-router-dom";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import styles from "./Blog.module.css";
 import { Textarea } from "../../components/Input/Input";
 
 async function postData(url, data, author, slug, user) {
+  user = user ? JSON.parse(user) : user;
+  console.log(user);
   if (!user)
     return (window.location.href = `/${author}/auth/login?redirectTo=${`/${author}/blogs/${slug}`}`);
 
   const token = localStorage.getItem("Authorization");
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: token,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  return await response.json();
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(error.message);
+  }
 }
 
 export async function Action({ request }) {
@@ -35,7 +43,7 @@ export async function Action({ request }) {
   const user = await formData.get("user");
 
   const commentData = { content, parentId };
-  console.log(commentData);
+  console.log(user);
   try {
     let data = null;
 
@@ -52,7 +60,8 @@ export async function Action({ request }) {
         `http://localhost:5000/${author}/api/blog/${slug}/comments/new`,
         commentData,
         author,
-        slug
+        slug,
+        user
       );
 
     return { data };
@@ -71,6 +80,7 @@ export default function Blog() {
   const [loading, setLoading] = useState(null);
   const [liking, setLiking] = useState(false);
   const { author, slug } = useParams();
+  const navigation = useNavigation();
   let token = localStorage.getItem("Authorization");
   token = token ? token : "";
 
@@ -174,6 +184,8 @@ export default function Blog() {
     }
   };
 
+  console.log(user);
+
   return (
     <div className={styles["preview-blog-container"]}>
       <main>
@@ -223,7 +235,9 @@ export default function Blog() {
             author={author}
             slug={slug}
             user={user}
-            disabled={loading}
+            loading={loading}
+            setLoading={setLoading}
+            navigation={navigation}
           />
           <Comments
             comments={commentsData}
@@ -231,7 +245,9 @@ export default function Blog() {
             author={author}
             slug={slug}
             user={user}
-            disabled={loading}
+            loading={loading}
+            setLoading={setLoading}
+            navigation={navigation}
             setCommentsData={setCommentsData}
             fetchData={fetchData}
           />
@@ -247,7 +263,9 @@ function Comments({
   author,
   slug,
   user,
-  disabled,
+  loading,
+  setLoading,
+  navigation,
   setCommentsData,
   fetchData,
 }) {
@@ -361,6 +379,9 @@ function Comments({
                     author={author}
                     slug={slug}
                     user={user}
+                    loading={loading}
+                    setLoading={setLoading}
+                    navigation={navigation}
                   />
                 )}
               </div>
@@ -372,7 +393,7 @@ function Comments({
                     author={author}
                     slug={slug}
                     user={user}
-                    disabled={disabled}
+                    loading={loading}
                     setCommentsData={setCommentsData}
                   />
                 ) : (
@@ -387,14 +408,27 @@ function Comments({
   );
 }
 
-function CommentsTextarea({ parentId = "", author, slug, user, disabled }) {
+function CommentsTextarea({
+  parentId = "",
+  author,
+  slug,
+  user,
+  loading,
+  setLoading,
+  navigation,
+  id = "root",
+}) {
+  function handeComment(id) {
+    setLoading({ [id]: true });
+  }
+
   return (
     <div className={styles["comment-textarea"]}>
       <Form method="post">
         <input type="hidden" name="parentId" value={parentId} />
         <input type="hidden" name="author" value={author} />
         <input type="hidden" name="slug" value={slug} />
-        <input type="hidden" name="user" value={user} />
+        <input type="hidden" name="user" value={JSON.stringify(user)} />
         <Textarea
           placeholder={"Enter your comment"}
           id={"comments-textarea"}
@@ -402,10 +436,10 @@ function CommentsTextarea({ parentId = "", author, slug, user, disabled }) {
           name={"content"}
         />
         <div className={styles["icons"]}>
-          <button type="submit">
-            {disabled ? (
-              <div className={styles["btn-spinner"]}></div>
-            ) : (
+          {loading[id] && navigation.state == "submitting" ? (
+            <div className={styles["btn-spinner"]}></div>
+          ) : (
+            <button type="submit" onClick={() => handeComment(id)}>
               <svg
                 className={styles["nav-icon"]}
                 fill="none"
@@ -419,8 +453,8 @@ function CommentsTextarea({ parentId = "", author, slug, user, disabled }) {
                   d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                 />
               </svg>
-            )}
-          </button>
+            </button>
+          )}
         </div>
       </Form>
     </div>
