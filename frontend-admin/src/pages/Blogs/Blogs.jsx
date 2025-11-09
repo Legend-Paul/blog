@@ -239,6 +239,7 @@ export default function Blogs() {
                     onAction={handleBlogAction}
                     onDelete={handleDelete}
                     loadingStates={loadingStates}
+                    user={data.user}
                   />
                 )
             )
@@ -249,6 +250,7 @@ export default function Blogs() {
               onAction={handleBlogAction}
               onDelete={handleDelete}
               loadingStates={loadingStates}
+              user={data.user}
             />
           ) : (
             <div className={styles["empty-state"]}>
@@ -266,7 +268,14 @@ export default function Blogs() {
 }
 
 // Blog Section Component (unchanged)
-function BlogSection({ status, blogs, onAction, onDelete, loadingStates }) {
+function BlogSection({
+  status,
+  blogs,
+  onAction,
+  onDelete,
+  loadingStates,
+  user,
+}) {
   const statusConfig = {
     DRAFT: { color: "var(--warning-color)", label: "Drafts" },
     PENDING: { color: "var(--info-color)", label: "Pending Review" },
@@ -295,6 +304,7 @@ function BlogSection({ status, blogs, onAction, onDelete, loadingStates }) {
             onAction={onAction}
             onDelete={onDelete}
             isLoading={loadingStates[blog.slug]}
+            user={user}
           />
         ))}
       </div>
@@ -303,7 +313,7 @@ function BlogSection({ status, blogs, onAction, onDelete, loadingStates }) {
 }
 
 // Blog Card Component (unchanged)
-function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
+function BlogCard({ blog, status, onAction, onDelete, isLoading, user }) {
   const navigate = useNavigate();
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -351,7 +361,7 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading }) {
 
   const handleActionClick = (action) => {
     if (action === "view") {
-      window.open(`/api/blog/${blog.slug}`, "_blank");
+      navigate(`https://blog-backend-tf6n.onrender.com/${user.username}`);
     } else if (action === "edit") {
       navigate(`/api/blog/edit/${blog.slug}`, {
         state: {
