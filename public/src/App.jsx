@@ -12,36 +12,27 @@ import Signout from "./pages/Signout/Signout";
 import ForgotPassword, {
   Action as forgotPasswordAction,
 } from "./pages/ForgotPassword/ForgotPassword";
+import ErrorPage from "./Error/ErrorPage";
 import "./globalStyles/index.css";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      {/* Account */}
-      <Route
-        path="/:author/auth/signup"
-        element={<Signup />}
-        action={signupAction}
-      />
-      <Route
-        path="/:author/auth/login"
-        element={<Login />}
-        action={loginAction}
-      />
-      <Route
-        path="/:author/auth/forgot-password"
-        element={<ForgotPassword />}
-        action={forgotPasswordAction}
-      />
-      <Route path="/:author/auth/signout" element={<Signout />} />
+      <Route path=":author" errorElement={<ErrorPage />}>
+        {/* Account */}
+        <Route path="auth/signup" element={<Signup />} action={signupAction} />
+        <Route path="auth/login" element={<Login />} action={loginAction} />
+        <Route
+          path="auth/forgot-password"
+          element={<ForgotPassword />}
+          action={forgotPasswordAction}
+        />
+        <Route path="auth/signout" element={<Signout />} />
 
-      {/* Blogs */}
-      <Route path="/:author/blogs" element={<Blogs />} />
-      <Route
-        path="/:author/blogs/:slug"
-        element={<Blog />}
-        action={blogAction}
-      />
+        {/* Blogs */}
+        <Route path="blogs" element={<Blogs />} />
+        <Route path="blogs/:slug" element={<Blog />} action={blogAction} />
+      </Route>
     </>
   )
 );
