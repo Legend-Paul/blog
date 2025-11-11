@@ -28,8 +28,9 @@ const corsOptions = {
     "https://blooger-mizs.onrender.com",
     "https://bloog-wcim.onrender.com",
   ],
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 // Middleware
