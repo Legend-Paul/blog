@@ -1,6 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 import signupRoute from "./routes/signup.js";
 import blogRoute from "./routes/blog.js";
 import adminDashboardRoute from "./routes/adminDashboard.js";
@@ -22,34 +24,35 @@ import {
 
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS Configuration - MUST come before other middleware
+// CORS Configuration
 const allowedOrigins = [
   "https://blooger-mizs.onrender.com",
   "https://bloog-wcim.onrender.com",
-  "http://localhost:5173", // for local development
+  "http://localhost:5173",
   "http://localhost:3000",
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
-
       if (allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Allow credentials (cookies, authorization headers)
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     exposedHeaders: ["Content-Length", "X-Request-Id"],
-    maxAge: 86400, // Cache preflight request for 24 hours
+    maxAge: 86400,
   })
 );
 
@@ -61,6 +64,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 passportConfig(passport);
 
+// API Routes (MUST come before static file serving)
 // author auth Routes
 app.use("/auth/login", loginRoute);
 app.use("/auth/signup", signupRoute);
@@ -82,8 +86,8 @@ app.use("/:author/api", requireAuth, publicActionRouter);
 app.use("/dashboard", requireAuth, adminDashboardRoute);
 app.use("/api", requireAuth, blogRoute);
 
-app.get("/", requireAuth, (req, res) => {
-  res.json({ user: req.user });
+app.get("/", (req, res) => {
+  res.json({ status: "ok", user: req.user });
 });
 
 // Error handling middleware
