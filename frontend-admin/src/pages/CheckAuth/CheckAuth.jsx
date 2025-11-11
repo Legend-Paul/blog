@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
 import Spinnner from "../../components/Spinnner/Spinnner";
 
+const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
+
 export default function CheckAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -24,7 +26,7 @@ export default function CheckAuth() {
     // Add Bearer prefix if your backend expects it
     const authHeader = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
 
-    fetch("https://blog-backend-tf6n.onrender.com/", {
+    fetch(`${API_BASE_URL}/`, {
       headers: {
         Authorization: authHeader, // ← Changed this
       },

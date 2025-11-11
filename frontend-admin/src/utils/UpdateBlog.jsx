@@ -1,5 +1,7 @@
 import { redirect } from "react-router-dom";
 
+const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
+
 export default async function Action({ request }) {
   const formData = await request.formData();
   const slug = formData.get("slug").trim().split(" ").join("-");
@@ -11,17 +13,14 @@ export default async function Action({ request }) {
   const token = localStorage.getItem("Authorization");
 
   try {
-    const response = await fetch(
-      `https://blog-backend-tf6n.onrender.com/api/blog/edit/${slug}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify(blogData),
-      }
-    );
+    const response = await fetch(`${API_BASE_URL}/api/blog/edit/${slug}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify(blogData),
+    });
 
     if (!response.ok) {
       throw new Error("Failed to create blog");

@@ -12,6 +12,8 @@ import formStyles from "../../globalStyles/formStyles.module.css";
 import Button from "../../components/Button/Button";
 import checkAuth from "../../utils/checkAuth";
 
+const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
+
 export async function Action({ request }) {
   const formData = await request.formData();
   const fullName = formData.get("fullName");
@@ -19,20 +21,16 @@ export async function Action({ request }) {
   const password = formData.get("password");
   const userData = { fullName, username, password };
   const token = localStorage.getItem("Authorization");
-  console.log(token);
 
   try {
-    const response = await fetch(
-      "https://blog-backend-tf6n.onrender.com/auth/update",
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify(userData),
-      }
-    );
+    const response = await fetch(`${API_BASE_URL}/auth/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify(userData),
+    });
 
     const data = await response.json();
     console.log(data);

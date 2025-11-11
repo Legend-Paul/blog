@@ -6,6 +6,8 @@ import CreateBlog from "../../components/CreateBlog/CreateBlog";
 import checkAuth from "../../utils/checkAuth";
 import { useLocation } from "react-router-dom";
 
+const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
+
 export default function Dashboard() {
   checkAuth();
 
@@ -15,7 +17,7 @@ export default function Dashboard() {
   const token = localStorage.getItem("Authorization");
 
   useEffect(() => {
-    fetch("https://blog-backend-tf6n.onrender.com/api/blogs", {
+    fetch(`${API_BASE_URL}/api/blogs`, {
       headers: {
         Authorization: token,
       },

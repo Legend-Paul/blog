@@ -4,9 +4,11 @@ import Header from "../../components/Header/Header";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import CreateBlog from "../../components/CreateBlog/CreateBlog";
 import Button from "../../components/Button/Button";
-import Notification from "../../components/Notification/Notification"; // New component
+import Notification from "../../components/Notification/Notification";
 import checkAuth from "../../utils/checkAuth";
 import styles from "./Blogs.module.css";
+
+const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
 
 export default function Blogs() {
   checkAuth();
@@ -14,7 +16,7 @@ export default function Blogs() {
   const [data, setData] = useState(null);
   const [loadingStates, setLoadingStates] = useState({});
   const [searchParams, setSearchParams] = useSearchParams();
-  const [notifications, setNotifications] = useState([]); // Notification state
+  const [notifications, setNotifications] = useState([]);
   const activeStatus = searchParams.get("status") || "ALL";
   const token = localStorage.getItem("Authorization");
 
@@ -32,15 +34,16 @@ export default function Blogs() {
   };
 
   useEffect(() => {
-    fetch("https://blog-backend-tf6n.onrender.com/api/blogs", {
+    fetch(`${API_BASE_URL}/api/blogs`, {
       headers: {
         Authorization: token,
       },
+      credentials: "include",
     })
       .then((response) => response.json())
       .then((res) => setData(res.data))
       .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+  }, [token]);
 
   const handleStatusFilter = (status) => {
     if (status === "ALL") {
@@ -60,27 +63,23 @@ export default function Blogs() {
     if (action === "archive") status = "ARCHIVED";
 
     try {
-      const response = await fetch(
-        `https://blog-backend-tf6n.onrender.com/api/blog/edit/${slug}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: token,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ status }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/blog/edit/${slug}`, {
+        method: "PUT",
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ status }),
+      });
 
       if (response.ok) {
-        const updatedData = await fetch(
-          "https://blog-backend-tf6n.onrender.com/api/blogs",
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        ).then((res) => res.json());
+        const updatedData = await fetch(`${API_BASE_URL}/api/blogs`, {
+          headers: {
+            Authorization: token,
+          },
+          credentials: "include",
+        }).then((res) => res.json());
 
         setData(updatedData.data);
         addNotification(
@@ -107,25 +106,21 @@ export default function Blogs() {
     setLoadingStates((prev) => ({ ...prev, [slug]: "delete" }));
 
     try {
-      const response = await fetch(
-        `https://blog-backend-tf6n.onrender.com/api/blog/f${slug}`,
-        {
-          method: "DELETE",
+      const response = await fetch(`${API_BASE_URL}/api/blog/${slug}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: token,
+        },
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const updatedData = await fetch(`${API_BASE_URL}/api/blogs`, {
           headers: {
             Authorization: token,
           },
-        }
-      );
-
-      if (response.ok) {
-        const updatedData = await fetch(
-          "https://blog-backend-tf6n.onrender.com/api/blogs",
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        ).then((res) => res.json());
+          credentials: "include",
+        }).then((res) => res.json());
 
         setData(updatedData.data);
         addNotification("Blog deleted successfully!", "success");
@@ -267,7 +262,7 @@ export default function Blogs() {
   );
 }
 
-// Blog Section Component (unchanged)
+// Blog Section Component
 function BlogSection({
   status,
   blogs,
@@ -312,7 +307,7 @@ function BlogSection({
   );
 }
 
-// Blog Card Component (unchanged)
+// Blog Card Component
 function BlogCard({ blog, status, onAction, onDelete, isLoading, user }) {
   const navigate = useNavigate();
   const formatDate = (dateString) => {
@@ -361,7 +356,7 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading, user }) {
 
   const handleActionClick = (action) => {
     if (action === "view") {
-      navigate(`https://blog-backend-tf6n.onrender.com/${user.username}`);
+      window.open(`${API_BASE_URL}/${user.username}`, "_blank");
     } else if (action === "edit") {
       navigate(`/api/blog/edit/${blog.slug}`, {
         state: {

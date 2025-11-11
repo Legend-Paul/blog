@@ -11,6 +11,8 @@ import styles from "./PreviewBlog.module.css";
 import Dialog from "../../components/Dialog/Dialog";
 import checkAuth from "../../utils/checkAuth";
 
+const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
+
 export default function PreviewBlog() {
   checkAuth();
   const [data, setData] = useState();
@@ -18,7 +20,7 @@ export default function PreviewBlog() {
   const token = localStorage.getItem("Authorization");
 
   useEffect(() => {
-    fetch(`https://blog-backend-tf6n.onrender.com/api/blog/${slug}`, {
+    fetch(`${API_BASE_URL}/api/blog/${slug}`, {
       headers: {
         Authorization: token,
       },
