@@ -4,6 +4,8 @@ import Header from "../../components/Header/Header";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import styles from "./Blogs.module.css";
 
+const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
+
 export default function Blogs() {
   const [data, setData] = useState(null);
   const [user, setUser] = useState(null);
@@ -14,11 +16,12 @@ export default function Blogs() {
   useEffect(() => {
     if (token)
       Promise.all([
-        fetch(
-          `https://blog-backend-tf6n.onrender.com/${author}/api/blogs`
-        ).then((res) => res.json()),
-        fetch("https://blog-backend-tf6n.onrender.com/", {
+        fetch(`${API_BASE_URL}/${author}/api/blogs`, {
+          credentials: "include",
+        }).then((res) => res.json()),
+        fetch(`${API_BASE_URL}/`, {
           headers: { Authorization: token },
+          credentials: "include",
         }).then((res) => res.json()),
       ])
         .then(([blogsResponse, userResponse]) => {
@@ -29,7 +32,9 @@ export default function Blogs() {
           console.error("Error fetching data:", error);
         });
     else
-      fetch(`https://blog-backend-tf6n.onrender.com/${author}/api/blogs`)
+      fetch(`${API_BASE_URL}/${author}/api/blogs`, {
+        credentials: "include",
+      })
         .then((response) => response.json())
         .then((res) => setData(res.data))
         .catch((error) => console.log("Error fetching data:", error));
@@ -74,7 +79,7 @@ export default function Blogs() {
   );
 }
 
-// Blog Section Component (unchanged)
+// Blog Section Component
 function BlogSection({ blogs, author }) {
   return (
     <div className={styles["blog-section"]}>
@@ -92,7 +97,7 @@ function BlogSection({ blogs, author }) {
   );
 }
 
-// Blog Card Component (unchanged)
+// Blog Card Component
 function BlogCard({ blog, author }) {
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {

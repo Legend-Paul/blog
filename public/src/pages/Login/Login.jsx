@@ -12,6 +12,8 @@ import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import styles from "../../globalStyles/formStyles.module.css";
 
+const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
+
 export async function Action({ request }) {
   const formData = await request.formData();
   const username = formData.get("username");
@@ -25,16 +27,13 @@ export async function Action({ request }) {
   };
 
   try {
-    const response = await fetch(
-      `https://blog-backend-tf6n.onrender.com/${author}/auth/login`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(loginData),
-      }
-    );
+    const response = await fetch(`${API_BASE_URL}/${author}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginData),
+    });
 
     const data = await response.json();
 

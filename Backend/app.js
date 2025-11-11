@@ -23,21 +23,19 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 const corsOptions = {
-  origin:
-    process.env.NODE_ENV === "production"
-      ? ["https://blooger-mizs.onrender.com", "https://bloog-wcim.onrender.com"]
-      : true,
+  origin: [
+    "https://blooger-mizs.onrender.com",
+    "https://bloog-wcim.onrender.com",
+  ],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Auth
 app.use(passport.initialize());

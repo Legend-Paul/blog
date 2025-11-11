@@ -11,6 +11,8 @@ import Spinnner from "../../components/Spinnner/Spinnner";
 import styles from "./Blog.module.css";
 import { Textarea } from "../../components/Input/Input";
 
+const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
+
 async function postData(url, data, author, slug, user) {
   user = user ? JSON.parse(user) : user;
   console.log(user);
@@ -25,6 +27,7 @@ async function postData(url, data, author, slug, user) {
         Authorization: token,
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(data),
     });
 
@@ -54,7 +57,7 @@ export async function Action({ request }) {
 
     if (parentId)
       data = await postData(
-        `https://blog-backend-tf6n.onrender.com/${author}/api/blog/${slug}/comments/${parentId}/reply`,
+        `${API_BASE_URL}/${author}/api/blog/${slug}/comments/${parentId}/reply`,
         commentData,
         author,
         slug,
@@ -62,7 +65,7 @@ export async function Action({ request }) {
       );
     else
       data = await postData(
-        `https://blog-backend-tf6n.onrender.com/${author}/api/blog/${slug}/comments/new`,
+        `${API_BASE_URL}/${author}/api/blog/${slug}/comments/new`,
         commentData,
         author,
         slug,
@@ -92,10 +95,10 @@ export default function Blog() {
   // Memoize the API URLs to prevent recreating them on every render
   const apiUrls = useMemo(
     () => ({
-      blog: `https://blog-backend-tf6n.onrender.com/${author}/api/blog/${slug}`,
-      blogs: `https://blog-backend-tf6n.onrender.com/${author}/api/blogs`,
-      comments: `https://blog-backend-tf6n.onrender.com/${author}/api/blog/${slug}/comments`,
-      user: "https://blog-backend-tf6n.onrender.com/",
+      blog: `${API_BASE_URL}/${author}/api/blog/${slug}`,
+      blogs: `${API_BASE_URL}/${author}/api/blogs`,
+      comments: `${API_BASE_URL}/${author}/api/blog/${slug}/comments`,
+      user: `${API_BASE_URL}/`,
     }),
     [author, slug]
   );
@@ -103,12 +106,22 @@ export default function Blog() {
   // Memoize the fetch functions
   const fetchData = useMemo(
     () => ({
-      blog: () => fetch(apiUrls.blog).then((res) => res.json()),
-      blogs: () => fetch(apiUrls.blogs).then((res) => res.json()),
-      comments: () => fetch(apiUrls.comments).then((res) => res.json()),
+      blog: () =>
+        fetch(apiUrls.blog, { credentials: "include" }).then((res) =>
+          res.json()
+        ),
+      blogs: () =>
+        fetch(apiUrls.blogs, { credentials: "include" }).then((res) =>
+          res.json()
+        ),
+      comments: () =>
+        fetch(apiUrls.comments, { credentials: "include" }).then((res) =>
+          res.json()
+        ),
       user: (token) =>
         fetch(apiUrls.user, {
           headers: { Authorization: token },
+          credentials: "include",
         }).then((res) => res.json()),
     }),
     [apiUrls]
@@ -171,8 +184,8 @@ export default function Blog() {
     setLiking(true);
 
     try {
-      const data = await postData(
-        `https://blog-backend-tf6n.onrender.com/${author}/api/blog/${slug}/likes/new`,
+      await postData(
+        `${API_BASE_URL}/${author}/api/blog/${slug}/likes/new`,
         {},
         author,
         slug,
@@ -297,7 +310,7 @@ function Comments({
     });
     try {
       await postData(
-        `https://blog-backend-tf6n.onrender.com/${author}/api/blog/${slug}/comments/${id}/likes/new`,
+        `${API_BASE_URL}/${author}/api/blog/${slug}/comments/${id}/likes/new`,
         {},
         author,
         slug,
