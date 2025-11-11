@@ -19,15 +19,43 @@ import {
   getPublicBlogs,
   getPublicBlog,
 } from "./controllers/publicBlogHandler.js";
+
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// CORS Configuration - MUST come before other middleware
+const allowedOrigins = [
+  "https://blooger-mizs.onrender.com",
+  "https://bloog-wcim.onrender.com",
+  "http://localhost:5173", // for local development
+  "http://localhost:3000",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allow credentials (cookies, authorization headers)
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["Content-Length", "X-Request-Id"],
+    maxAge: 86400, // Cache preflight request for 24 hours
+  })
+);
+
+// Other Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
 
 // Auth
 app.use(passport.initialize());
