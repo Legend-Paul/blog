@@ -356,10 +356,7 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading, user }) {
 
   const handleActionClick = (action) => {
     if (action === "view") {
-      window.open(
-        `https://blooger-mizs.onrender.com/${user.username}`,
-        "_blank"
-      );
+      window.open(`https://bloog-wcim.onrender.com/${user.username}`, "_blank");
     } else if (action === "edit") {
       navigate(`/api/blog/edit/${blog.slug}`, {
         state: {
