@@ -28,7 +28,7 @@ const PORT = process.env.PORT || 3000;
 // CORS Configuration - MUST come before other middleware
 const allowedOrigins = [
   "https://blooger-mizs.onrender.com",
-  "https://bloog-wcim.onrender.com",
+  "https://bloog-wcim.onrender.com4",
   "http://localhost:5173", // for local development
   "http://localhost:3000",
 ];
