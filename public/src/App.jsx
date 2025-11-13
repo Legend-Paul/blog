@@ -24,6 +24,7 @@ function AuthorLayout() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
+      <Route path="/:author" element={<Blogs />} />
       <Route
         path="/:author"
         errorElement={<ErrorPage />}
