@@ -3,6 +3,7 @@ import {
   createRoutesFromElements,
   Route,
   RouterProvider,
+  Outlet,
 } from "react-router-dom";
 import Blogs from "./pages/Blogs/Blogs";
 import Blog, { Action as blogAction } from "./pages/Blog/Blog";
@@ -15,10 +16,19 @@ import ForgotPassword, {
 import ErrorPage from "./Error/ErrorPage";
 import "./globalStyles/index.css";
 
+// Layout component that renders child routes
+function AuthorLayout() {
+  return <Outlet />;
+}
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path=":author" errorElement={<ErrorPage />}>
+      <Route
+        path="/:author"
+        errorElement={<ErrorPage />}
+        element={<AuthorLayout />}
+      >
         {/* Blogs */}
         <Route index element={<Blogs />} />
         <Route path="blogs" element={<Blogs />} />
