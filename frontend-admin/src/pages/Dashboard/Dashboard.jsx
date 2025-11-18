@@ -100,7 +100,14 @@ export default function Dashboard() {
                   className={styles["blog"]}
                   key={blog.id || blog._id || blog.slug}
                 >
-                  <a href={blog.slug}>{blog.title}</a>
+                  <a
+                    href={window.open(
+                      `https://bloog-wcim.onrender.com/${data.user.username}`,
+                      "_blank"
+                    )}
+                  >
+                    {blog.title}
+                  </a>
                 </div>
               );
             })}
