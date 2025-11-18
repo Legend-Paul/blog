@@ -16,37 +16,33 @@ import ForgotPassword, {
 import ErrorPage from "./Error/ErrorPage";
 import "./globalStyles/index.css";
 
+// Layout component that renders child routes
+function AuthorLayout() {
+  return <Outlet />;
+}
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Outlet />} errorElement={<ErrorPage />}>
+      <Route
+        path="/:author"
+        errorElement={<ErrorPage />}
+        element={<AuthorLayout />}
+      >
         {/* Blogs */}
-        <Route path="/:author" element={<Blogs />} />
-
-        <Route path="/:author/blogs" element={<Blogs />} />
-        <Route
-          path="/:author/blogs/:slug"
-          element={<Blog />}
-          action={blogAction}
-        />
+        <Route index element={<Blogs />} />
+        <Route path="blogs" element={<Blogs />} />
+        <Route path="blogs/:slug" element={<Blog />} action={blogAction} />
 
         {/* Account */}
+        <Route path="auth/signup" element={<Signup />} action={signupAction} />
+        <Route path="auth/login" element={<Login />} action={loginAction} />
         <Route
-          path="/:author/auth/signup"
-          element={<Signup />}
-          action={signupAction}
-        />
-        <Route
-          path="/:author/auth/login"
-          element={<Login />}
-          action={loginAction}
-        />
-        <Route
-          path="/:author/auth/forgot-password"
+          path="auth/forgot-password"
           element={<ForgotPassword />}
           action={forgotPasswordAction}
         />
-        <Route path="/:author/auth/signout" element={<Signout />} />
+        <Route path="auth/signout" element={<Signout />} />
       </Route>
     </>
   )
