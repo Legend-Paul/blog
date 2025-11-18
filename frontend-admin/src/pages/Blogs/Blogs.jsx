@@ -8,7 +8,7 @@ import Notification from "../../components/Notification/Notification";
 import checkAuth from "../../utils/checkAuth";
 import styles from "./Blogs.module.css";
 
-const API_BASE_URL = "https://localhost:5000";
+const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
 
 export default function Blogs() {
   checkAuth();
