@@ -105,7 +105,6 @@ export default function Dashboard() {
                       `https://bloog-wcim.onrender.com/${data.user.username}/blogs/` +
                       blog.slug
                     }
-                    target="_blank"
                   >
                     {blog.title}
                   </a>
