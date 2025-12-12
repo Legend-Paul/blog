@@ -31,6 +31,7 @@ const allowedOrigins = [
   "https://bloog-wcim.onrender.com",
   "http://localhost:5173", // for local development
   "http://localhost:3000",
+  "https://legendblog.onrender.com",
 ];
 
 app.use(
