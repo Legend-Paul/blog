@@ -102,7 +102,7 @@ export default function Dashboard() {
                 >
                   <a
                     href={
-                      `https://bloog-wcim.onrender.com/${data.user.username}/blogs/` +
+                      `https://legendblog.onrender.com/${data.user.username}/blogs/` +
                       blog.slug
                     }
                     target="_blank"
