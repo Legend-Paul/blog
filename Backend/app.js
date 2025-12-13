@@ -25,32 +25,53 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS Configuration - MUST come before other middleware
-const allowedOrigins = [
-  "https://legendbloog.netlify.app",
-  "https://legendblooger.netlify.app",
-  "http://localhost:5173",
-  "http://localhost:3000",
-  "https://legendblog.onrender.com",
-  "https://legendbloger.onrender.com",
-];
+// TEMPORARY: Allow ALL origins for debugging
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Max-Age", "86400");
 
-// Error handling middleware - UPDATE THIS
-app.use((err, req, res, next) => {
-  console.error("Error:", err);
-
-  // Always set CORS headers even on errors
-  const origin = req.headers.origin;
-
-  if (!origin || allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin || "*");
-    res.setHeader("Access-Control-Allow-Credentials", "true");
+  // Handle preflight
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
   }
 
-  res.status(err.status || 500).json({
-    message: err.message || "Internal Server Error",
-  });
+  next();
 });
+
+// Remove or comment out your existing cors() middleware
+// app.use(cors({...}))
+
+// // CORS Configuration - MUST come before other middleware
+// const allowedOrigins = [
+//   "https://legendbloog.netlify.app",
+//   "https://legendblooger.netlify.app",
+//   "http://localhost:5173",
+//   "http://localhost:3000",
+//   "https://legendblog.onrender.com",
+//   "https://legendbloger.onrender.com",
+// ];
+
+// // Error handling middleware - UPDATE THIS
+// app.use((err, req, res, next) => {
+//   console.error("Error:", err);
+
+//   // Always set CORS headers even on errors
+//   const origin = req.headers.origin;
+
+//   if (!origin || allowedOrigins.includes(origin)) {
+//     res.setHeader("Access-Control-Allow-Origin", origin || "*");
+//     res.setHeader("Access-Control-Allow-Credentials", "true");
+//   }
+
+//   res.status(err.status || 500).json({
+//     message: err.message || "Internal Server Error",
+//   });
+// });
 
 // Other Middleware
 app.use(express.json());
@@ -86,8 +107,13 @@ app.get("/", requireAuth, (req, res) => {
 });
 
 // Error handling middleware
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error("Error:", err);
+
+  // Add CORS headers to error responses too
+  res.setHeader("Access-Control-Allow-Origin", "*");
+
   res.status(err.status || 500).json({
     message: err.message || "Internal Server Error",
   });
