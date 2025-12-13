@@ -53,6 +53,17 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  console.log("=== Incoming Request ===");
+  console.log("Origin:", req.headers.origin);
+  console.log("Host:", req.headers.host);
+  console.log("Referer:", req.headers.referer);
+  console.log("Method:", req.method);
+  console.log("Path:", req.path);
+  console.log("=======================");
+  next();
+});
+
 // ADD THIS: Explicitly handle OPTIONS requests
 app.options("*", cors());
 
