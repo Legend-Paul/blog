@@ -27,11 +27,12 @@ const PORT = process.env.PORT || 3000;
 
 // CORS Configuration - MUST come before other middleware
 const allowedOrigins = [
+  "https://legendbloog.netlify.app",
+  "https://legendblooger.netlify.app",
   "http://localhost:5173", // for local development
   "http://localhost:3000",
   "https://legendblog.onrender.com",
   "https://legendbloger.onrender.com",
-  "https://legendbloog.netlify.app",
 ];
 
 app.use(
