@@ -53,8 +53,6 @@ export default function Blogs() {
       ? { author, label: "Signout", route: "signout" }
       : { author, label: "Login", route: "login" };
 
-  console.log(user);
-
   return (
     <div className={styles["blogs-container"]}>
       <Header userStaus={userStaus} />
