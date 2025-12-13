@@ -29,43 +29,28 @@ const PORT = process.env.PORT || 3000;
 const allowedOrigins = [
   "https://legendbloog.netlify.app",
   "https://legendblooger.netlify.app",
-  "http://localhost:5173", // for local development
+  "http://localhost:5173",
   "http://localhost:3000",
   "https://legendblog.onrender.com",
   "https://legendbloger.onrender.com",
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    exposedHeaders: ["Content-Length", "X-Request-Id"],
-    maxAge: 86400,
-  })
-);
+// Error handling middleware - UPDATE THIS
+app.use((err, req, res, next) => {
+  console.error("Error:", err);
 
-app.use((req, res, next) => {
-  console.log("=== Incoming Request ===");
-  console.log("Origin:", req.headers.origin);
-  console.log("Host:", req.headers.host);
-  console.log("Referer:", req.headers.referer);
-  console.log("Method:", req.method);
-  console.log("Path:", req.path);
-  console.log("=======================");
-  next();
+  // Always set CORS headers even on errors
+  const origin = req.headers.origin;
+
+  if (!origin || allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin || "*");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+  }
+
+  res.status(err.status || 500).json({
+    message: err.message || "Internal Server Error",
+  });
 });
-
-// ADD THIS: Explicitly handle OPTIONS requests
-app.options("*", cors());
 
 // Other Middleware
 app.use(express.json());
