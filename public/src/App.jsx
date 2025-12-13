@@ -24,28 +24,43 @@ function AuthorLayout() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/legend/blogs" element={<Blogs />} />
-
+      {/* Blogs */}
+      <Route index element={<Blogs />} errorElement={<ErrorPage />} />
       <Route
-        path="/:author"
+        path="/:author/blogs"
+        element={<Blogs />}
         errorElement={<ErrorPage />}
-        element={<AuthorLayout />}
-      >
-        {/* Blogs */}
-        <Route index element={<Blogs />} />
-        <Route path="blogs" element={<Blogs />} />
-        <Route path="blogs/:slug" element={<Blog />} action={blogAction} />
+      />
+      <Route
+        path="/:author/blogs/:slug"
+        element={<Blog />}
+        action={blogAction}
+        errorElement={<ErrorPage />}
+      />
 
-        {/* Account */}
-        <Route path="auth/signup" element={<Signup />} action={signupAction} />
-        <Route path="auth/login" element={<Login />} action={loginAction} />
-        <Route
-          path="auth/forgot-password"
-          element={<ForgotPassword />}
-          action={forgotPasswordAction}
-        />
-        <Route path="auth/signout" element={<Signout />} />
-      </Route>
+      {/* Account */}
+      <Route
+        path="/:author/auth/signup"
+        element={<Signup />}
+        action={signupAction}
+        errorElement={<ErrorPage />}
+      />
+      <Route
+        path="/:author/auth/login"
+        element={<Login />}
+        action={loginAction}
+        errorElement={<ErrorPage />}
+      />
+      <Route
+        path="/:author/auth/forgot-password"
+        element={<ForgotPassword />}
+        action={forgotPasswordAction}
+      />
+      <Route
+        path="/:author/auth/signout"
+        element={<Signout />}
+        errorElement={<ErrorPage />}
+      />
     </>
   )
 );
