@@ -31,6 +31,7 @@ const allowedOrigins = [
   "http://localhost:3000",
   "https://legendblog.onrender.com",
   "https://legendbloger.onrender.com",
+  "https://legendbloog.netlify.app/",
 ];
 
 app.use(
