@@ -16,7 +16,7 @@ export default function Header({ searchParams }) {
             to="/"
             state={{ searchParams: searchParams ? searchParams : "" }}
           >
-            Blog
+            Bloger
           </NavLink>
         </div>
         <nav>
@@ -110,7 +110,7 @@ export function EditorHeader({ onClose, route }) {
     <div className={styles["header-container"]}>
       <header>
         <div className={styles["logo"]}>
-          <NavLink to="/">Blog</NavLink>
+          <NavLink to="/">Bloger</NavLink>
         </div>
         <nav>
           <ul>
