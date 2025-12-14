@@ -1,0 +1,36 @@
+.copied {
+  font-size: var(--text-xs);
+}
+
+.copy-button {
+  cursor: pointer;
+  position: relative;
+  align-self: center;
+  p {
+    display: none;
+    font-size: var(--text-xl);
+  }
+  svg {
+    width: calc(var(--text-xs) + var(--text-xs) / 2);
+    height: calc(var(--text-xs) + var(--text-xs) / 2);
+
+    transition: fill var(--transition-fast);
+  }
+  &:hover p {
+    display: block;
+    position: absolute;
+    top: 30px;
+    width: 5rem;
+    left: 0;
+    transform: translateX(-50%);
+
+    text-align: center;
+    /* right: 0; */
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    padding: var(--space-2xs) var(--space-xs);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    box-shadow: var(--shadow-sm);
+  }
+}

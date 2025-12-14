@@ -6,6 +6,7 @@ import CreateBlog from "../../components/CreateBlog/CreateBlog";
 import Button from "../../components/Button/Button";
 import Notification from "../../components/Notification/Notification";
 import checkAuth from "../../utils/checkAuth";
+import CopyButton from "../../components/CopyButton/CopyButton";
 import styles from "./Blogs.module.css";
 
 const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
@@ -356,7 +357,10 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading, user }) {
 
   const handleActionClick = (action) => {
     if (action === "view") {
-      window.open(`https://legendblog.onrender.com/${user.username}`, "_blank");
+      window.open(
+        `https://legendblog.onrender.com/${user.username}/blogs/${blog.slug}`,
+        "_blank"
+      );
     } else if (action === "edit") {
       navigate(`/api/blog/edit/${blog.slug}`, {
         state: {
@@ -379,7 +383,13 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading, user }) {
   return (
     <div className={styles["blog-card"]}>
       <div className={styles["blog-header"]}>
-        <h3 className={styles["blog-title"]}>{blog.title}</h3>
+        <div className={styles["blog-title-copy-btn"]}>
+          <h3 className={styles["blog-title"]}>{blog.title} </h3>
+          <CopyButton
+            text={`https://legendblog.onrender.com/${user.username}/blogs/${blog.slug}`}
+          />
+        </div>
+
         <span className={styles["blog-date"]}>
           {formatDate(blog.createdAt)}
         </span>
@@ -402,19 +412,5 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading, user }) {
         ))}
       </div>
     </div>
-  );
-}
-
-function CopyButton({ text }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  return (
-    <button onClick={handleCopy}>{copied ? "Copied!" : "Copy Link"}</button>
   );
 }

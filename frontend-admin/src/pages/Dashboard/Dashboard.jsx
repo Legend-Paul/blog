@@ -5,6 +5,7 @@ import Spinnner from "../../components/Spinnner/Spinnner";
 import CreateBlog from "../../components/CreateBlog/CreateBlog";
 import checkAuth from "../../utils/checkAuth";
 import { useLocation } from "react-router-dom";
+import CopyButton from "../../components/CopyButton/CopyButton";
 
 const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
 
@@ -109,6 +110,12 @@ export default function Dashboard() {
                   >
                     {blog.title}
                   </a>
+                  <CopyButton
+                    text={
+                      `https://legendblog.onrender.com/${data.user.username}/blogs/` +
+                      blog.slug
+                    }
+                  />
                 </div>
               );
             })}
