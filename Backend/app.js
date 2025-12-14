@@ -25,45 +25,35 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// CORS Configuration - MUST come before other middleware
+const allowedOrigins = [
+  "https://legendbloog.netlify.app",
+  "https://legendblooger.netlify.app/",
+  "http://localhost:5173", // for local development
+  "http://localhost:3000",
+  "https://legendblog.onrender.com",
+  "https://legendbloger.onrender.com",
+];
+
 app.use(
   cors({
-    origin: [
-      "https://legendbloog.netlify.app",
-      "https://legendblooger.netlify.app",
-      "http://localhost:5173",
-      "http://localhost:3000",
-      "https://legendblog.onrender.com",
-      "https://legendbloger.onrender.com",
-    ],
-    credentials: true,
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allow credentials (cookies, authorization headers)
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["Content-Length", "X-Request-Id"],
+    maxAge: 86400, // Cache preflight request for 24 hours
   })
 );
-// // CORS Configuration - MUST come before other middleware
-// const allowedOrigins = [
-//   "https://legendbloog.netlify.app",
-//   "https://legendblooger.netlify.app",
-//   "http://localhost:5173",
-//   "http://localhost:3000",
-//   "https://legendblog.onrender.com",
-//   "https://legendbloger.onrender.com",
-// ];
-
-// // Error handling middleware - UPDATE THIS
-// app.use((err, req, res, next) => {
-//   console.error("Error:", err);
-
-//   // Always set CORS headers even on errors
-//   const origin = req.headers.origin;
-
-//   if (!origin || allowedOrigins.includes(origin)) {
-//     res.setHeader("Access-Control-Allow-Origin", origin || "*");
-//     res.setHeader("Access-Control-Allow-Credentials", "true");
-//   }
-
-//   res.status(err.status || 500).json({
-//     message: err.message || "Internal Server Error",
-//   });
-// });
 
 // Other Middleware
 app.use(express.json());

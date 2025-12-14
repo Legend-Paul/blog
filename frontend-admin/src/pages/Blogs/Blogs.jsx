@@ -404,3 +404,17 @@ function BlogCard({ blog, status, onAction, onDelete, isLoading, user }) {
     </div>
   );
 }
+
+function CopyButton({ text }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <button onClick={handleCopy}>{copied ? "Copied!" : "Copy Link"}</button>
+  );
+}
