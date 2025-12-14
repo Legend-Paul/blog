@@ -10,6 +10,7 @@ import {
 import Spinnner from "../../components/Spinnner/Spinnner";
 import styles from "./Blog.module.css";
 import { Textarea } from "../../components/Input/Input";
+import formatDate from "../../utils/formatDate";
 
 const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
 
@@ -161,14 +162,6 @@ export default function Blog() {
     );
   }
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
   if (!blogData) {
     return (
       <div>
@@ -205,6 +198,9 @@ export default function Blog() {
 
   return (
     <div className={styles["preview-blog-container"]}>
+      <p className={styles["created-date"]}>
+        Created At: {formatDate(blog.createdAt)}
+      </p>
       <main>
         <div dangerouslySetInnerHTML={{ __html: blog.content }} />
         <OtherBlogs blogs={blogs} author={author} formatDate={formatDate} />

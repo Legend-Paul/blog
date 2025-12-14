@@ -1,9 +1,9 @@
 .preview-blog-container {
-  padding-bottom: var(--space-2xl);
+  /* padding-bottom: var(--space-2xl); */
+  padding: var(--space-xl);
   main {
-    padding: var(--space-xl) !important;
     margin: 0 auto;
-    margin-top: 0 !important;
+    margin-top: 0;
     display: grid;
     gap: var(--space-3xl);
   }
@@ -159,6 +159,7 @@
 
 .comment {
   margin: var(--space-md) 0;
+  border-bottom: 2px solid var(--border-dark);
   border-left: 2px solid var(--border-dark);
   padding: var(--space-xs) var(--space-xl);
   border-radius: var(--space-sm);

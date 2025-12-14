@@ -175,8 +175,8 @@ main {
   max-width: 1000px !important;
   margin: 0 auto;
   width: 100%;
-  padding-left: var(--space-sm) !important;
-  padding-right: var(--space-sm) !important;
+  /* padding-left: var(--space-sm);
+  padding-right: var(--space-sm); */
 }
 section {
   padding: 0, var(--space-2xl);
