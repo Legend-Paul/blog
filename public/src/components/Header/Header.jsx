@@ -16,7 +16,7 @@ export default function Header({ searchParams, userStaus }) {
             to={`/${userStaus.author}/blogs`}
             state={{ searchParams: searchParams ? searchParams : "" }}
           >
-            bloog
+            Blog
           </NavLink>
         </div>
         <nav>
