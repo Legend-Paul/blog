@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Spinnner from "../../components/Spinnner/Spinnner";
 import styles from "./Blogs.module.css";
+import formatDate from "../../utils/formatDate";
 
 const API_BASE_URL = "https://blog-backend-tf6n.onrender.com";
 
@@ -97,14 +98,6 @@ function BlogSection({ blogs, author }) {
 
 // Blog Card Component
 function BlogCard({ blog, author }) {
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
   return (
     <div className={styles["blog-card"]}>
       <div className={styles["blog-header"]}>
